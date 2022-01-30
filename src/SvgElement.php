@@ -13,23 +13,45 @@ class SvgElement implements Htmlable
     use RendersAttributes;
 
     public const SVG_ATTRIBUTES = [
-        'view-box', 
-        'version', 
-        'width', 
+        'view-box',
+        'viewBox',
+        'version',
+        'width',
         'height'
     ];
 
     public const GRAPH_ELEMENTS = [
-        'clipPath',
-        'g',
         'line',
         'rect',
         'circle',
         'ellipse',
         'path',
-        'text',
         'image',
+        'use',
+        'stop',
+        'feMorphology',
+        'feTurbulence',
+        'feDisplacementMap',
+        'feFlood',
+        'feColorMatrix',
+        'feOffset',
+        'feGaussianBlur',
+        'feComposite',
+        'feBlend',
+        'g',
+        'style',
+        'text',
+        'clipPath',
+        'title',
+        'linearGradient',
+        'defs',
+        'filter',
 
+    ];
+
+    public const REGEXP = [
+        'groupElement' => '/(<(element)(?:\s[^>]*\/?>|\/>|>))([.\s<a-z="-:;>]*?)(<\/\2>)?/i',
+        'monGroupElement' => '/(<element(?:\s[^>]*\/?>|\/>|>))/i'
     ];
 
     public const NON_GROUP_ELEMENTS = [
@@ -40,6 +62,16 @@ class SvgElement implements Htmlable
         'path',
         'image',
         'use',
+        'stop',
+        'feMorphology',
+        'feTurbulence',
+        'feDisplacementMap',
+        'feFlood',
+        'feColorMatrix',
+        'feOffset',
+        'feGaussianBlur',
+        'feComposite',
+        'feBlend',
     ];
 
     public const GROUP_ELEMENTS = [
@@ -48,27 +80,38 @@ class SvgElement implements Htmlable
         'text',
         'clipPath',
         'title',
+        'defs',
+        'filter',
+        'linearGradient',
     ];
 
     private string $name;
 
     private string $contents;
 
+    private array $conteinedElements = [];
+
     public function __construct(string $name, string $contents, array $attributes = [])
     {
         $this->name = $name;
         $this->contents = $contents;
         $svg = preg_match("/<svg[^>]*>/i", $contents, $svgTag);
-        if($svg !== 0 && $svg !== false && $attributes === []){
-            $attributes = $this->getElementAttributes($svgTag[0]);
+        if ($svg !== 0 && $svg !== false) {
+            $attributes = array_merge($attributes, $this->getElementAttributes($svgTag[0]));
         }
         foreach ($attributes as $key => $attribute) {
             $this->$key($attribute);
         }
-        if(!in_array($name, self::NON_GROUP_ELEMENTS)){
+        $this->contents = $contents = str_replace($svgTag, '', $contents);
+        foreach (self::GRAPH_ELEMENTS as $element) {
+            if (stripos($contents, '<' . $element) !== false) {
+                $this->conteinedElements[] = $element;
+            }
+        }
+        if (!in_array($name, self::NON_GROUP_ELEMENTS)) {
             $this->getAllElements();
         }
-        if($name !== 'style'){
+        if ($name !== 'style') {
             $this->removeContents();
         }
     }
@@ -82,18 +125,9 @@ class SvgElement implements Htmlable
             if (property_exists($this, $name)) {
                 return $this->$name;
             }
-            if (property_exists($this, 'g')) {
-                foreach ($this->g as $gs) {
-                    $this->elements[$name] = $gs->$name;
-                }
-            }
-            if (property_exists($this, 'clipPath')) {
-                foreach ($this->g as $gs) {
-                    $this->elements[$name] = $gs->$name;
-                }
-            }
+            
         } catch (Exception $e) {
-            throw "This Methode don't exist" . $e->getMessage() . "\n";
+            return null;
         }
     }
 
@@ -110,11 +144,11 @@ class SvgElement implements Htmlable
 
     public function contents(): string
     {
-        if(isset($this->contents)){
+        if (isset($this->contents)) {
             return $this->contents;
         }
         $elements = get_object_vars($this);
-        if($elements === false){
+        if ($elements === false) {
             return '';
         }
         $ret = '';
@@ -122,14 +156,13 @@ class SvgElement implements Htmlable
             if (is_array($element)) {
                 foreach ($element as $svg) {
                     if ($svg instanceof SvgElement) {
-                        $ret .= $svg->toHtml()."\n";
+                        $ret .= $svg->toHtml() . "\n";
                     }
                 }
             }
         }
 
         return $ret;
-        
     }
 
     public function removeContents(): self
@@ -146,40 +179,84 @@ class SvgElement implements Htmlable
 
     public function getAllElements(): void
     {
-
-        foreach (self::GRAPH_ELEMENTS as $type) {
-            $element = $this->getElements($type);
-            if ($element !== false && isset($element[0]) && $element[0] !== []) {
-                $this->$type = $element;
+        $content =  str_replace("\n", '',$this->contents());
+        $content =  str_replace("  ", '',$content);
+        while($content !== ''){
+            $firstElement = preg_match('/<([^\s\/]+)/i', $content, $element);
+            if(!isset($element[1]) || $firstElement === 0){
+                return;
+            }
+            $element = is_array($element[1])?$element[1][0]:$element[1];
+            preg_match('/(<('.$element.')(?:\s[^>]*\/?>|\/>|>))([^\']+?)(<\/\2>)/i', $content, $group);
+            preg_match('/(<('.$element.')(?:\s[^>]*\/?>|\/>|>))/i', $content, $nonGroup);
+            if(empty($group)){
+                $svgElement = $this->findNonGroupElement($content, $element);
+                $elementArray = [$svgElement];
+            
+                if(is_array($this->$element)){
+                    
+                    $elementArray = [...$this->$element, $svgElement];
+                }
+                $this->$element = $elementArray;
+                
+                $content = str_replace($nonGroup[0], '',$content);
+            }else{
+                $svgElement = $this->findGroupElement($content, $element);
+                $elementArray = [$svgElement[0]];
+                if(is_array($this->$element)){
+                    $elementArray = [...$this->$element, $svgElement[0]];
+                }
+                $this->$element = $elementArray;
+                $content = str_replace($svgElement[1], '',$content);
             }
         }
     }
 
-    public function getElements(string $element)
+    public function isGrouped(string $element)
     {
-        $ret = [];
-        if (in_array($element, self::GROUP_ELEMENTS) || $element === 'svg') {
-            if ($this->contents() !== '') {
-                $ret = $this->findGroupElement($this->contents(), $element);
+
+        foreach (self::GROUP_ELEMENTS as $type) {
+            if($this->isInside($type, $element)){
+                return true;
             }
-        } elseif (in_array($element, self::NON_GROUP_ELEMENTS)) {
-            $gFirstPos = stripos($this->contents(), '<g');
-            $clipFirstPos = stripos($this->contents(), '<clipPath');
-            $elementFirstPos = stripos($this->contents(), '<' . $element);
-            if (($gFirstPos !== false && $gFirstPos < $elementFirstPos) || ($clipFirstPos !== false && $clipFirstPos < $elementFirstPos)) {
-                return false;
-            }
-            $ret = $this->findNonGroupElement($this->contents(), $element);
-        } else {
+        }
+        return false;
+    }
+
+    public function isInside(string  $groupElement, string $element, $offset = 0)
+    {
+        $elementFirstPos = stripos($this->contents(), '<' . $element, $offset);
+        $first = stripos($this->contents(), '<' . $groupElement, $offset);
+        if ($elementFirstPos <= $first || $first === false) {
             return false;
         }
-        return $ret;
+        $close = stripos($this->contents(), '</' . $groupElement, $offset);
+        if ($elementFirstPos < $close) {
+            return true;
+        }
+        $tmpContent = mb_substr($this->contents(), $first, $close);
+        $nElements = mb_substr_count($tmpContent, '<' . $groupElement);
+        if ($nElements === 0) {
+            return false;
+        }
+        for ($i = 0; $i < $nElements; $i++) {
+            $close = stripos($this->contents(), '</' . $groupElement, $close);
+            if ($elementFirstPos < $close) {
+                return true;
+            }
+        }
+        $this->isInside($groupElement, $element, $close+2);
     }
-
+    
     public function removeComents(): self
     {
         $this->contents = preg_replace("/(<!--.+-->\n)/i", '', $this->contents());
         return $this;
+    }
+
+    public function removeXmlFromContent($contents): string
+    {
+        return preg_replace("/(<?xml.+>\n)/i", '', $contents);
     }
 
     public function removeStylefromContent(): self
@@ -222,7 +299,7 @@ class SvgElement implements Htmlable
             }
             if ($key === 'attributes') {
                 $ret['attributes'] =  $this->attributes();
-                foreach($ret['attributes'] as $k => $att){
+                foreach ($ret['attributes'] as $k => $att) {
                     $ret['attributes'][$k] = str_replace(['\"', '"'], '', $att);
                 }
                 continue;
@@ -230,9 +307,9 @@ class SvgElement implements Htmlable
             if (is_array($element)) {
                 foreach ($element as $k => $elm) {
                     if (is_a($elm, 'BladeUI\Icons\SvgElement')) {
-                        $ret[$key.'-'.$k] = $elm->toArray();
+                        $ret[$key . '-' . $k] = $elm->toArray();
                     } else {
-                        $ret[$key.'-'.$k] = $elm;
+                        $ret[$key . '-' . $k] = $elm;
                     }
                 }
                 continue;
@@ -251,12 +328,11 @@ class SvgElement implements Htmlable
     {
     }
 
-    public function findGroupElement(string $content, string $element): array
+    public function findGroupElement(string $content, string $element)
     {
-        $ret = [];
-        $count = mb_substr_count($content, '<' . $element);
+        $count = mb_substr_count($content, '</' . $element);
         if ($count <= 0) {
-            return [];
+            return false;
         }
 
         if ($count === 1) {
@@ -264,14 +340,15 @@ class SvgElement implements Htmlable
             $posEnde = stripos($content, '</' . $element . '>');
             $tag = trim(substr($content, $posStart,  stripos($content, '>', $posStart) - $posStart + 1));
             $cont = trim(substr($content, $posStart + strlen($tag), $posEnde - $posStart - strlen($tag)));
+            $toRemove = trim(substr($content, $posStart , $posEnde - $posStart + strlen('</' . $element . '>')));
             $attributes = $this->getElementAttributes($tag);
             $tmp = new SvgElement($element, $cont, $attributes);
-            $ret[] = $tmp;
-            return $ret;
+            return [$tmp, $toRemove];
         }
 
         $posStart[0] = stripos($content, '<' . $element);
-        $posEnde[0] = stripos($content, '</' . $element . '>');
+        $posEnde[0] = stripos($content, '</' . $element);
+        
         for ($i = 1; $i < $count; $i++) {
             $posStart[$i] = stripos($content, '<' . $element, $posStart[$i - 1] + 2);
             $posEnde[$i] = stripos($content, '</' . $element, $posEnde[$i - 1] + 2);
@@ -282,67 +359,64 @@ class SvgElement implements Htmlable
         }
         ksort($pos);
         $n = 0;
-
         $first = array_key_first($pos);
+        
         foreach ($pos as $key => $val) {
             if ($first === true) {
                 $first = $key;
             }
             $n += $val;
             if ($n === 0) {
-                preg_match("/<" . $element . "[^>]*>/i", $content, $tag, 0, $first);
-                $con = trim(substr($content, $first + strlen($tag[0]) + 1, $key - $first - strlen($tag[0]) - 1));
+                preg_match('/(<('.$element.')(?:\s[^>]*\/?>|\/>|>))/i', $content, $tag, 0, $first);
+                $cont = trim(substr($content, $first + strlen($tag[0]), $key - $first - strlen($tag[0])));
+                $toRemove = trim(substr($content, $first , $key - $first + strlen('</' . $element . '>')));
                 $attributes = $this->getElementAttributes($tag[0]);
-                $tmp = new SvgElement($element, $con, $attributes);
-                $ret[] = $tmp;
-                $first = true;
+                $tmp = new SvgElement($element, $cont, $attributes);
+                return [$tmp, $toRemove];
             }
         }
-        return $ret;
+        return false;
     }
 
-    public function findNonGroupElement(string $content, string $element): array
+    public function findNonGroupElement(string $content, string $element)
     {
-        preg_match_all("/<" . $element . "[^>]+\/?>/i", $content, $match);
+        preg_match_all("/(<(" . $element . ")(?:\s[^>]*\/?>|\/>|>))([.\s<a-z=\"-:;>]*?)(<\/\2>)?/i", $content, $match);
         $tags = $match === [] ? '' : $match[0];
         $content = '';
-        $ret = [];
         if ($tags === false || $tags === []) {
-            return [];
+            return false;
         }
-        foreach ($tags as $tag) {
-            $content = $tag;
-            $attributes = $this->getElementAttributes($tag);
+        foreach ($match as $tag) {
+            $attributes = $this->getElementAttributes($tag[0]);
             $tmp = new SvgElement($element, $content, $attributes);
-            $ret[] = $tmp;
+            return $tmp;
         }
-        return $ret;
+        return false;
     }
 
     public function getElementAttributes(string $tag): array
     {
-        preg_match_all("/[a-z0-9_$:-]*=[\"'][a-zA-Z0-9.,:;_?=%$+*#\/\n\t\r\s\\-]*[\"']/i", $tag, $attrs);
+        preg_match_all("/[a-z0-9_$:-]*=[\"'][a-zA-Z0-9.,:;_?=%$+*#\(\)\/\n\t\r\s\\-]*[\"']/i", $tag, $attrs);
         $attributes = [];
         foreach ($attrs[0] as $attribute) {
-            $attributes[explode('=', $attribute)[0]] = str_replace('"', '',explode('=', $attribute)[1]);
+            $attributes[explode('=', $attribute)[0]] = str_replace('"', '', explode('=', $attribute)[1]);
         }
         return  $attributes;
     }
 
     public function cleanGroup(): self
     {
-        foreach($this as $component => $svgElement){
-            if($component === 'g'){
-                foreach($this->$component as $k => $g){
-                    if(property_exists($g,'g') && count($g->g) === 1){
+        foreach ($this as $component => $svgElement) {
+            if ($component === 'g') {
+                foreach ($this->$component as $k => $g) {
+                    if (property_exists($g, 'g') && count($g->g) === 1) {
                         $gOld = $g->g[0];
                         $gAttribute = $g->attributes();
                         $this->$component[$k] = $gOld;
                         $gAttribute = array_merge($this->$component[$k]->attributes(), $gAttribute);
-                        foreach($gAttribute as $attName => $val){
+                        foreach ($gAttribute as $attName => $val) {
                             $this->$component[$k]->$attName($val);
                         }
-
                     }
                     $g->clean();
                 }
@@ -353,16 +427,29 @@ class SvgElement implements Htmlable
 
     public function removeSvgAttribute()
     {
-        $svgAttributes = self::SVG_ATTRIBUTES;
-        foreach ($svgAttributes as $att) {
-            if (isset($this->attributes[$att])) {
-                unset($this->attributes[$att]);
+        foreach (self::SVG_ATTRIBUTES as $att) {
+            if (isset($this->attributes()[$att])) {
+                $this->remove($att);
             }
         }
         foreach ($this->attributes() as $att => $val) {
+            if (preg_match('/xml|xmsln[:]?(svg?)/', $att, $match) !== 0) {
+                $this->remove($att);
+            }
+            if (preg_match('/sodipodi[:]?[^=]*?/', $att, $match) !== 0) {
+                $this->remove($att);
+            }
+            
+        }
+    }
 
-            if (preg_match('/xml[:]?[^=]*/', $att, $match) !== 0) {
-                unset($this->attributes[$att]);
+    public function removeNonSvgAttr()
+    {
+        foreach ($this->attributes() as $name => $att) {
+            if (!in_array($name,self::SVG_ATTRIBUTES)
+            && preg_match_all('/(xml|xmsln)[:]?.*/i', $name, $match) === 0
+            && preg_match_all('/(sodipodi)[:]?.*/i', $name, $match) === 0) {
+                $this->remove($name);
             }
         }
     }

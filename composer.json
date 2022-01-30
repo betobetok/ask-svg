@@ -1,19 +1,17 @@
 {
-    "name": "blade-ui-kit/blade-icons",
-    "description": "A package to easily make use of icons in your Laravel Blade views.",
+    "name": "betobetok/blade-icons",
+    "description": "This is a personal extention from https://github.com/blade-ui-kit/blade-icons",
     "keywords": ["Blade", "Icons", "Laravel", "SVG"],
-    "homepage": "https://github.com/blade-ui-kit/blade-icons",
+    "homepage": "https://github.com/betobetok/blade-icons-svg",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/blade-ui-kit/blade-icons/issues",
-        "source": "https://github.com/blade-ui-kit/blade-icons"
+        "issues": "https://github.com/betobetok/blade-icons-svg/issues",
+        "source": "https://github.com/betobetok/blade-icons-svg"
     },
-    "authors": [
-        {
-            "name": "Dries Vints",
-            "homepage": "https://driesvints.com"
-        }
-    ],
+    "authors": [{
+        "name": "Alberto Solorzano Kraemer",
+        "email": "betobetok@gmail.com"
+    }],
     "require": {
         "php": "^7.4|^8.0",
         "illuminate/contracts": "^8.0",
@@ -21,7 +19,8 @@
         "illuminate/support": "^8.0",
         "illuminate/view": "^8.0",
         "symfony/console": "^5.3",
-        "symfony/finder": "^5.3"
+        "symfony/finder": "^5.3",
+        "numphp/numphp": "^1.2.0 "
     },
     "require-dev": {
         "mockery/mockery": "^1.3",
