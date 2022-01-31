@@ -1,12 +1,12 @@
 {
-    "name": "betobetok/blade-icons",
+    "name": "betobetok/ask-svg",
     "description": "This is a personal extention from https://github.com/blade-ui-kit/blade-icons",
     "keywords": ["Blade", "Icons", "Laravel", "SVG"],
-    "homepage": "https://github.com/betobetok/blade-icons-svg",
+    "homepage": "https://github.com/betobetok/ask-svg",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/betobetok/blade-icons-svg/issues",
-        "source": "https://github.com/betobetok/blade-icons-svg"
+        "issues": "https://github.com/betobetok/ask-svg/issues",
+        "source": "https://github.com/betobetok/ask-svg"
     },
     "authors": [{
         "name": "Alberto Solorzano Kraemer",
