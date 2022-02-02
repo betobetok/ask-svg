@@ -33,14 +33,10 @@ trait RendersAttributes
     public function __call(string $method, array $arguments): self
     {
         if (count($arguments) === 0) {
-            $this->attributes[] = $method;
+            $this->attributes[] = Str::snake($method, '-');
         } else {
-            $this->attributes[$method] = $arguments[0];
+            $this->attributes[Str::snake($method, '-')] = $arguments[0];
         }
         return $this;
-    }
-    public function remove($att)
-    {
-        unset($this->attributes[$att]);
     }
 }

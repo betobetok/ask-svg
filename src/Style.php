@@ -59,17 +59,6 @@ class Style extends SvgElement
         $ret .= '</style>';
         return $ret;
     }
-    public function toCss(): string
-    {
-        $ret  = "/* ## Automatically generated code ## \n";
-        $ret .= "   ##             ASK              ## \n";
-        $ret .= "   ################################## */\n";
-        $classes = $this->classes();
-        foreach($classes as $className => $comands){
-            $ret .= '.' . $className . ' ' . $comands . "\n";
-        }
-        return $ret;
-    }
 
     public function mergeStyles(Style $add): self
     {
