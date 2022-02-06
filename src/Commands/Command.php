@@ -6,15 +6,17 @@ namespace BladeUI\Icons\Commands;
 
 abstract class Command
 {
-    private string $type;
+    protected string $type;
 
-    private string $comand;
+    protected string $comand;
 
-    private array $attributes;
+    protected array $attributes;
 
-    private Command $prev;
+    protected Command $prev;
 
-    private int $position;
+    protected int $position;
+
+    protected array $endPointCoordinates;
 
     public function __construct(string $type, array $attributes = [], ?Command $prev = null)
     {
@@ -23,12 +25,34 @@ abstract class Command
             $this->prev = $prev;
         }
         $this->attributes = $attributes;
-        $this->inisializate();
+        $this->initialization();
     }
 
-    public function inisializate()
+    public function initialization()
     {
         # code...
     }
 
+    public function getComand()
+    {
+        return $this->type === 'relative' ? strtolower(self::class) : self::class;
+    }
+
+    public function getEndPoint($absolute = true)
+    {
+        return [
+            'x' => 0,
+            'y' => 0,
+        ];
+    }
+
+    public function setEndPoint(array $relativePoint, array $absolutePoint)
+    {
+        $this->endPointCoordinates = [
+            'x' => (float)$relativePoint['x'],
+            'y' => (float)$relativePoint['y'],
+            'X' => (float)$absolutePoint['x'],
+            'Y' => (float)$absolutePoint['y'],
+        ];
+    }
 }

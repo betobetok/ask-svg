@@ -39,4 +39,11 @@ trait RendersAttributes
         }
         return $this;
     }
+
+    public function removeAtt(string $attribute)
+    {
+        if (isset($this->attributes[$attribute])) {
+            unset($this->attributes[$attribute]);
+        }
+    }
 }

@@ -9,9 +9,11 @@ use BladeUI\Icons\Commands as Comands;
 trait Shape
 {
 
-    private array $startPosition;
+    protected array $startPosition;
 
-    private array $commands;
+    protected array $endPosition;
+
+    protected array $commands;
 
     public function getStartPosition()
     {
@@ -36,9 +38,8 @@ trait Shape
                 $command = new $commandClass($type, $arguments[0], $prev);
                 $prev = $command;
             }
-            $commands[$k][$name] = $command;
+            $commands[$k][$name] = $command ?? $commandClass;
         }
-        
         return $commands;
     }
 }
