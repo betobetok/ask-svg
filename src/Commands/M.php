@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Commands;
 
+use Error;
+
 class M extends Command
 {
     private $x;
@@ -11,6 +13,9 @@ class M extends Command
 
     public function initialization()
     {
+        if (count($this->attributes) % 2 > 0) {
+            throw new Error('Incorrect configuration of attributes');
+        }
         $this->x = $this->attributes[0];
         $this->y = $this->attributes[1];
         $absolutePoint = $this->getEndPoint();
@@ -29,7 +34,7 @@ class M extends Command
         return $this->y;
     }
 
-    public function getEndPoint($absolute = true)
+    public function getEndPoint($absolute = true): array
     {
         if($absolute && $this->type === 'absolute'){
             return [

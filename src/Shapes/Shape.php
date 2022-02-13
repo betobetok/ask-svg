@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace BladeUI\Icons\Shapes;
 
 use BladeUI\Icons\Commands as Comands;
+use NumPHP\Core\NumArray;
 
 trait Shape
 {
 
-    protected array $startPosition;
+    protected NumArray $startPosition;
 
-    protected array $endPosition;
+    protected NumArray $endPosition;
 
     protected array $commands;
 

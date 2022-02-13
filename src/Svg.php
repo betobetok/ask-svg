@@ -16,7 +16,7 @@ final class Svg extends SvgElement
 
     private array $elements = [];
 
-    public function __construct(string $name, string $contents, array $attributes = [])
+    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
     {
         $name = explode('/', $name);
         $name = $name[count($name) - 1];
@@ -68,7 +68,7 @@ final class Svg extends SvgElement
         }
         $old = $this->getAllSvgElements($this);
         $name = $old['attributes']['id'] ?? '';
-        
+
         // $content = $this->findGroupElement($this->contents(), 'svg') !== [] ? "\n<g" . (isset($old['attributes']['id']) ? 'id="' . $old['attributes']['id'] . '"' : '') . '>' . "\n" . $this->findGroupElement($this->contents(), 'svg')[0]->contents() . "\n</g>" : '';
         foreach ($param as $svg) {
             $new = $this->getAllSvgElements($svg);
@@ -79,8 +79,8 @@ final class Svg extends SvgElement
                 $old['style']->$name($attribute);
             }
             $svg->removeSvgAttribute();
-            $tmp = new SvgElement('g', '', $svg->attributes);
-            if(isset($svg->attributes['id'])){
+            $tmp = new SvgElement('g', '', $svg->attributes, $this);
+            if (isset($svg->attributes['id'])) {
                 $tmp->id($svg->attributes['id']);
                 $svg->removeId();
             }
@@ -90,7 +90,7 @@ final class Svg extends SvgElement
                     continue;
                 }
                 if ($element === 'attributes') {
-                    foreach($new[$element] as $k => $att){
+                    foreach ($new[$element] as $k => $att) {
                         $k = str_replace('"', '', $k);
                         $att = str_replace('"', '', $att);
                         $tmp->$k($att);
@@ -104,8 +104,7 @@ final class Svg extends SvgElement
                 $svg->$name(str_replace('"', '', $attribute));
             }
             $name .= isset($new['attributes']['id']) ? '-' . $new['attributes']['id'] : '';
-            $this->g = array_merge([$tmp], $this->g??[]) ;
-
+            $this->g = array_merge([$tmp], $this->g ?? []);
         }
         $this->style = $old['style'];
         $this->setName('merge-' . $name);

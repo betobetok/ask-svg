@@ -46,4 +46,9 @@ trait RendersAttributes
             unset($this->attributes[$attribute]);
         }
     }
+
+    public function setAttribute(string $name, string $arguments)
+    {
+        $this->attributes[Str::snake($name, '-')] = $arguments;
+    }
 }

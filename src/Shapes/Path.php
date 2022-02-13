@@ -19,10 +19,10 @@ class Path extends SvgElement
 
     protected array $d;
 
-    public function __construct(string $name, string $contents, array $attributes = [])
+    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
     {
-        parent::__construct($name,  $contents,  $attributes);
-        preg_match('/d="([A-Za-z0-9\s.,-]+)"/', $contents, $d);
+        parent::__construct($name,  $contents,  $attributes, $context);
+        preg_match('/\sd="([A-Za-z0-9\s.,-]+)"/', $contents, $d);
        
         foreach ($attributes as $key => $attribute) {
             $this->$key($attribute);
@@ -35,6 +35,8 @@ class Path extends SvgElement
         if(is_array($this->d) && !empty($this->d)){
             $this->removeAtt('d');
         }
+        $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
+        
     }
 
     public function toHtml(): string

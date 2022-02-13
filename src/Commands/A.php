@@ -16,7 +16,7 @@ class A extends Command
 
     public function initialization()
     {
-        if (count($this->attributes) % 3 > 0) {
+        if (count($this->attributes) % 7 > 0) {
             throw new Error('Incorrect configuration of attributes');
         }
 
