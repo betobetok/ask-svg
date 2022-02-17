@@ -134,11 +134,13 @@ class Transformation
             $data[] = 1;
             $transformedPoint = new NumArray($data);
         }
-        $OriginalPoint = new NumArray([1, 1, 1]);
-        foreach ($this->transformations as $transform) {
+        $OriginalPoint = $transformedPoint;
+        $transformations = array_reverse($this->transformations);
+        foreach ($transformations as $transform) {
             foreach ($transform as $matrix) {
+                $matrix = new NumArray($matrix->getData());
                 $matrixTransform = LinAlg::inv($matrix);
-                $OriginalPoint = $matrixTransform->dot($transformedPoint);
+                $OriginalPoint = $matrixTransform->dot($OriginalPoint);
             }
         }
         return $OriginalPoint;
@@ -146,17 +148,18 @@ class Transformation
 
     public function getTransformed(NumArray $OriginalPoint): NumArray
     {
-
         $data = $OriginalPoint->getData();
         if (count($data) < 3) {
             $data[] = 1;
             $OriginalPoint = new NumArray($data);
         }
 
-        $transformedPoint = new NumArray([1, 1, 1]);
-        foreach ($this->transformations as $transform) {
+        $transformedPoint = $OriginalPoint;
+        $transformations = array_reverse($this->transformations);
+        foreach ($transformations as $transform) {
             foreach ($transform as $k => $matrix) {
-                $transformedPoint = $matrix->dot($OriginalPoint);
+                $matrix = new NumArray($matrix->getData());
+                $transformedPoint = $matrix->dot($transformedPoint);
             }
         }
         return $transformedPoint;

@@ -485,12 +485,17 @@ class SvgElement implements Htmlable
             $element = $element->getContext();
             $transforms[] = $element->transforms();
         } while ($element->hasContext());
-
-        foreach ($transforms as $transform) {
-            if (!($transform instanceof Transformation)) {
+        // dump([
+        //     'transformaciones' => $transforms,
+        //     'id'=>$id
+        // ]);
+        $n = count($transforms)-1;
+        for ($i = 0; $i <= $n; $i++) {
+            if (!($transforms[$i] instanceof Transformation)) {
                 continue;
             }
-            $point = $transform->getOriginal($point);
+            // dump([$point,$transforms[$i]]);
+            $point = $transforms[$i]->getTransformed($point);
         }
         return $point;
     }
