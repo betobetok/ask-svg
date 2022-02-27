@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
+<<<<<<< Updated upstream
 use NumPHP\Core\NumArray;
 
+=======
+use BladeUI\Icons\SvgElement;
+use NumPHP\Core\NumArray;
+
+/**
+ * Rect
+ */
+>>>>>>> Stashed changes
 class Rect extends Shape
 {
     /** @var float $x */
@@ -29,6 +38,7 @@ class Rect extends Shape
     /**
      * __construct
      *
+<<<<<<< Updated upstream
      * @param  string $name
      * @param  string $contents
      * @param  array $attributes
@@ -51,6 +61,23 @@ class Rect extends Shape
         $this->removeAtt('ry');
         $this->removeAtt('width');
         $this->removeAtt('height');
+=======
+     * @param  string $contents
+     * @param  array $attributes
+     * @param  SvgElement $context
+     * @return void
+     */
+    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    {
+        parent::__construct($contents, $attributes, $context);
+        $att = $this->attributes();
+        foreach ($att as $k => $val) {
+            if (property_exists($this, $k)) {
+                $this->$k = (float)$val;
+                $this->removeAtt($k);
+            }
+        }
+>>>>>>> Stashed changes
     }
 
     /**

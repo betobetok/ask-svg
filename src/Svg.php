@@ -15,20 +15,29 @@ final class Svg extends SvgElement
     public Style $style;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private array $elements = [];
 
     public function __construct(string $name, string $contents, array $attributes = [])
 =======
+=======
+>>>>>>> Stashed changes
     /**
      * 
      *
      * @param  string $fileName
      * @param  string $contents
      * @param  array $attributes
+<<<<<<< Updated upstream
      * @param  mixed $context
      * @return void
      */
     public function __construct(string $fileName, string $contents, array $attributes = [], $context = null)
+>>>>>>> Stashed changes
+=======
+     * @return void
+     */
+    public function __construct(string $fileName, string $contents, array $attributes = [])
 >>>>>>> Stashed changes
     {
         $name = explode('/', $fileName);
@@ -37,6 +46,7 @@ final class Svg extends SvgElement
         $this->contents = $contents;
 
         $styleContent = $this->getStylefromContent();
+<<<<<<< Updated upstream
         $this->style = new Style($styleContent, $name);
         $this->removeStylefromContent();
 
@@ -55,11 +65,24 @@ final class Svg extends SvgElement
         }
 
         $contents = $this->replaceClasses($this->style, $contents);
+=======
+        $this->style = new Style($styleContent, $name, $this);
+        $this->removeStylefromContent();
+
+        $contents = $this->configAttributesAndContent('svg', $contents, $attributes);
+
+        $contents = $this->replaceClasses($this->style, $contents);
+
+>>>>>>> Stashed changes
         parent::__construct('svg', $contents);
 
         $this->cleanContent();
     }
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     /**
      * style
      *
@@ -87,10 +110,17 @@ final class Svg extends SvgElement
     /**
      * setStyle
      *
+<<<<<<< Updated upstream
      * @param  mixed $style
      * @return self
      */
     public function setStyle($style): self
+=======
+     * @param  Style $style
+     * @return self
+     */
+    public function setStyle(Style $style): self
+>>>>>>> Stashed changes
     {
         $this->style = $style;
         return $this;
@@ -99,7 +129,11 @@ final class Svg extends SvgElement
     /**
      * replaceClasses
      *
+<<<<<<< Updated upstream
      * @param  mixed $style
+=======
+     * @param  Style $style
+>>>>>>> Stashed changes
      * @param  string $content
      * @return string
      */
@@ -115,10 +149,17 @@ final class Svg extends SvgElement
     /**
      * mergeSvgs
      *
+<<<<<<< Updated upstream
      * @param  Svg $param
      * @return Svg
      */
     public function mergeSvgs(Svg ...$param): Svg
+=======
+     * @param  Svg[] $param
+     * @return Svg
+     */
+    public function mergeSvgs(...$param): Svg
+>>>>>>> Stashed changes
     {
         if (is_array($param[0])) {
             $param = $param[0];

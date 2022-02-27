@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
+<<<<<<< Updated upstream
+=======
+use BladeUI\Icons\SvgElement;
+>>>>>>> Stashed changes
 use Exception;
 
 /**
@@ -11,12 +15,17 @@ use Exception;
  */
 class Path extends Shape
 {
+<<<<<<< Updated upstream
     /** @var string  dString*/
+=======
+    /** @var string  $dString*/
+>>>>>>> Stashed changes
     private $dString;
 
     /** @var array d*/
     protected array $d = [];
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     public function __construct(string $name, string $contents, array $attributes = [])
     {
@@ -44,6 +53,24 @@ class Path extends Shape
 >>>>>>> Stashed changes
         $this->dString = $d[1];
         if (empty($d)) {
+=======
+    /**
+     * 
+     *
+     * @param  mixed $name
+     * @param  mixed $contents
+     * @param  mixed $attributes
+     * @param  SvgElement $context
+     * @return void
+     */
+    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    {
+        parent::__construct($contents,  $attributes, $context);
+
+        if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
+            $this->dString = $this->attributes()['d'];
+        } else {
+>>>>>>> Stashed changes
             throw new Exception("Path had no d", 1);
         }
         $this->d = $this->getExistingComands($this->dString);
@@ -54,6 +81,9 @@ class Path extends Shape
 =======
         $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
         unset($this->dString);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 

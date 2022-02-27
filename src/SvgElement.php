@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace BladeUI\Icons;
 
 use BladeUI\Icons\Concerns\RendersAttributes;
+use BladeUI\Icons\Configurators\Style;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 use BladeUI\Icons\Shapes\Path;
 use BladeUI\Icons\Shapes\Shape;
 =======
+=======
+>>>>>>> Stashed changes
 use NumPHP\Core\NumArray;
 >>>>>>> Stashed changes
 
@@ -21,6 +25,7 @@ class SvgElement implements Htmlable
 {
     use RendersAttributes;
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     use Shape;
 
@@ -65,6 +70,8 @@ class SvgElement implements Htmlable
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     public const SVG_ATTRIBUTES = [
         'view-box', 
         'version', 
@@ -103,6 +110,11 @@ class SvgElement implements Htmlable
         'text',
         'clipPath',
         'title',
+        'defs',
+        'filter',
+        'mask',
+        'pattern',
+        'font'
     ];
 
 <<<<<<< Updated upstream
@@ -130,8 +142,10 @@ class SvgElement implements Htmlable
         'ellipse',
         'path',
         'polyline',
-        'polygon'
+        'polygon',
+        'text',
     ];
+<<<<<<< Updated upstream
     
     /** name @var string */
     private $name;
@@ -155,14 +169,46 @@ class SvgElement implements Htmlable
      * @var SvgElement $context 
      */
     public function __construct(string $name, string $contents, array $attributes = [], $context = null)
+=======
+
+    /** @var string $name */
+    protected $name;
+
+    /** @var string $contents */
+    protected $contents;
+
+    /** @var SvgElement $context */
+    protected $context;
+
+    /** @var Transformation $transforms */
+    protected $transforms;
+
+    /** @var bool $isTransformable */
+    protected $isTransformable = false;
+
+    /**
+     * @var string      $name   the name of a svg element (e. g, svg, path, circle, etc)
+     * @var string      $content  the content of a svg file or a part of them
+     * @var array       $attributes  the array with the attributres for this element
+     * @var SvgElement  $context 
+     */
+    public function __construct(string $name, string $contents, array $attributes = [], SvgElement $context = null)
+>>>>>>> Stashed changes
     {
+
         $this->name = $name;
         $this->contents = $contents;
         $this->context = $context;
+<<<<<<< Updated upstream
         
         foreach ($attributes as $key => $attribute) {
             $this->$key($attribute);
         }
+
+        $this->getTransformations();
+        if (!in_array($name, self::NON_GROUP_ELEMENTS) && $name !== 'style') {
+>>>>>>> Stashed changes
+=======
 
         $this->getTransformations();
         if (!in_array($name, self::NON_GROUP_ELEMENTS) && $name !== 'style') {
@@ -173,7 +219,32 @@ class SvgElement implements Htmlable
             $this->removeContents();
         }
     }
+<<<<<<< Updated upstream
             
+=======
+
+
+    protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
+    {
+        $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
+
+        if ($svg !== 0 && $svg !== false) {
+            $attributes = $this->mergeAttributes($svgTag[0], $attributes);
+            $contentFirst = strlen($svgTag[0]);
+            $contetnleng = strrpos($contents, '</' . $tag . '>') - $contentFirst;
+            $contents = substr($contents, $contentFirst, $contetnleng);
+        }
+
+        unset($attributes['id']);
+
+        foreach ($attributes as $key => $attribute) {
+            $this->$key($attribute);
+        }
+
+        return $contents;
+    }
+
+>>>>>>> Stashed changes
     public function __get($name)
     {
         try {
@@ -197,7 +268,11 @@ class SvgElement implements Htmlable
             throw "This Methode don't exist" . $e->getMessage() . "\n";
         }
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * name
      *
@@ -207,15 +282,24 @@ class SvgElement implements Htmlable
     {
         return $this->name;
     }
+<<<<<<< Updated upstream
     
     /**
      * id
      *
      * @param  string $arg
+=======
+
+    /**
+     * id
+     *
+     * @param string $arg
+>>>>>>> Stashed changes
      * @return string|self
      */
     public function id($arg = '')
     {
+<<<<<<< Updated upstream
         if (empty($arg)){
             return $this->attributes()['id'] ?? '';
         }else{
@@ -227,6 +311,16 @@ class SvgElement implements Htmlable
 
 =======
     
+=======
+        if (empty($arg)) {
+            return $this->attributes()['id'] ?? '';
+        } else {
+            $this->setAttribute('id',  $arg);
+            return $this;
+        }
+    }
+
+>>>>>>> Stashed changes
     /**
      * transforms get the Transformation Object for the element 
      *
@@ -235,12 +329,19 @@ class SvgElement implements Htmlable
     public function transforms(): Transformation
     {
         return $this->transforms;
+<<<<<<< Updated upstream
     }    
+=======
+    }
+>>>>>>> Stashed changes
     /**
      * contents
      *
      * @return string
      */
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public function contents(): string
     {
@@ -265,7 +366,11 @@ class SvgElement implements Htmlable
         return $ret;
         
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeContents
      *
@@ -276,7 +381,11 @@ class SvgElement implements Htmlable
         unset($this->contents);
         return $this;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * setContents
      *
@@ -289,9 +398,13 @@ class SvgElement implements Htmlable
         return $this;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 =======
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getContext
      *
@@ -301,12 +414,19 @@ class SvgElement implements Htmlable
     {
         return $this->context;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getAllElements
      *
      * @return void
      */
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public function getAllElements(): void
     {
@@ -318,11 +438,35 @@ class SvgElement implements Htmlable
             }
         }
     }
+<<<<<<< Updated upstream
     
     /**
      * getElements
      *
      * @param  mixed $element
+=======
+
+
+    /**
+     * mergeAttributes
+     *
+     * @param string    $tag
+     * @param array     $attributes
+     *
+     * @return array
+     */
+    public function mergeAttributes(string $tag, array $attributes): array
+    {
+        $attributesFromString = $this->getElementAttributes($tag);
+        return array_merge($attributes, $attributesFromString);
+    }
+
+    /**
+     * getElements
+     *
+     * @param  string    $element
+     * 
+>>>>>>> Stashed changes
      * @return SvgElement|false
      */
     public function getElements(string $element)
@@ -346,9 +490,13 @@ class SvgElement implements Htmlable
         return $ret;
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 =======
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeGroupElements
      *
@@ -401,19 +549,30 @@ class SvgElement implements Htmlable
         }
         return $ret;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeComents Deprecate
      *
      * @return self
      */
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public function removeComents(): self
     {
         // $this->contents = preg_replace("/(<!--.+-->\n)/i", '', $this->contents());
         return $this;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeStylefromContent
      *
@@ -437,6 +596,17 @@ class SvgElement implements Htmlable
         return $match[0] ?? '';
     }
 
+    /**
+     * getStylefromContent
+     *
+     * @return string
+     */
+    public function getStylefromContent(): string
+    {
+        preg_match("/(<style[^>]*>)[^á]*<\/style>/i", $this->contents(), $match);
+        return $match[0] ?? '';
+    }
+
     public function toHtml(): string
     {
         if (in_array($this->name(), self::GROUP_ELEMENTS)) {
@@ -448,7 +618,11 @@ class SvgElement implements Htmlable
             // return str_replace('<svg', sprintf('<svg%s', $this->renderAttributes()), $this->contents());
         }
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeId
      *
@@ -461,7 +635,11 @@ class SvgElement implements Htmlable
         }
         return $this;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * toArray
      *
@@ -509,7 +687,11 @@ class SvgElement implements Htmlable
     public function unserialize($data)
     {
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * findGroupElement
      *
@@ -532,6 +714,7 @@ class SvgElement implements Htmlable
             $cont = trim(substr($content, $posStart + strlen($tag), $posEnde - $posStart - strlen($tag)));
             $attributes = $this->getElementAttributes($tag);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             $tmp = new SvgElement($element, $cont, $attributes);
 =======
             // TODO 
@@ -542,6 +725,17 @@ class SvgElement implements Htmlable
             //     $tmp = new SvgElement($element, $content, $attributes, $this);
             // }
             $tmp = new SvgElement($element, $cont, $attributes, $this);
+>>>>>>> Stashed changes
+=======
+            $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
+            $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+            if (class_exists($classElement)) {
+                $tmp = new $classElement($cont, $attributes, $this);
+            } elseif (class_exists($classElement2)) {
+                $tmp = new $classElement2($cont, $attributes, $this);
+            } else {
+                $tmp = new SvgElement($element, $cont, $attributes, $this);
+            }
 >>>>>>> Stashed changes
             $ret[] = $tmp;
             return $ret;
@@ -571,6 +765,7 @@ class SvgElement implements Htmlable
                 $con = trim(substr($content, $first + strlen($tag[0]) + 1, $key - $first - strlen($tag[0]) - 1));
                 $attributes = $this->getElementAttributes($tag[0]);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 $tmp = new SvgElement($element, $con, $attributes);
 =======
                  // TODO 
@@ -582,13 +777,28 @@ class SvgElement implements Htmlable
                 // }
                 $tmp = new SvgElement($element, $con, $attributes, $this);
 >>>>>>> Stashed changes
+=======
+                $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
+                $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+                if (class_exists($classElement)) {
+                    $tmp = new $classElement($con, $attributes, $this);
+                } elseif (class_exists($classElement2)) {
+                    $tmp = new $classElement2($con, $attributes, $this);
+                } else {
+                    $tmp = new SvgElement($element, $con, $attributes, $this);
+                }
+>>>>>>> Stashed changes
                 $ret[] = $tmp;
                 $first = true;
             }
         }
         return $ret;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * findNonGroupElement
      *
@@ -608,17 +818,29 @@ class SvgElement implements Htmlable
         foreach ($tags as $tag) {
             $content = $tag;
             $attributes = $this->getElementAttributes($tag);
+<<<<<<< Updated upstream
             $classElement = 'BladeUI\\Icons\\Shapes\\'.ucfirst($element);
             if(class_exists($classElement)){
                 $tmp = new $classElement($element, $content, $attributes);
             }else{
                 $tmp = new SvgElement($element, $content, $attributes);
+=======
+            $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
+            if (class_exists($classElement)) {
+                $tmp = new $classElement($content, $attributes, $this);
+            } else {
+                $tmp = new SvgElement($element, $content, $attributes, $this);
+>>>>>>> Stashed changes
             }
             $ret[] = $tmp;
         }
         return $ret;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getElementAttributes
      *
@@ -635,7 +857,11 @@ class SvgElement implements Htmlable
         return  $attributes;
     }
 
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
     /**
      * cleanGroup
      *
@@ -662,7 +888,11 @@ class SvgElement implements Htmlable
         }
         return $this;
     }
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
     /**
      * removeSvgAttribute
      *
@@ -684,8 +914,12 @@ class SvgElement implements Htmlable
         }
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getTransformations
      *
@@ -702,7 +936,11 @@ class SvgElement implements Htmlable
 
         return $this;
     }
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
     /**
      * getElementById
      *
@@ -731,7 +969,11 @@ class SvgElement implements Htmlable
         }
         return false;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getStartPointById
      *
@@ -754,18 +996,30 @@ class SvgElement implements Htmlable
             $element = $element->getContext();
             $transforms[] = $element->transforms();
         } while ($element->hasContext());
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
         $n = count($transforms) - 1;
         for ($i = 0; $i <= $n; $i++) {
             if (!($transforms[$i] instanceof Transformation)) {
                 continue;
             }
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
             $point = $transforms[$i]->getTransformed($point);
         }
         return $point;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * hasContext
      *
@@ -775,7 +1029,11 @@ class SvgElement implements Htmlable
     {
         return $this->context !== null;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * transform
      *
