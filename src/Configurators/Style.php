@@ -12,19 +12,6 @@ use BladeUI\Icons\SvgElement;
  * Style
  */
 class Style extends Configurator
-<<<<<<< Updated upstream
-{    
-    /** classes @var array */
-    private $classes;
-
-    public function __construct(string $svgContent, string $name)
-    {
-        parent::__construct('style', $svgContent);
-        $this->renameStyle($name);
-        $this->removeContents();
-    }
-    
-=======
 {
     /** @var array $classes */
     private $classes;
@@ -45,7 +32,6 @@ class Style extends Configurator
         $this->removeContents();
     }
 
->>>>>>> Stashed changes
     /**
      * renameStyle
      *
@@ -56,60 +42,35 @@ class Style extends Configurator
     {
         $this->classes = [];
         preg_match_all("/.([a-z0-9]*)({[^}]*})/i", $this->contents(), $comands);
-<<<<<<< Updated upstream
-        foreach($comands[1] as $k => $class){
-            $className = $class . '-' . $svgElementName; 
-=======
         foreach ($comands[1] as $k => $class) {
             $className = $class . '-' . $svgElementName;
->>>>>>> Stashed changes
             $this->classes[$className] = $comands[2][$k];
         }
         return $this;
     }
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
     /**
      * classes get the css classes from style
      *
      * @return array
      */
-<<<<<<< Updated upstream
-    public function classes() : array
-    {
-        return $this->classes;
-    }
-    
-=======
     public function classes(): array
     {
         return $this->classes;
     }
 
->>>>>>> Stashed changes
     /**
      * setClasses set the css classes for style
      *
      * @param  array $classes
      * @return self
      */
-<<<<<<< Updated upstream
-    public function setClasses(array $classes) : self
-=======
     public function setClasses(array $classes): self
->>>>>>> Stashed changes
     {
         $this->classes = $classes;
         return $this;
     }
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
     /**
      * toHtml
      *
@@ -119,21 +80,13 @@ class Style extends Configurator
     {
         $ret = '<style' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n";
         $classes = $this->classes();
-<<<<<<< Updated upstream
-        foreach($classes as $className => $comands){
-=======
         foreach ($classes as $className => $comands) {
->>>>>>> Stashed changes
             $ret .= '.' . $className . ' ' . $comands . "\n";
         }
         $ret .= '</style>';
         return $ret;
     }
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
     /**
      * mergeStyles Merge one Style with an other
      *
@@ -142,22 +95,6 @@ class Style extends Configurator
      */
     public function mergeStyles(Style $add): ?self
     {
-<<<<<<< Updated upstream
-        if(empty($this->attributes())){
-            if(empty($add->attributes())){
-                return null;
-            }
-            foreach($add->attributes() as $name => $arguments){
-                $this->setAttribute($name, $arguments);
-            }
-        }
-        
-        if(empty($add->attributes())){
-            return null;
-        }
-        $array = array_merge($this->attributes(), $add->attributes());
-        foreach($array as $name => $arguments){
-=======
         if (empty($this->attributes())) {
             if (empty($add->attributes())) {
                 return null;
@@ -172,17 +109,12 @@ class Style extends Configurator
         }
         $array = array_merge($this->attributes(), $add->attributes());
         foreach ($array as $name => $arguments) {
->>>>>>> Stashed changes
             $this->setAttribute($name, $arguments);
         }
 
         return $this;
     }
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
     /**
      * toArray
      *

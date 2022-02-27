@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-<<<<<<< Updated upstream
-use NumPHP\Core\NumArray;
-
-class Circle extends Shape
-{
-=======
 use BladeUI\Icons\SvgElement;
 use NumPHP\Core\NumArray;
 
@@ -19,7 +13,6 @@ use NumPHP\Core\NumArray;
 class Circle extends Shape
 {
     /** @var float $cx */
->>>>>>> Stashed changes
     protected float $cx;
 
     /** @var float $cy */
@@ -39,16 +32,6 @@ class Circle extends Shape
      */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
-<<<<<<< Updated upstream
-        parent::__construct($name,  $contents,  $attributes, $context);
-        $att = $this->attributes();
-        $this->cx = (float)$att['cx'];
-        $this->cy = (float)$att['cy'];
-        $this->r = (float)$att['r'];
-        $this->removeAtt('cx');
-        $this->removeAtt('cy');
-        $this->removeAtt('r');
-=======
         parent::__construct($contents,  $attributes, $context);
 
         $att = $this->attributes();
@@ -58,7 +41,6 @@ class Circle extends Shape
                 $this->removeAtt($k);
             }
         }
->>>>>>> Stashed changes
     }
 
     /**
@@ -74,16 +56,12 @@ class Circle extends Shape
         ]);
     }
 
-<<<<<<< Updated upstream
-    public function getDiameter()
-=======
     /**
      * getDiameter
      *
      * @return float
      */
     public function getDiameter(): float
->>>>>>> Stashed changes
     {
         return $this->r * 2;
     }

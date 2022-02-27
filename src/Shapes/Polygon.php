@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-<<<<<<< Updated upstream
-=======
 use BladeUI\Icons\SvgElement;
->>>>>>> Stashed changes
 use Exception;
 use NumPHP\Core\NumArray;
 
@@ -16,20 +13,6 @@ use NumPHP\Core\NumArray;
  */
 class Polygon extends Shape
 {
-<<<<<<< Updated upstream
-    /** @var array points */
-    protected array $points;
-
-    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
-    {
-        parent::__construct($name,  $contents,  $attributes, $context);
-        preg_match('/\spoints="([A-Za-z0-9\s.,-]+)"/', $contents, $points);
-
-        if (empty($points)) {
-            throw new Exception("Path had no d", 1);
-        }
-        $this->points = $this->getPoints($points[1]);
-=======
     /** @var array $points */
     protected array $points;
 
@@ -52,21 +35,17 @@ class Polygon extends Shape
             throw new Exception("Polygon had no points attribute", 1);
         }
         $this->points = $this->getPoints($this->points);
->>>>>>> Stashed changes
         if (!empty($this->points)) {
             $this->removeAtt('points');
         }
         $this->startPosition = $this->points[0];
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * toHtml
      *
      * @return string
      */
->>>>>>> Stashed changes
     public function toHtml(): string
     {
         return sprintf('<%s points="%s" %s/>', $this->name(), $this->pointsString(), $this->renderAttributes());
@@ -75,11 +54,7 @@ class Polygon extends Shape
     /**
      * getPoints
      *
-<<<<<<< Updated upstream
-     * @param string points
-=======
      * @param string $points
->>>>>>> Stashed changes
      *
      * @return array
      */

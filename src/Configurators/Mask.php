@@ -10,11 +10,7 @@ use NumPHP\Core\NumArray;
 class Mask extends Configurator
 {
 
-<<<<<<< Updated upstream
-    /** @var bool isTransformable */
-=======
     /** @var bool $isTransformable */
->>>>>>> Stashed changes
     protected bool $isTransformable = true;
 
     public function __construct(string $name, string $contents, array $attributes = [], $context = null)

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-<<<<<<< Updated upstream
-=======
 use BladeUI\Icons\SvgElement;
->>>>>>> Stashed changes
 use Exception;
 
 /**
@@ -15,45 +12,12 @@ use Exception;
  */
 class Path extends Shape
 {
-<<<<<<< Updated upstream
-    /** @var string  dString*/
-=======
     /** @var string  $dString*/
->>>>>>> Stashed changes
     private $dString;
 
     /** @var array d*/
     protected array $d = [];
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    public function __construct(string $name, string $contents, array $attributes = [])
-    {
-        parent::__construct($name,  $contents,  $attributes);
-        preg_match('/d="([A-Za-z0-9\s.,-]+)"/', $contents, $d);
-       
-        foreach ($attributes as $key => $attribute) {
-            $this->$key($attribute);
-        }
-=======
-    /**
-     * __construct
-     *
-     * @param  mixed $name
-     * @param  mixed $contents
-     * @param  mixed $attributes
-     * @param  mixed $context
-     * @return void
-     */
-    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
-    {
-        parent::__construct('path',  $contents,  $attributes, $context);
-        preg_match('/\sd="([A-Za-z0-9\s.,-]+)"/', $contents, $d);
-
->>>>>>> Stashed changes
-        $this->dString = $d[1];
-        if (empty($d)) {
-=======
     /**
      * 
      *
@@ -70,21 +34,14 @@ class Path extends Shape
         if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
             $this->dString = $this->attributes()['d'];
         } else {
->>>>>>> Stashed changes
             throw new Exception("Path had no d", 1);
         }
         $this->d = $this->getExistingComands($this->dString);
         if (is_array($this->d) && !empty($this->d)) {
             $this->removeAtt('d');
         }
-<<<<<<< Updated upstream
-=======
         $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
         unset($this->dString);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }
 
     /**

@@ -14,31 +14,15 @@ final class Svg extends SvgElement
     /** @var Style $style */
     public Style $style;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    private array $elements = [];
-
-    public function __construct(string $name, string $contents, array $attributes = [])
-=======
-=======
->>>>>>> Stashed changes
     /**
      * 
      *
      * @param  string $fileName
      * @param  string $contents
      * @param  array $attributes
-<<<<<<< Updated upstream
-     * @param  mixed $context
-     * @return void
-     */
-    public function __construct(string $fileName, string $contents, array $attributes = [], $context = null)
->>>>>>> Stashed changes
-=======
      * @return void
      */
     public function __construct(string $fileName, string $contents, array $attributes = [])
->>>>>>> Stashed changes
     {
         $name = explode('/', $fileName);
         $this->id($fileName);
@@ -46,26 +30,6 @@ final class Svg extends SvgElement
         $this->contents = $contents;
 
         $styleContent = $this->getStylefromContent();
-<<<<<<< Updated upstream
-        $this->style = new Style($styleContent, $name);
-        $this->removeStylefromContent();
-
-        $svg = preg_match("/<svg[^>]*>/i", $contents, $svgTag);
-
-        if ($svg !== 0 && $svg !== false && $attributes === []) {
-            $attributesFromString = $this->getElementAttributes($svgTag[0]);
-            $attributes = array_merge($attributes, $attributesFromString);
-            $contents = str_replace([$svgTag[0], '</svg>'], '', $contents);
-        }
-
-        unset($attributes['id']);
-
-        foreach ($attributes as $key => $attribute) {
-            $this->$key($attribute);
-        }
-
-        $contents = $this->replaceClasses($this->style, $contents);
-=======
         $this->style = new Style($styleContent, $name, $this);
         $this->removeStylefromContent();
 
@@ -73,16 +37,12 @@ final class Svg extends SvgElement
 
         $contents = $this->replaceClasses($this->style, $contents);
 
->>>>>>> Stashed changes
         parent::__construct('svg', $contents);
 
         $this->cleanContent();
     }
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     /**
      * style
      *
@@ -110,17 +70,10 @@ final class Svg extends SvgElement
     /**
      * setStyle
      *
-<<<<<<< Updated upstream
-     * @param  mixed $style
-     * @return self
-     */
-    public function setStyle($style): self
-=======
      * @param  Style $style
      * @return self
      */
     public function setStyle(Style $style): self
->>>>>>> Stashed changes
     {
         $this->style = $style;
         return $this;
@@ -129,11 +82,7 @@ final class Svg extends SvgElement
     /**
      * replaceClasses
      *
-<<<<<<< Updated upstream
-     * @param  mixed $style
-=======
      * @param  Style $style
->>>>>>> Stashed changes
      * @param  string $content
      * @return string
      */
@@ -149,17 +98,10 @@ final class Svg extends SvgElement
     /**
      * mergeSvgs
      *
-<<<<<<< Updated upstream
-     * @param  Svg $param
-     * @return Svg
-     */
-    public function mergeSvgs(Svg ...$param): Svg
-=======
      * @param  Svg[] $param
      * @return Svg
      */
     public function mergeSvgs(...$param): Svg
->>>>>>> Stashed changes
     {
         if (is_array($param[0])) {
             $param = $param[0];
@@ -167,7 +109,7 @@ final class Svg extends SvgElement
 
         $old = $this->getAllSvgElements($this);
         $name = $old['attributes']['id'] ?? '';
-        
+
         // $content = $this->findGroupElement($this->contents(), 'svg') !== [] ? "\n<g" . (isset($old['attributes']['id']) ? 'id="' . $old['attributes']['id'] . '"' : '') . '>' . "\n" . $this->findGroupElement($this->contents(), 'svg')[0]->contents() . "\n</g>" : '';
         foreach ($param as $svg) {
             $new = $this->getAllSvgElements($svg);
@@ -178,8 +120,8 @@ final class Svg extends SvgElement
                 $old['style']->$name($attribute);
             }
             $svg->removeSvgAttribute();
-            $tmp = new SvgElement('g', '', $svg->attributes);
-            if(isset($svg->attributes['id'])){
+            $tmp = new SvgElement('g', '', $svg->attributes, $this);
+            if (isset($svg->attributes['id'])) {
                 $tmp->id($svg->attributes['id']);
                 $svg->removeId();
             }
@@ -189,7 +131,7 @@ final class Svg extends SvgElement
                     continue;
                 }
                 if ($element === 'attributes') {
-                    foreach($new[$element] as $k => $att){
+                    foreach ($new[$element] as $k => $att) {
                         $k = str_replace('"', '', $k);
                         $att = str_replace('"', '', $att);
                         $tmp->$k($att);
@@ -203,8 +145,7 @@ final class Svg extends SvgElement
                 $svg->$name(str_replace('"', '', $attribute));
             }
             $name .= isset($new['attributes']['id']) ? '-' . $new['attributes']['id'] : '';
-            $this->g = array_merge([$tmp], $this->g??[]) ;
-
+            $this->g = array_merge([$tmp], $this->g ?? []);
         }
         $this->style = $old['style'];
         $this->setName('merge-' . $name);

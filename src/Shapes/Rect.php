@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-<<<<<<< Updated upstream
-use NumPHP\Core\NumArray;
-
-=======
 use BladeUI\Icons\SvgElement;
 use NumPHP\Core\NumArray;
 
 /**
  * Rect
  */
->>>>>>> Stashed changes
 class Rect extends Shape
 {
     /** @var float $x */
@@ -38,30 +33,6 @@ class Rect extends Shape
     /**
      * __construct
      *
-<<<<<<< Updated upstream
-     * @param  string $name
-     * @param  string $contents
-     * @param  array $attributes
-     * @param  mixed $context
-     * @return void
-     */
-    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
-    {
-        parent::__construct($name, $contents, $attributes, $context);
-        $att = $this->attributes();
-        $this->x = (float)$att['x'];
-        $this->y = (float)$att['y'];
-        $this->rx = (float)$att['rx'] ?? 0;
-        $this->ry = (float)$att['ry'] ?? 0;
-        $this->width = (float)$att['width'];
-        $this->height = (float)$att['height'];
-        $this->removeAtt('x');
-        $this->removeAtt('y');
-        $this->removeAtt('rx');
-        $this->removeAtt('ry');
-        $this->removeAtt('width');
-        $this->removeAtt('height');
-=======
      * @param  string $contents
      * @param  array $attributes
      * @param  SvgElement $context
@@ -77,7 +48,6 @@ class Rect extends Shape
                 $this->removeAtt($k);
             }
         }
->>>>>>> Stashed changes
     }
 
     /**

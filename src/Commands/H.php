@@ -28,7 +28,7 @@ class H extends Command
         unset($this->attributes);
     }
 
-    public function getEndPoint($absolute = true)
+    public function getEndPoint($absolute = true): array
     {
         if ($absolute && $this->type === 'absolute') {
             if (empty($this->prev)) {

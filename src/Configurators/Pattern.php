@@ -7,14 +7,6 @@ namespace BladeUI\Icons\Configurators;
 use BladeUI\Icons\Concerns\RendersAttributes;
 use NumPHP\Core\NumArray;
 
-<<<<<<< Updated upstream
-class Pattern extends Configurator
-{
-
-    /** @var bool isTransformable */
-    protected bool $isTransformable = true;
-
-=======
 /**
  * Pattern
  */
@@ -34,7 +26,6 @@ class Pattern extends Configurator
      *
      * @return void
      */
->>>>>>> Stashed changes
     public function __construct(string $name, string $contents, array $attributes = [], $context = null)
     {
         parent::__construct($name,  $contents,  $attributes, $context);

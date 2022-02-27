@@ -4,20 +4,10 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Commands;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-abstract class Command
-=======
-=======
->>>>>>> Stashed changes
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 
 abstract class Command implements Htmlable 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 {
     protected string $type;
 
@@ -31,13 +21,7 @@ abstract class Command implements Htmlable
 
     protected array $endPointCoordinates;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 
->>>>>>> Stashed changes
     public function __construct(string $type, array $attributes = [], ?Command $prev = null)
     {
         $this->type = $type;
@@ -75,6 +59,16 @@ abstract class Command implements Htmlable
             'X' => (float)$absolutePoint['x'],
             'Y' => (float)$absolutePoint['y'],
         ];
+
+        $this->endPointAbs = new NumArray([
+            (float)$absolutePoint['x'],
+            (float)$absolutePoint['y'],
+        ]);
+
+        $this->endPointRel = new NumArray([
+            (float)$relativePoint['x'],
+            (float)$relativePoint['y'],
+        ]);
     }
 
     public function toHtml()
@@ -94,26 +88,5 @@ abstract class Command implements Htmlable
         }
         return $return;
     }
-<<<<<<< Updated upstream
-=======
-
-    public function toHtml()
-    {
-        $return = $this->getComand();
-        foreach ($this->coordinates as $point) {
-            if (is_array($point)) {
-                foreach ($point as $coordinate) {
-                    $return .= ' ' . $coordinate;
-                }
-                if ($point !== $this->coordinates[array_key_last($this->coordinates)]){
-                    $return .= ',';
-                }else{
-                    $return .= ' ';
-                }
-            }
-        }
-        return $return;
-    }
->>>>>>> Stashed changes
         
 }
