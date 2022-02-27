@@ -8,8 +8,6 @@ use Error;
 
 class T extends Command
 {
-    protected $coordinates;
-
     protected $nextPoint = 0;
 
     protected $count = 0;

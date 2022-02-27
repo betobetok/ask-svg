@@ -6,5 +6,8 @@ namespace BladeUI\Icons\Commands;
 
 class Z extends Command
 {
-    
+    public function initialization()
+    {
+        $this->coordinates = [];
+    }
 }

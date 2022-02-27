@@ -4,39 +4,77 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use Exception;
-use Illuminate\Contracts\Support\Htmlable;
+use BladeUI\Icons\Configurators\Style;
 
+/**
+ * Svg
+ */
 final class Svg extends SvgElement
 {
-    use RendersAttributes;
-
+    /** @var Style $style */
     public Style $style;
 
+<<<<<<< Updated upstream
     private array $elements = [];
 
     public function __construct(string $name, string $contents, array $attributes = [])
+=======
+    /**
+     * 
+     *
+     * @param  string $fileName
+     * @param  string $contents
+     * @param  array $attributes
+     * @param  mixed $context
+     * @return void
+     */
+    public function __construct(string $fileName, string $contents, array $attributes = [], $context = null)
+>>>>>>> Stashed changes
     {
-        $name = explode('/', $name);
+        $name = explode('/', $fileName);
+        $this->id($fileName);
         $name = $name[count($name) - 1];
-        $this->style = new Style($contents, $name);
-        $contents = $this->replaceClasses($this->style, $contents);
-        parent::__construct($name, $contents, $attributes);
-        $svgAttributes = $this->getSVGAtributes();
-        foreach ($svgAttributes as $name => $attr) {
-            $this->attributes[$name] = $attr;
-        }
-        $this->removeComents();
+        $this->contents = $contents;
+
+        $styleContent = $this->getStylefromContent();
+        $this->style = new Style($styleContent, $name);
         $this->removeStylefromContent();
-        $this->removeContents();
+
+        $svg = preg_match("/<svg[^>]*>/i", $contents, $svgTag);
+
+        if ($svg !== 0 && $svg !== false && $attributes === []) {
+            $attributesFromString = $this->getElementAttributes($svgTag[0]);
+            $attributes = array_merge($attributes, $attributesFromString);
+            $contents = str_replace([$svgTag[0], '</svg>'], '', $contents);
+        }
+
+        unset($attributes['id']);
+
+        foreach ($attributes as $key => $attribute) {
+            $this->$key($attribute);
+        }
+
+        $contents = $this->replaceClasses($this->style, $contents);
+        parent::__construct('svg', $contents);
+
+        $this->cleanContent();
     }
 
+    /**
+     * style
+     *
+     * @return Style
+     */
     public function style(): Style
     {
         return $this->style;
     }
 
+    /**
+     * getSVGAtributes
+     *
+     * @return array
+     */
     public function getSVGAtributes(): array
     {
         $svg = $this->getElements('svg');
@@ -46,12 +84,25 @@ final class Svg extends SvgElement
         return [];
     }
 
+    /**
+     * setStyle
+     *
+     * @param  mixed $style
+     * @return self
+     */
     public function setStyle($style): self
     {
         $this->style = $style;
         return $this;
     }
 
+    /**
+     * replaceClasses
+     *
+     * @param  mixed $style
+     * @param  string $content
+     * @return string
+     */
     public function replaceClasses(Style $style, string $content): string
     {
         foreach ($style->classes() as $className => $comands) {
@@ -61,11 +112,18 @@ final class Svg extends SvgElement
         return $content;
     }
 
-    public function mergeSvgs(...$param): Svg
+    /**
+     * mergeSvgs
+     *
+     * @param  Svg $param
+     * @return Svg
+     */
+    public function mergeSvgs(Svg ...$param): Svg
     {
         if (is_array($param[0])) {
             $param = $param[0];
         }
+
         $old = $this->getAllSvgElements($this);
         $name = $old['attributes']['id'] ?? '';
         
@@ -118,7 +176,13 @@ final class Svg extends SvgElement
         return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n" . $this->contents() . "\n" . '</svg>';
     }
 
-    public function getAllSvgElements(Svg $svg)
+    /**
+     * getAllSvgElements
+     *
+     * @param  mixed $svg
+     * @return array
+     */
+    public function getAllSvgElements(Svg $svg): array
     {
         $elements = get_object_vars($svg);
         $ret = [];
@@ -128,7 +192,12 @@ final class Svg extends SvgElement
         return $ret;
     }
 
-    public function cleanContent()
+    /**
+     * cleanContent
+     *
+     * @return self
+     */
+    public function cleanContent(): self
     {
         $elements = $this->getAllSvgElements($this);
         foreach ($elements as $element) {

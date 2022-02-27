@@ -16,6 +16,7 @@ class M extends Command
         $absolutePoint = $this->getEndPoint();
         $relativePoint = $this->getEndPoint(false);
         $this->setEndPoint($relativePoint, $absolutePoint);
+        $this->coordinates = $this->type === 'absolute' ? [$absolutePoint]: [$relativePoint];
         unset($this->attributes);
     }
 

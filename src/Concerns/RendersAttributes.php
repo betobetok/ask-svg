@@ -15,7 +15,7 @@ trait RendersAttributes
         return $this->attributes;
     }
 
-    private function renderAttributes(): string
+    protected function renderAttributes(): string
     {
         if (count($this->attributes()) == 0) {
             return '';

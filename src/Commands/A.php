@@ -8,8 +8,6 @@ use Error;
 
 class A extends Command
 {
-    protected array $conditions;
-
     protected $nextPoint = 0;
 
     protected $count = 0;
@@ -24,30 +22,30 @@ class A extends Command
         foreach ($this->attributes as $k => $condition) {
             switch ($k % 7) {
                 case 0:
-                    $conditions[$count]['rx'] = $condition;
+                    $coordinates[$count]['rx'] = $condition;
                     break;
                 case 1:
-                    $conditions[$count]['ry'] = $condition;
+                    $coordinates[$count]['ry'] = $condition;
                     break;
                 case 2:
-                    $conditions[$count]['xRotation'] = $condition;
+                    $coordinates[$count]['xRotation'] = $condition;
                     break;
                 case 3:
-                    $conditions[$count]['large'] = $condition;
+                    $coordinates[$count]['large'] = $condition;
                     break;
                 case 4:
-                    $conditions[$count]['sweep'] = $condition;
+                    $coordinates[$count]['sweep'] = $condition;
                     break;
                 case 5:
-                    $conditions[$count]['x'] = $condition;
+                    $coordinates[$count]['x'] = $condition;
                     break;
                 case 6:
-                    $conditions[$count]['y'] = $condition;
+                    $coordinates[$count]['y'] = $condition;
                     $count++;
                     break;
             }
         }
-        $this->conditions = $conditions;
+        $this->coordinates = $coordinates;
         $this->count = $count;
         $absolutePoint = $this->getEndPoint();
         $relativePoint = $this->getEndPoint(false);
@@ -76,40 +74,40 @@ class A extends Command
         }
         if($absolute && $this->type === 'absolute'){
             return [
-                'x' => $this->conditions[$n]['x'],
-                'y' => $this->conditions[$n]['y'],
+                'x' => $this->coordinates[$n]['x'],
+                'y' => $this->coordinates[$n]['y'],
             ];
         }
         if($absolute && $this->type === 'relative'){
             if(empty($this->prev)){
                 return [
-                    'x' => $this->conditions[$n]['x'],
-                    'y' => $this->conditions[$n]['y'],
+                    'x' => $this->coordinates[$n]['x'],
+                    'y' => $this->coordinates[$n]['y'],
                 ];
             }
             $prevPoint = $this->prev->getEndPoint();
             return [
-                'x' => $prevPoint['x'] + $this->conditions[$n]['x'],
-                'y' => $prevPoint['y'] + $this->conditions[$n]['y'],
+                'x' => $prevPoint['x'] + $this->coordinates[$n]['x'],
+                'y' => $prevPoint['y'] + $this->coordinates[$n]['y'],
             ];
         }
         if(!$absolute && $this->type === 'absolute'){
             if(empty($this->prev)){
                 return [
-                    'x' => $this->conditions[$n]['x'],
-                    'y' => $this->conditions[$n]['y'],
+                    'x' => $this->coordinates[$n]['x'],
+                    'y' => $this->coordinates[$n]['y'],
                 ];
             }
             $prevPoint = $this->prev->getEndPoint();
             return [
-                'x' => $this->conditions[$n]['x'] - $prevPoint['x'],
-                'y' => $this->conditions[$n]['y'] - $prevPoint['y'],
+                'x' => $this->coordinates[$n]['x'] - $prevPoint['x'],
+                'y' => $this->coordinates[$n]['y'] - $prevPoint['y'],
             ];
         }
         if(!$absolute && $this->type === 'relative'){
             return [
-                'x' => $this->conditions[$n]['x'],
-                'y' => $this->conditions[$n]['y'],
+                'x' => $this->coordinates[$n]['x'],
+                'y' => $this->coordinates[$n]['y'],
             ];
         } 
     }
@@ -142,7 +140,7 @@ class A extends Command
         
         $bPoint =$this->getPoint($n);
 
-        $angle = $this->conditions[$n]['xRotation'] * 180 / pi();
+        $angle = $this->coordinates[$n]['xRotation'] * 180 / pi();
 
         if($angle > 0){
             $aPoint = [
@@ -156,12 +154,12 @@ class A extends Command
             ];
         }
 
-        $arcRatio = (pow($this->conditions[$n]['rx'],2)/pow($this->conditions[$n]['ry'],2));
+        $arcRatio = (pow($this->coordinates[$n]['rx'],2)/pow($this->coordinates[$n]['ry'],2));
         $dx = ($aPoint['x'] - $bPoint['x']);
         $dy = ($aPoint['y'] - $bPoint['y']);
 
         $h = (($arcRatio * $dy) + pow($aPoint['x'],2) - pow($bPoint['x'],2))/(2 * $dx);
-        $k = $bPoint['y'] + pow($this->conditions[$n]['rx'],2) + ($arcRatio * pow(($bPoint['x'] - $h),2));
+        $k = $bPoint['y'] + pow($this->coordinates[$n]['rx'],2) + ($arcRatio * pow(($bPoint['x'] - $h),2));
 
         return [
             'x' => $h,

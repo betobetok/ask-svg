@@ -8,8 +8,6 @@ use Error;
 
 class H extends Command
 {
-    protected array $coordinate;
-
     protected float $x;
 
     public function initialization()
