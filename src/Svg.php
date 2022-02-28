@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons;
 
+use BladeUI\Icons\Configurators\G;
 use BladeUI\Icons\Configurators\Style;
 
 /**
  * Svg
  */
-final class Svg extends SvgElement
+final class Svg extends SvgElement implements Conteiner
 {
     /** @var Style $style */
     public Style $style;
@@ -41,6 +42,8 @@ final class Svg extends SvgElement
 
         $this->cleanContent();
     }
+
+
 
 
     /**
@@ -110,23 +113,24 @@ final class Svg extends SvgElement
         $old = $this->getAllSvgElements($this);
         $name = $old['attributes']['id'] ?? '';
 
-        // $content = $this->findGroupElement($this->contents(), 'svg') !== [] ? "\n<g" . (isset($old['attributes']['id']) ? 'id="' . $old['attributes']['id'] . '"' : '') . '>' . "\n" . $this->findGroupElement($this->contents(), 'svg')[0]->contents() . "\n</g>" : '';
         foreach ($param as $svg) {
             $new = $this->getAllSvgElements($svg);
             $newElements = array_keys($new);
             $old['style']->setClasses(array_merge($old['style']->classes(), $new['style']->classes()));
             $attributes = array_merge($old['style']->attributes(), $new['style']->attributes());
+
             foreach ($attributes as $name => $attribute) {
                 $old['style']->$name($attribute);
             }
             $svg->removeSvgAttribute();
-            $tmp = new SvgElement('g', '', $svg->attributes, $this);
+            $tmpG = new G('', $svg->attributes, $this);
             if (isset($svg->attributes['id'])) {
-                $tmp->id($svg->attributes['id']);
+                $tmpG->id($svg->attributes['id']);
                 $svg->removeId();
             }
+
             foreach ($newElements as $element) {
-                if ($element === 'style' || $element === 'contents' || $element === 'elements') {
+                if ($element === 'style' || $element === 'contents' || $element === 'elements' || $element === 'name' || $element === 'context') {
                     unset($new[$element]);
                     continue;
                 }
@@ -134,22 +138,21 @@ final class Svg extends SvgElement
                     foreach ($new[$element] as $k => $att) {
                         $k = str_replace('"', '', $k);
                         $att = str_replace('"', '', $att);
-                        $tmp->$k($att);
+                        $tmpG->$k($att);
                     }
                     continue;
                 }
-                $tmp->$element = $new[$element];
+                $tmpG->$element = $new[$element];
             }
-            $tmp->removeSvgAttribute();
+
+            $tmpG->removeSvgAttribute();
             foreach ($svg->attributes() as $name => $attribute) {
                 $svg->$name(str_replace('"', '', $attribute));
             }
-            $name .= isset($new['attributes']['id']) ? '-' . $new['attributes']['id'] : '';
-            $this->g = array_merge([$tmp], $this->g ?? []);
+            $this->g = array_merge([$tmpG], $this->g ?? []);
         }
-        $this->style = $old['style'];
-        $this->setName('merge-' . $name);
-
+        $this->style = clone ($old['style']);
+        unset($old['style']);
         return $this;
     }
 
@@ -192,6 +195,24 @@ final class Svg extends SvgElement
             }
         }
         $this->removeContents();
+        return $this;
+    }
+
+    /**
+     * Get the value of content
+     */
+    public function getContent()
+    {
+        return $this;
+    }
+
+    /**
+     * Set the value of content
+     *
+     * @return  self
+     */
+    public function setContent($content)
+    {
         return $this;
     }
 }

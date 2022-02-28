@@ -6,6 +6,7 @@ namespace BladeUI\Icons;
 
 use BladeUI\Icons\Concerns\RendersAttributes;
 use BladeUI\Icons\Configurators\Style;
+use Error;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
@@ -32,9 +33,13 @@ class SvgElement implements Htmlable
         'circle',
         'ellipse',
         'path',
-        'text',
         'image',
-
+        'use',
+        'polyline',
+        'polygon',
+        'text',
+        'pattern',
+        'defs',
     ];
 
     public const NON_GROUP_ELEMENTS = [
@@ -96,18 +101,21 @@ class SvgElement implements Htmlable
      */
     public function __construct(string $name, string $contents, array $attributes = [], SvgElement $context = null)
     {
-
         $this->name = $name;
         $this->contents = $contents;
         $this->context = $context;
 
         $this->getTransformations();
+
         if (!in_array($name, self::NON_GROUP_ELEMENTS) && $name !== 'style') {
             $this->getAllElements();
         }
         if ($name !== 'style') {
             $this->removeContents();
         }
+        // if (isset($this->attributes()['id']) && $this->attributes()['id'] === 'g12112') {
+        //     dump($this);
+        // }
     }
 
 
@@ -117,12 +125,13 @@ class SvgElement implements Htmlable
 
         if ($svg !== 0 && $svg !== false) {
             $attributes = $this->mergeAttributes($svgTag[0], $attributes);
-            $contentFirst = strlen($svgTag[0]);
-            $contetnleng = strrpos($contents, '</' . $tag . '>') - $contentFirst;
-            $contents = substr($contents, $contentFirst, $contetnleng);
+            if ($tag === 'svg') {
+                $contentFirst = strrpos($contents,  $svgTag[0]) + strlen($svgTag[0]);
+                $contetnleng = strrpos($contents, '</' . $tag . '>') - $contentFirst;
+                $contents = substr($contents, $contentFirst, $contetnleng);
+                unset($attributes['id']);
+            }
         }
-
-        unset($attributes['id']);
 
         foreach ($attributes as $key => $attribute) {
             $this->$key($attribute);
@@ -140,18 +149,8 @@ class SvgElement implements Htmlable
             if (property_exists($this, $name)) {
                 return $this->$name;
             }
-            // if (property_exists($this, 'g')) {
-            //     foreach ($this->g as $gs) {
-            //         $this->elements[$name] = $gs->$name;
-            //     }
-            // }
-            // if (property_exists($this, 'clipPath')) {
-            //     foreach ($this->g as $gs) {
-            //         $this->elements[$name] = $gs->$name;
-            //     }
-            // }
         } catch (Exception $e) {
-            throw "This Methode don't exist" . $e->getMessage() . "\n";
+            throw new Error("This Methode don't exist" . $e->getMessage() . "\n");
         }
     }
 
@@ -200,10 +199,12 @@ class SvgElement implements Htmlable
         if (isset($this->contents)) {
             return $this->contents;
         }
+
         $elements = get_object_vars($this);
         if ($elements === false) {
             return '';
         }
+
         $ret = '';
         foreach ($elements as $element) {
             if (is_array($element)) {
@@ -293,11 +294,11 @@ class SvgElement implements Htmlable
     {
         $ret = [];
         if (in_array($element, self::GROUP_ELEMENTS) || $element === 'svg') {
-            if ($this->contents() !== '') {
-                $ret = $this->findGroupElement($this->contents(), $element);
+            if ($this->contents !== '') {
+                $ret = $this->findGroupElement($this->contents, $element);
             }
         } elseif (in_array($element, self::NON_GROUP_ELEMENTS)) {
-            $content = $this->removeGroupElements($this->contents());
+            $content = $this->removeGroupElements($this->contents);
             $ret = $this->findNonGroupElement($content, $element);
         } else {
             return false;
@@ -653,9 +654,9 @@ class SvgElement implements Htmlable
      * getElementById
      *
      * @param  string $id
-     * @return SvgElement|false
+     * @return SvgElement|null
      */
-    public function getElementById(string $id): ?SvgElement
+    public function getElementById(string $id)
     {
         $att = $this->attributes();
         if (isset($att['id']) && $att['id'] === $id) {
@@ -686,8 +687,8 @@ class SvgElement implements Htmlable
      */
     public function getStartPointById(string $id): ?NumArray
     {
-        $element = $this->getElementById($id);
 
+        $element = $this->getElementById($id);
         if ($element === false) {
             return null;
         }

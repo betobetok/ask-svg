@@ -12,10 +12,6 @@ use NumPHP\Core\NumArray;
  */
 class Pattern extends Configurator
 {
-
-    /** @var bool $isTransformable */
-    protected bool $isTransformable = true;
-
     /**
      * 
      *
@@ -26,8 +22,14 @@ class Pattern extends Configurator
      *
      * @return void
      */
-    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
+    public function __construct(string $contents, array $attributes = [], $context = null)
     {
-        parent::__construct($name,  $contents,  $attributes, $context);
+        $this->isTransformable = true;
+
+        foreach ($attributes as $key => $attribute) {
+            $this->$key($attribute);
+        }
+
+        parent::__construct($contents,  $attributes, $context);
     }
 }

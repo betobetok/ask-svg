@@ -9,10 +9,6 @@ namespace BladeUI\Icons\Configurators;
  */
 class RadialGradient extends Configurator
 {
-
-    /** @var bool isTransformable */
-    protected bool $isTransformable = false;
-
     /**
      *
      * @param string name
@@ -22,8 +18,12 @@ class RadialGradient extends Configurator
      *
      * @return void
      */
-    public function __construct(string $name, string $contents, array $attributes = [], $context = null)
+    public function __construct(string $contents, array $attributes = [], $context = null)
     {
-        parent::__construct($name,  $contents,  $attributes, $context);
+        foreach ($attributes as $key => $attribute) {
+            $this->$key($attribute);
+        }
+
+        parent::__construct($contents,  $attributes, $context);
     }
 }

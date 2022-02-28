@@ -10,4 +10,10 @@ class Z extends Command
     {
         $this->coordinates = [];
     }
+
+    public function getPoint($n = null, $absolute = true): array
+    {
+        $m = $this->getLastMComand();
+        return $m->getEndPoint();
+    }
 }

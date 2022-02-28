@@ -15,9 +15,11 @@ class G extends Configurator implements Conteiner
     {
         $this->isTransformable = true;
 
-        parent::__construct($contents,  $attributes, $context);
+        foreach ($attributes as $key => $attribute) {
+            $this->$key($attribute);
+        }
 
-        $this->cleanContent();
+        parent::__construct($contents, $attributes, $context);
     }
 
     /**

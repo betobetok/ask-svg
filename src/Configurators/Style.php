@@ -27,7 +27,8 @@ class Style extends Configurator
      */
     public function __construct(string $svgContent, string $name, SvgElement $context = null)
     {
-        parent::__construct($svgContent, [], $context);
+        $contents = $this->configAttributesAndContent($name, $svgContent, []);
+        parent::__construct($contents, [], $context);
         $this->renameStyle($name);
         $this->removeContents();
     }
