@@ -15,7 +15,7 @@ trait RendersAttributes
         return $this->attributes;
     }
 
-    private function renderAttributes(): string
+    protected function renderAttributes(): string
     {
         if (count($this->attributes()) == 0) {
             return '';
@@ -45,5 +45,10 @@ trait RendersAttributes
         if (isset($this->attributes[$attribute])) {
             unset($this->attributes[$attribute]);
         }
+    }
+
+    public function setAttribute(string $name, string $arguments)
+    {
+        $this->attributes[Str::snake($name, '-')] = $arguments;
     }
 }

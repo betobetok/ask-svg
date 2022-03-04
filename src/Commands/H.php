@@ -8,8 +8,6 @@ use Error;
 
 class H extends Command
 {
-    protected array $coordinate;
-
     protected float $x;
 
     public function initialization()
@@ -19,63 +17,18 @@ class H extends Command
         }
 
         foreach ($this->attributes as $k => $coordinate) {
-            $this->coordinate['x'] = $coordinate;
+            $coordinates[$k]['x'] = $coordinate;
+            $coordinates[$k]['y'] = 0;
             $this->x = (float)$coordinate;
         }
-
+        $this->count = count($this->attributes);
+        $this->coordinates = $coordinates;
         $absolutePoint = $this->getEndPoint();
+        $this->resetNext();
         $relativePoint = $this->getEndPoint(false);
+        $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
-        
-        unset($this->attributes);
-    }
 
-    public function getEndPoint($absolute = true)
-    {
-        if ($absolute && $this->type === 'absolute') {
-            if (empty($this->prev)) {
-                return [
-                    'x' => $this->coordinate['x'],
-                    'y' => 0,
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $this->coordinate['x'],
-                'y' => $prevPoint['y'],
-            ];
-        }
-        if ($absolute && $this->type === 'relative') {
-            if (empty($this->prev)) {
-                return [
-                    'x' => $this->coordinate['x'],
-                    'y' => 0,
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $prevPoint['x'] + $this->coordinate['x'],
-                'y' => $prevPoint['y'],
-            ];
-        }
-        if (!$absolute && $this->type === 'absolute') {
-            if (empty($this->prev)) {
-                return [
-                    'x' => $this->coordinate['x'],
-                    'y' => 0,
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $this->coordinate['x'] - $prevPoint['x'],
-                'y' => 0,
-            ];
-        }
-        if (!$absolute && $this->type === 'relative') {
-            return [
-                'x' => $this->coordinate['x'],
-                'y' => 0,
-            ];
-        }
+        unset($this->attributes);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Commands;
 
+use Error;
+
 class M extends Command
 {
     private $x;
@@ -11,6 +13,23 @@ class M extends Command
 
     public function initialization()
     {
+        if (count($this->attributes) % 2 > 0) {
+            throw new Error('Incorrect configuration of attributes');
+        }
+        $count = 0;
+        foreach ($this->attributes as $k => $coordinate) {
+            switch ($k % 2) {
+                case 0:
+                    $coordinates[$count]['x'] = $coordinate;
+                    break;
+                case 1:
+                    $coordinates[$count]['y'] = $coordinate;
+                    $count++;
+                    break;
+            }
+        }
+        $this->coordinates = $coordinates;
+        $this->count = $count;
         $this->x = $this->attributes[0];
         $this->y = $this->attributes[1];
         $absolutePoint = $this->getEndPoint();
@@ -29,52 +48,9 @@ class M extends Command
         return $this->y;
     }
 
-    public function getEndPoint($absolute = true)
-    {
-        if($absolute && $this->type === 'absolute'){
-            return [
-                'x' => $this->x,
-                'y' => $this->y,
-            ];
-        }
-        if($absolute && $this->type === 'relative'){
-            if(empty($this->prev)){
-                return [
-                    'x' => $this->x,
-                    'y' => $this->y,
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $prevPoint['x'] + $this->x,
-                'y' => $prevPoint['y'] + $this->y,
-            ];
-        }
-        if(!$absolute && $this->type === 'absolute'){
-            if(empty($this->prev)){
-                return [
-                    'x' => $this->x,
-                    'y' => $this->y,
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $this->x - $prevPoint['x'],
-                'y' => $this->y - $prevPoint['y'],
-            ];
-        }
-        if(!$absolute && $this->type === 'relative'){
-            return [
-                'x' => $this->x,
-                'y' => $this->y,
-            ];
-        }
-        
-    }
-
     public function getDinstance($toPoint = [])
     {
-        if(empty($toPoint)){
+        if (empty($toPoint)) {
             $toPoit = [
                 'x' => 0,
                 'y' => 0,
@@ -82,12 +58,11 @@ class M extends Command
         }
         $dx = $this->x - $toPoint['x'];
         $dy = $this->y - $toPoint['y'];
-        $distance = sqrt(pow($dx,2)+(pow($dy,2)));
+        $distance = sqrt(pow($dx, 2) + (pow($dy, 2)));
         return [
             'dx' => $dx,
             'dy' => $dy,
             'distance' => $distance
-        ];      
+        ];
     }
-    
 }

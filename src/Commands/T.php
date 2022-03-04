@@ -8,25 +8,19 @@ use Error;
 
 class T extends Command
 {
-    protected $coordinates;
-
-    protected $nextPoint = 0;
-
-    protected $count = 0;
-
     public function initialization()
     {
-        if(count($this->attributes)%2 >0){
+        if (count($this->attributes) % 2 > 0) {
             throw new Error('Incorrect configuration of attributes');
         }
 
         $count = 0;
-        foreach($this->attributes as $k => $coordinate){
-            switch($k%2){
+        foreach ($this->attributes as $k => $coordinate) {
+            switch ($k % 2) {
                 case 0:
                     $coordinates[$count]['x'] = $coordinate;
                     break;
-                case 1: 
+                case 1:
                     $coordinates[$count]['y'] = $coordinate;
                     $count++;
                     break;
@@ -35,72 +29,10 @@ class T extends Command
         $this->coordinates = $coordinates;
         $this->count = $count;
         $absolutePoint = $this->getEndPoint();
+        $this->resetNext();
         $relativePoint = $this->getEndPoint(false);
+        $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
         unset($this->attributes);
-    }
-
-    public function getEndPoint($absolute = true)
-    {
-        $n = $this->count-1;
-        return $this->getPoint($n, $absolute);
-    }
-
-    public function getPoint($n = null, $absolute = true)
-    {
-        if($n >= $this->count){
-            throw new Error("Point doesn't exist, max position: " . $this->count, 1);
-        }
-        if($n === null){
-            $n = $this->nextPoint;
-            if($this->nextPoint >= $this->count){
-                $this->nextPoint = 0;
-            }else{
-                $this->nextPoint++;
-            }
-        }
-        if($absolute && $this->type === 'absolute'){
-            return [
-                'x' => $this->coordinates[$n]['x'],
-                'y' => $this->coordinates[$n]['y'],
-            ];
-        }
-        if($absolute && $this->type === 'relative'){
-            if(empty($this->prev)){
-                return [
-                    'x' => $this->coordinates[$n]['x'],
-                    'y' => $this->coordinates[$n]['y'],
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $prevPoint['x'] + $this->coordinates[$n]['x'],
-                'y' => $prevPoint['y'] + $this->coordinates[$n]['y'],
-            ];
-        }
-        if(!$absolute && $this->type === 'absolute'){
-            if(empty($this->prev)){
-                return [
-                    'x' => $this->coordinates[$n]['x'],
-                    'y' => $this->coordinates[$n]['y'],
-                ];
-            }
-            $prevPoint = $this->prev->getEndPoint();
-            return [
-                'x' => $this->coordinates[$n]['x'] - $prevPoint['x'],
-                'y' => $this->coordinates[$n]['y'] - $prevPoint['y'],
-            ];
-        }
-        if(!$absolute && $this->type === 'relative'){
-            return [
-                'x' => $this->coordinates[$n]['x'],
-                'y' => $this->coordinates[$n]['y'],
-            ];
-        } 
-    }
-
-    public function resetNext()
-    {
-        $this->nextPoint = 1;
     }
 }

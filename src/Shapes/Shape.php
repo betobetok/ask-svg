@@ -4,42 +4,37 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-use BladeUI\Icons\Commands as Comands;
+use BladeUI\Icons\SvgElement;
+use Illuminate\Contracts\Support\Htmlable;
+use NumPHP\Core\NumArray;
 
-trait Shape
+/**
+ * Shape
+ */
+abstract class Shape extends SvgElement
 {
 
-    protected array $startPosition;
+    /** @var NumArray $startPosition */
+    protected NumArray $startPosition;
 
-    protected array $endPosition;
+    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    {
+        $name = explode('\\', get_class($this));
+        $name = strtolower($name[array_key_last($name)]);
 
-    protected array $commands;
+        $this->isTransformable = true;
 
+        $contents = $this->configAttributesAndContent($name, $contents, $attributes);
+
+        parent::__construct($name,  $contents,  $attributes, $context);
+    }
+    /**
+     * getStartPosition
+     *
+     * @return void
+     */
     public function getStartPosition()
     {
         return $this->startPosition;
-    }
-
-    public function getComandsFromPath(string $d)
-    {
-    }
-
-    public function getExistingComands(string $d)
-    {
-        $commands = [];
-        $prev = null;
-        preg_match_all('/([a-zA-Z]{1})\s?([e0-9\s,.-]+)?[^A-Za-z]/', $d, $match);
-        $i=0;
-        foreach($match[1] as $k => $name){
-            preg_match_all('/([0-9.e-]+)/',$match[2][$k], $arguments);
-            $commandClass = 'BladeUI\\Icons\\Commands\\'. ucfirst($name);
-            $type = $name === strtolower($name)?'relative':'absolute';
-            if(class_exists($commandClass)){
-                $command = new $commandClass($type, $arguments[0], $prev);
-                $prev = $command;
-            }
-            $commands[$k][$name] = $command ?? $commandClass;
-        }
-        return $commands;
     }
 }
