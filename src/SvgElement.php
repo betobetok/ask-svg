@@ -113,9 +113,6 @@ class SvgElement implements Htmlable
         if ($name !== 'style') {
             $this->removeContents();
         }
-        // if (isset($this->attributes()['id']) && $this->attributes()['id'] === 'g12112') {
-        //     dump($this);
-        // }
     }
 
 
@@ -259,7 +256,6 @@ class SvgElement implements Htmlable
      */
     public function getAllElements(): void
     {
-
         foreach (self::GRAPH_ELEMENTS as $type) {
             $element = $this->getElements($type);
             if ($element !== false && isset($element[0]) && $element[0] !== []) {
@@ -343,6 +339,7 @@ class SvgElement implements Htmlable
             $n = 0;
 
             $first = array_key_first($pos);
+            $tmp = [];
             foreach ($pos as $key => $val) {
                 if ($first === true) {
                     $first = $key;
@@ -350,11 +347,11 @@ class SvgElement implements Htmlable
                 $n += $val;
                 if ($n === 0) {
                     preg_match("/<" . $groupElement . "[^>]*>/i", $ret, $tag, 0, $first);
-                    $cont = trim(substr($ret, $first, $key - $first + strlen('</' . $groupElement . '>')));
-                    $ret = str_replace($cont, '', $ret);
+                    $tmp[] = trim(substr($ret, $first, $key - $first + strlen('</' . $groupElement . '>')));
                     $first = true;
                 }
             }
+            $ret = trim(str_replace($tmp, '', $ret));
         }
         return $ret;
     }
@@ -483,7 +480,7 @@ class SvgElement implements Htmlable
 
         if ($count === 1) {
             $posStart = stripos($content, '<' . $element);
-            $posEnde = stripos($content, '</' . $element . '>');
+            $posEnde = strripos($content, '</' . $element . '>');
             $tag = trim(substr($content, $posStart,  stripos($content, '>', $posStart) - $posStart + 1));
             $cont = trim(substr($content, $posStart + strlen($tag), $posEnde - $posStart - strlen($tag)));
             $attributes = $this->getElementAttributes($tag);
@@ -499,21 +496,22 @@ class SvgElement implements Htmlable
             $ret[] = $tmp;
             return $ret;
         }
-
         $posStart[0] = stripos($content, '<' . $element);
         $posEnde[0] = stripos($content, '</' . $element . '>');
         for ($i = 1; $i < $count; $i++) {
-            $posStart[$i] = stripos($content, '<' . $element, $posStart[$i - 1] + 2);
-            $posEnde[$i] = stripos($content, '</' . $element, $posEnde[$i - 1] + 2);
+            $posStart[$i] = stripos($content, '<' . $element, $posStart[$i - 1] + 1);
+            $posEnde[$i] = stripos($content, '</' . $element, $posEnde[$i - 1] + 1);
         }
         for ($i = 0; $i < $count; $i++) {
             $pos[$posStart[$i]] = 1;
             $pos[$posEnde[$i]] = -1;
         }
+
         ksort($pos);
         $n = 0;
 
         $first = array_key_first($pos);
+
         foreach ($pos as $key => $val) {
             if ($first === true) {
                 $first = $key;
@@ -549,6 +547,7 @@ class SvgElement implements Htmlable
     public function findNonGroupElement(string $content, string $element): array
     {
         preg_match_all("/<" . $element . "[^>]+\/?>/i", $content, $match);
+
         $tags = $match === [] ? '' : $match[0];
         $content = '';
         $ret = [];

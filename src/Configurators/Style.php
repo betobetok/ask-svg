@@ -98,7 +98,7 @@ class Style extends Configurator
     {
         if (empty($this->attributes())) {
             if (empty($add->attributes())) {
-                return null;
+                return $this;
             }
             foreach ($add->attributes() as $name => $arguments) {
                 $this->setAttribute($name, $arguments);
@@ -106,7 +106,7 @@ class Style extends Configurator
         }
 
         if (empty($add->attributes())) {
-            return null;
+            return $this;
         }
         $array = array_merge($this->attributes(), $add->attributes());
         foreach ($array as $name => $arguments) {

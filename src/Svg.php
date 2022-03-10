@@ -38,7 +38,7 @@ final class Svg extends SvgElement implements Conteiner
 
         $contents = $this->replaceClasses($this->style, $contents);
 
-        parent::__construct('svg', $contents);
+        parent::__construct('svg', $contents, [], $this);
 
         $this->cleanContent();
     }

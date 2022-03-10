@@ -11,7 +11,7 @@ class C extends Command
     public function initialization()
     {
         if (count($this->attributes) % 6 > 0) {
-            throw new Error('Incorrect configuration of attributes');
+            throw new Error('Incorrect configuration of attributes ');
         }
 
         $count = 0;

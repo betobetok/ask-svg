@@ -13,7 +13,7 @@ use Exception;
 class Path extends Shape
 {
     /** @var string  $dString*/
-    private $dString;
+    private $dString = '';
 
     /** @var array d*/
     protected array $d = [];
@@ -33,14 +33,14 @@ class Path extends Shape
 
         if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
             $this->dString = $this->attributes()['d'];
-        } else {
-            throw new Exception("Path had no d", 1);
         }
         $this->d = $this->getExistingComands($this->dString);
         if (is_array($this->d) && !empty($this->d)) {
             $this->removeAtt('d');
         }
-        $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
+        if (!empty($this->d)) {
+            $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
+        }
         unset($this->dString);
     }
 

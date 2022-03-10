@@ -14,7 +14,7 @@ use NumPHP\Core\NumArray;
 class Polygon extends Shape
 {
     /** @var array $points */
-    protected array $points;
+    protected array $points = [];
 
     /**
      *
@@ -32,7 +32,7 @@ class Polygon extends Shape
         if (isset($this->attributes()['points']) && !empty($this->attributes()['points'])) {
             $this->points = $this->attributes()['points'];
         } else {
-            throw new Exception("Polygon had no points attribute", 1);
+            $this->points = '';
         }
         $this->points = $this->getPoints($this->points);
         if (!empty($this->points)) {
