@@ -35,9 +35,8 @@ class Path extends Shape
             $this->dString = $this->attributes()['d'];
         }
         $this->d = $this->getExistingComands($this->dString);
-        if (is_array($this->d) && !empty($this->d)) {
-            $this->removeAtt('d');
-        }
+        $this->removeAtt('d');
+
         if (!empty($this->d)) {
             $this->startPosition = $this->d[0][array_key_first($this->d[0])]->endPointAbs;
         }
@@ -83,7 +82,7 @@ class Path extends Shape
         $prev = null;
         preg_match_all('/([a-zA-Z]{1})\s?([e0-9\s,.-]+)?[^A-Za-z]?/', $d, $match);
         foreach ($match[1] as $k => $name) {
-            preg_match_all('/([0-9.e-]+)/', $match[2][$k], $arguments);
+            preg_match_all('/(-?[0-9.]+(e-\d+)?)/', $match[2][$k], $arguments);
             $commandClass = 'BladeUI\\Icons\\Commands\\' . ucfirst($name);
             $type = $name === strtolower($name) ? 'relative' : 'absolute';
             if (class_exists($commandClass)) {
@@ -93,5 +92,20 @@ class Path extends Shape
             $commands[$k][$name] = $command ?? $commandClass;
         }
         return $commands;
+    }
+
+    protected function renderAttributes(): string
+    {
+        if (count($this->attributes()) == 0) {
+            return '';
+        }
+
+        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+            if (is_int($attribute)) {
+                return $value;
+            }
+
+            return sprintf('%s="%s"', $attribute, $value);
+        })->implode(' ');
     }
 }

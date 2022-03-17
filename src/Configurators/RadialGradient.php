@@ -7,7 +7,7 @@ namespace BladeUI\Icons\Configurators;
 /**
  * RadialGradient
  */
-class RadialGradient extends Configurator
+class Radialgradient extends Configurator
 {
     /**
      *
@@ -25,5 +25,15 @@ class RadialGradient extends Configurator
         }
 
         parent::__construct($contents,  $attributes, $context);
+        $this->name = 'radialGradient';
+    }
+
+    public function toHtml(): string
+    {
+        if (isset($this->stop)) {
+            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+        } else {
+            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+        }
     }
 }

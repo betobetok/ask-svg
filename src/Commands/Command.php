@@ -170,40 +170,40 @@ abstract class Command implements Htmlable
         }
         if ($absolute && $this->type === 'absolute') {
             return [
-                'x' => $this->coordinates[$n]['x'],
-                'y' => $this->coordinates[$n]['y'],
+                'x' => $this->coordinates[$n]['x'] ?? 0,
+                'y' => $this->coordinates[$n]['y'] ?? 0,
             ];
         }
         if ($absolute && $this->type === 'relative') {
             if (empty($this->prev)) {
                 return [
-                    'x' => $this->coordinates[$n]['x'],
-                    'y' => $this->coordinates[$n]['y'],
+                    'x' => $this->coordinates[$n]['x'] ?? 0,
+                    'y' => $this->coordinates[$n]['y'] ?? 0,
                 ];
             }
             $prevPoint = $this->prev->getEndPoint();
             return [
-                'x' => $prevPoint['x'] + $this->coordinates[$n]['x'],
-                'y' => $prevPoint['y'] + $this->coordinates[$n]['y'],
+                'x' => ($prevPoint['x'] ?? 0) + ($this->coordinates[$n]['x'] ?? 0),
+                'y' => ($prevPoint['y'] ?? 0) + ($this->coordinates[$n]['y'] ?? 0),
             ];
         }
         if (!$absolute && $this->type === 'absolute') {
             if (empty($this->prev)) {
                 return [
-                    'x' => $this->coordinates[$n]['x'],
-                    'y' => $this->coordinates[$n]['y'],
+                    'x' => $this->coordinates[$n]['x'] ?? 0,
+                    'y' => $this->coordinates[$n]['y'] ?? 0,
                 ];
             }
             $prevPoint = $this->prev->getEndPoint();
             return [
-                'x' => $this->coordinates[$n]['x'] - $prevPoint['x'],
-                'y' => $this->coordinates[$n]['y'] - $prevPoint['y'],
+                'x' => ($this->coordinates[$n]['x'] ?? 0) - ($prevPoint['x'] ?? 0),
+                'y' => ($this->coordinates[$n]['y'] ?? 0) - ($prevPoint['y'] ?? 0),
             ];
         }
         if (!$absolute && $this->type === 'relative') {
             return [
-                'x' => $this->coordinates[$n]['x'],
-                'y' => $this->coordinates[$n]['y'],
+                'x' => $this->coordinates[$n]['x'] ?? 0,
+                'y' => $this->coordinates[$n]['y'] ?? 0,
             ];
         }
     }

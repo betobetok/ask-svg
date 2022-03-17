@@ -17,9 +17,8 @@ class V extends Command
         }
 
         foreach ($this->attributes as $k => $coordinate) {
-            $coordinates[$k]['x'] = 0;
             $coordinates[$k]['y'] = $coordinate;
-            $this->x = (float)$coordinate;
+            $this->y = (float)$coordinate;
         }
         $this->coordinates = $coordinates;
         $this->count = count($this->attributes);

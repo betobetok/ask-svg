@@ -18,7 +18,6 @@ class H extends Command
 
         foreach ($this->attributes as $k => $coordinate) {
             $coordinates[$k]['x'] = $coordinate;
-            $coordinates[$k]['y'] = 0;
             $this->x = (float)$coordinate;
         }
         $this->count = count($this->attributes);
