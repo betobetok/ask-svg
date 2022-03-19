@@ -163,38 +163,7 @@ final class Svg extends SvgElement implements Conteiner
             $this->style = $style;
         }
 
-        $defs = $this->defs;
-        if (empty($defs)) {
-            $this->defs = [];
-            $defs = new Defs('', [], $this);
-            $this->defs[] = $defs;
-        }
-
-        // $this->removeSvgAttribute();
-        // $oldAttributes = $this->attributes();
-        // $gOld = new G('', $oldAttributes, $this);
-        // foreach ($this->elements as $element) {
-        //     $elementName = $element->name;
-        //     $gOld->elements[] = $element;
-        //     if (isset($gOld->$elementName)) {
-        //         $gOld->$elementName[] = $element;
-        //     } else {
-        //         $gOld->$elementName = [$element];
-        //     }
-        //     unset($this->$elementName);
-        // }
-        // $this->g = [$gOld];
-
         $svgAttributes = $this->getOnlySvgAttribute();
-
-        // $this->removeAllattributes();
-        // foreach ($svgAttributes as $key => $svgAttribute) {
-        //     $this->setAttribute($key, $svgAttribute);
-        // }
-
-        // $this->elements = [
-        //     0 => $gOld,
-        // ];
 
         foreach ($param as $svg) {
 
@@ -204,9 +173,13 @@ final class Svg extends SvgElement implements Conteiner
             }
 
             if (isset($svg->defs)) {
-                $defs->mergeDefs($svg->defs);
+                if (empty($this->defs)) {
+                    $this->defs = [$svg->defs];
+                } else {
+                    $this->defs[] = $svg->defs;
+                }
             }
-
+            unset($svg->defs);
             $svgAttributes = array_merge($svgAttributes, $svg->getOnlySvgAttribute());
             $svg->removeSvgAttribute();
             $newAttributes = $svg->attributes();
@@ -224,7 +197,11 @@ final class Svg extends SvgElement implements Conteiner
 
             unset($gNew->defs);
             $this->elements[] = $gNew;
-            $this->g[] = $gNew;
+            if (isset($this->g)) {
+                $this->g[] = $gNew;
+            } else {
+                $this->g = [$gNew];
+            }
         }
         $this->removeAllattributes();
         foreach ($svgAttributes as $key => $svgAttribute) {
