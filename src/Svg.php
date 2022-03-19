@@ -189,14 +189,14 @@ final class Svg extends SvgElement implements Conteiner
                 $elementName = $element->name;
                 $gNew->elements[] = $element;
                 if (isset($gNew->$elementName)) {
-                    $gNew->$elementName[] = $element;
+                    array_unshift($gNew->$elementName, $element);
                 } else {
                     $gNew->$elementName = [$element];
                 }
             }
 
             unset($gNew->defs);
-            $this->elements[] = $gNew;
+            array_unshift($this->elements, $gNew);
             if (isset($this->g)) {
                 $this->g[] = $gNew;
             } else {
