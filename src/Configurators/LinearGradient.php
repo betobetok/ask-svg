@@ -7,7 +7,7 @@ namespace BladeUI\Icons\Configurators;
 use BladeUI\Icons\Concerns\RendersAttributes;
 use NumPHP\Core\NumArray;
 
-class Lineargradient extends Configurator
+class LinearGradient extends Configurator
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
