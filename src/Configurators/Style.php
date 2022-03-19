@@ -117,6 +117,10 @@ class Style extends Configurator
      */
     public function toHtml(): string
     {
+        if (empty($this->rules())) {
+            return '';
+        }
+
         $ret = sprintf("<style %s>\n", $this->renderAttributes());
 
         foreach ($this->rules() as $ruleName => $declarations) {

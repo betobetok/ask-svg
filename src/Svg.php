@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons;
 
+use BladeUI\Icons\Configurators\Defs;
 use BladeUI\Icons\Configurators\G;
 use BladeUI\Icons\Configurators\Style;
 use Illuminate\Support\Arr;
@@ -44,7 +45,51 @@ final class Svg extends SvgElement implements Conteiner
         $this->cleanContent();
     }
 
+    /**
+     * getStylefromContent
+     *
+     * @return string
+     */
+    public function getStylefromContent(): string
+    {
+        preg_match("/(<style[^>]*>)[^á]*<\/style>/i", $this->contents(), $match);
+        return $match[0] ?? '';
+    }
 
+    /**
+     * getDefsfromContent
+     *
+     * @return string
+     */
+    public function getDefsfromContent(): string
+    {
+        preg_match("/(<defs[^>]*>)[^á]*<\/defs>/i", $this->contents(), $match);
+        return $match[0] ?? '';
+    }
+
+    /**
+     * removeStylefromContent
+     *
+     * @return self
+     */
+    public function removeStylefromContent(): self
+    {
+        $styleText = $this->getStylefromContent();
+        $this->contents = str_replace($styleText, '', $this->contents());
+        return $this;
+    }
+
+    /**
+     * removeDefsfromContent
+     *
+     * @return self
+     */
+    public function removeDefsfromContent(): self
+    {
+        $styleText = $this->getDefsfromContent();
+        $this->contents = str_replace($styleText, '', $this->contents());
+        return $this;
+    }
 
 
     /**
@@ -113,36 +158,56 @@ final class Svg extends SvgElement implements Conteiner
 
         $name  = $this->id ?? '';
         $style = $this->style;
-
-        $svgAttributes = $this->attributes();
-        $this->removeSvgAttribute();
-        $oldAttributes = $this->attributes();
-        $gOld = new G('', $oldAttributes, $this);
-        foreach ($this->elements as $element) {
-            $elementName = $element->name;
-            $gOld->elements[] = $element;
-            if (isset($gOld->$elementName)) {
-                $gOld->$elementName[] = $element;
-            } else {
-                $gOld->$elementName = [$element];
-            }
-            unset($this->$elementName);
-        }
-        $this->g = [$gOld];
-
-        $svgAttributes = Arr::except($svgAttributes, array_keys($oldAttributes));
-
-        $this->removeAllattributes();
-        foreach ($svgAttributes as $key => $svgAttribute) {
-            $this->setAttribute($key, $svgAttribute);
+        if (empty($style)) {
+            $style = new Style('', [], $this);
+            $this->style = $style;
         }
 
-        $this->elements = [
-            0 => $gOld,
-        ];
+        $defs = $this->defs;
+        if (empty($defs)) {
+            $this->defs = [];
+            $defs = new Defs('', [], $this);
+            $this->defs[] = $defs;
+        }
+
+        // $this->removeSvgAttribute();
+        // $oldAttributes = $this->attributes();
+        // $gOld = new G('', $oldAttributes, $this);
+        // foreach ($this->elements as $element) {
+        //     $elementName = $element->name;
+        //     $gOld->elements[] = $element;
+        //     if (isset($gOld->$elementName)) {
+        //         $gOld->$elementName[] = $element;
+        //     } else {
+        //         $gOld->$elementName = [$element];
+        //     }
+        //     unset($this->$elementName);
+        // }
+        // $this->g = [$gOld];
+
+        $svgAttributes = $this->getOnlySvgAttribute();
+
+        // $this->removeAllattributes();
+        // foreach ($svgAttributes as $key => $svgAttribute) {
+        //     $this->setAttribute($key, $svgAttribute);
+        // }
+
+        // $this->elements = [
+        //     0 => $gOld,
+        // ];
 
         foreach ($param as $svg) {
-            $style->mergeStyles($svg->style);
+
+            if (isset($svg->defs)) {
+                $style->mergeStyles($svg->style);
+                unset($svg->style);
+            }
+
+            if (isset($svg->defs)) {
+                $defs->mergeDefs($svg->defs);
+            }
+
+            $svgAttributes = array_merge($svgAttributes, $svg->getOnlySvgAttribute());
             $svg->removeSvgAttribute();
             $newAttributes = $svg->attributes();
 
@@ -156,8 +221,14 @@ final class Svg extends SvgElement implements Conteiner
                     $gNew->$elementName = [$element];
                 }
             }
+
+            unset($gNew->defs);
             $this->elements[] = $gNew;
             $this->g[] = $gNew;
+        }
+        $this->removeAllattributes();
+        foreach ($svgAttributes as $key => $svgAttribute) {
+            $this->setAttribute($key, $svgAttribute);
         }
         $this->id($name);
         return $this;
@@ -216,5 +287,49 @@ final class Svg extends SvgElement implements Conteiner
     public function setContent($content)
     {
         return $this;
+    }
+
+    /**
+     * removeSvgAttribute
+     *
+     * @return void
+     */
+    public function removeSvgAttribute()
+    {
+        $svgAttributes = self::SVG_ATTRIBUTES;
+        foreach ($svgAttributes as $att) {
+            if (isset($this->attributes[$att])) {
+                $this->removeAtt($att);
+            }
+        }
+        foreach ($this->attributes() as $att => $val) {
+
+            if (preg_match('/xml[:]?[^=]*/', $att, $match) !== 0) {
+                $this->removeAtt($att);
+            }
+        }
+    }
+
+    /**
+     * getOnlySvgAttribute
+     *
+     * @return array
+     */
+    public function getOnlySvgAttribute(): array
+    {
+        $response = [];
+        $svgAttributes = self::SVG_ATTRIBUTES;
+        foreach ($svgAttributes as $att) {
+            if (isset($this->attributes[$att])) {
+                $response[$att] = $this->attributes[$att];
+            }
+        }
+        foreach ($this->attributes() as $att => $val) {
+
+            if (preg_match('/xml[:]?[^=]*/', $att, $match) !== 0) {
+                $response[$att] = $this->attributes[$att];
+            }
+        }
+        return $response;
     }
 }

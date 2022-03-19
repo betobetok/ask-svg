@@ -451,28 +451,6 @@ class SvgElement implements Htmlable
         return $this;
     }
 
-    /**
-     * removeStylefromContent
-     *
-     * @return self
-     */
-    public function removeStylefromContent(): self
-    {
-        $styleText = $this->getStylefromContent();
-        $this->contents = str_replace($styleText, '', $this->contents());
-        return $this;
-    }
-
-    /**
-     * getStylefromContent
-     *
-     * @return string
-     */
-    public function getStylefromContent(): string
-    {
-        preg_match("/(<style[^>]*>)[^á]*<\/style>/i", $this->contents(), $match);
-        return $match[0] ?? '';
-    }
 
     public function toHtml(): string
     {
@@ -705,26 +683,6 @@ class SvgElement implements Htmlable
         return $this;
     }
 
-    /**
-     * removeSvgAttribute
-     *
-     * @return void
-     */
-    public function removeSvgAttribute()
-    {
-        $svgAttributes = self::SVG_ATTRIBUTES;
-        foreach ($svgAttributes as $att) {
-            if (isset($this->attributes[$att])) {
-                unset($this->attributes[$att]);
-            }
-        }
-        foreach ($this->attributes() as $att => $val) {
-
-            if (preg_match('/xml[:]?[^=]*/', $att, $match) !== 0) {
-                unset($this->attributes[$att]);
-            }
-        }
-    }
 
     /**
      * getTransformations
