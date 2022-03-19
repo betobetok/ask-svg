@@ -7,7 +7,7 @@ namespace BladeUI\Icons\Configurators;
 /**
  * RadialGradient
  */
-class Radialgradient extends Configurator
+class RadialGradient extends Configurator
 {
     /**
      *
