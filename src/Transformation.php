@@ -20,10 +20,10 @@ class Transformation
         'skewX',
         'skewY',
     ];
-    
+
     /** @var array $transformations */
     protected $transformations;
-    
+
     /**
      *
      *
@@ -143,9 +143,12 @@ class Transformation
                             ]
                         )
                     ];
+                    break;
             }
         }
-        if(!isset($this->transformations)){
+
+        if (!isset($this->transformations)) {
+
             $this->transformations[] = [
                 'matrix' => new NumArray(
                     [
@@ -157,7 +160,7 @@ class Transformation
             ];
         }
     }
-     
+
     /**
      * getOriginal
      *
@@ -182,7 +185,7 @@ class Transformation
         }
         return $OriginalPoint;
     }
-    
+
     /**
      * getTransformed
      *
@@ -207,5 +210,47 @@ class Transformation
             }
         }
         return $transformedPoint;
+    }
+
+    public function __toString()
+    {
+        $ret = 'transform="';
+        foreach ($this->transformations as $transformation) {
+            $type = array_key_first($transformation);
+
+            switch ($type) {
+                case 'translate':
+                    if (count($transformation) > 1) {
+                        $ret .= ' rotate(';
+                        $dataT = $transformation['translation']->getData();
+                        $dataR = $transformation['rotation']->getData();
+                        $ret .= acos($dataR[0][0]) . (($dataT[0][2] !== 0 && $dataT[1][2] !== 0) ? ', ' . $dataT[0][2] . ', ' . $dataT[1][2] : '') . ')';
+                        break;
+                    } else {
+                        $data = $transformation['translate']->getData();
+                        $ret .= ' translate(' . $data[0][2] . ', ' . $data[0][2] . ')';
+                    }
+                    break;
+                case 'scale':
+                    $data = $transformation['scale']->getData();
+                    $ret .= ' scale(' . $data[0][0] . ($data[1][1] === 0 ? '' : ', ' . $data[1][1]) . ')';
+                    break;
+                case 'matrix':
+                    $data = $transformation['matrix']->getData();
+                    $ret .= ' matrix(' . $data[0][0] . ', ' . $data[0][1] . ', ' . $data[1][0] . ', ' . $data[1][1] . ', ' . $data[0][2] . ', ' . $data[1][2] . ')';
+                    break;
+                case 'skewX':
+                    $data = $transformation['skewX']->getData();
+                    $ret .= ' skewX(' . atan($data[0][2]) . ')';
+                    break;
+                case 'skewY':
+                    $data = $transformation['skewY']->getData();
+                    $ret .= ' skewY(' . atan($data[0][1]) . ')';
+                    break;
+                default:
+                    $ret = '';
+            }
+        }
+        return $ret;
     }
 }

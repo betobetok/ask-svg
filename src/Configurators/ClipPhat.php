@@ -10,7 +10,7 @@ use NumPHP\Core\NumArray;
 /**
  * ClipPhat
  */
-class ClipPhat extends Configurator
+class Clipphat extends Configurator
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {

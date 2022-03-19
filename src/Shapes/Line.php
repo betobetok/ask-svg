@@ -13,16 +13,16 @@ use NumPHP\Core\NumArray;
 class Line extends Shape
 {
     /** @var float $x1 */
-    protected float $x1;
+    protected float $x1 = 0;
 
     /** @var float $y1 */
-    protected float $y1;
+    protected float $y1 = 0;
 
     /** @var float $x2 */
-    protected float $x2;
+    protected float $x2 = 0;
 
     /** @var float $y2 */
-    protected float $y2;
+    protected float $y2 = 0;
 
     /**
      *

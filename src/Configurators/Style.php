@@ -16,6 +16,9 @@ class Style extends Configurator
     /** @var array $classes */
     private $classes;
 
+    /** @var array $classes */
+    private $rules;
+
     /**
      * 
      *
@@ -25,29 +28,54 @@ class Style extends Configurator
      *
      * @return void
      */
-    public function __construct(string $svgContent, string $name, SvgElement $context = null)
+    public function __construct(string $svgContent, array $attributes = [], SvgElement $context = null)
     {
-        $contents = $this->configAttributesAndContent($name, $svgContent, []);
+        $name = '';
+        if ($context !== null) {
+            $name = $context->id();
+        }
+        $contents = $this->configAttributesAndContent('style', $svgContent, []);
+
+
+
         parent::__construct($contents, [], $context);
-        $this->renameStyle($name);
+        $this->getRules();
+        $this->renameClasses($name);
         $this->removeContents();
+        unset($this->elements);
     }
 
     /**
-     * renameStyle
+     * renameClasses
      *
      * @param  mixed $svgElementName
      * @return self
      */
-    public function renameStyle(string $svgElementName): self
+    public function renameClasses(string $svgElementName): self
     {
         $this->classes = [];
-        preg_match_all("/.([a-z0-9]*)({[^}]*})/i", $this->contents(), $comands);
-        foreach ($comands[1] as $k => $class) {
-            $className = $class . '-' . $svgElementName;
-            $this->classes[$className] = $comands[2][$k];
+        foreach ($this->rules as $selector => $declarations) {
+            if (strpos($selector, '.') === 0) {
+                $className = $selector . '-' . $svgElementName;
+                $this->classes[$className] = $declarations;
+                $this->rules[$className] = $declarations;
+                unset($this->rules[$selector]);
+            }
         }
         return $this;
+    }
+
+    public function getRules()
+    {
+        $this->rules = [];
+        preg_match_all("/([.#a-z0-9-]*)\s?({[^}]*})/i", $this->contents(), $comands);
+        foreach ($comands[1] as $k => $selector) {
+            preg_match_all("/([a-z0-9-]*):([^;]*);/i", $comands[2][$k], $declarations);
+            $this->rules[$selector] = [];
+            foreach ($declarations[1] as $i => $property) {
+                $this->rules[$selector][$property] = $declarations[2][$i];
+            }
+        }
     }
 
     /**
@@ -58,6 +86,16 @@ class Style extends Configurator
     public function classes(): array
     {
         return $this->classes;
+    }
+
+    /**
+     * rules
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return $this->rules;
     }
 
     /**
@@ -79,10 +117,18 @@ class Style extends Configurator
      */
     public function toHtml(): string
     {
-        $ret = '<style' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n";
-        $classes = $this->classes();
-        foreach ($classes as $className => $comands) {
-            $ret .= '.' . $className . ' ' . $comands . "\n";
+        if (empty($this->rules())) {
+            return '';
+        }
+
+        $ret = sprintf("<style %s>\n", $this->renderAttributes());
+
+        foreach ($this->rules() as $ruleName => $declarations) {
+            $ret .=  sprintf("%s {\n", $ruleName);
+            foreach ($declarations as $property => $value) {
+                $ret .=  sprintf("\t%s: %s;\n", $property, $value);
+            }
+            $ret .= "}\n";
         }
         $ret .= '</style>';
         return $ret;
@@ -96,18 +142,7 @@ class Style extends Configurator
      */
     public function mergeStyles(Style $add): ?self
     {
-        if (empty($this->attributes())) {
-            if (empty($add->attributes())) {
-                return null;
-            }
-            foreach ($add->attributes() as $name => $arguments) {
-                $this->setAttribute($name, $arguments);
-            }
-        }
-
-        if (empty($add->attributes())) {
-            return null;
-        }
+        $this->rules = array_merge($this->rules, $add->rules);
         $array = array_merge($this->attributes(), $add->attributes());
         foreach ($array as $name => $arguments) {
             $this->setAttribute($name, $arguments);

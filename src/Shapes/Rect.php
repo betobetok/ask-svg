@@ -13,22 +13,22 @@ use NumPHP\Core\NumArray;
 class Rect extends Shape
 {
     /** @var float $x */
-    protected float $x;
+    protected float $x = 0;
 
     /** @var float $y */
-    protected float $y;
+    protected float $y = 0;
 
     /** @var float $width */
-    protected float $width;
+    protected float $width = 0;
 
     /** @var float $height */
-    protected float $height;
+    protected float $height = 0;
 
     /** @var float $rx */
-    protected float $rx;
+    protected float $rx = 0;
 
     /** @var float $ry */
-    protected float $ry;
+    protected float $ry = 0;
 
     /**
      * __construct

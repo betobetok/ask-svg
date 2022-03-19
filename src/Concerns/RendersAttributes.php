@@ -21,7 +21,7 @@ trait RendersAttributes
             return '';
         }
 
-        return ' '.collect($this->attributes())->map(function (string $value, $attribute) {
+        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
             }
@@ -33,9 +33,9 @@ trait RendersAttributes
     public function __call(string $method, array $arguments): self
     {
         if (count($arguments) === 0) {
-            $this->attributes[] = Str::snake($method, '-');
+            $this->attributes[] = Str::camel($method);
         } else {
-            $this->attributes[Str::snake($method, '-')] = $arguments[0];
+            $this->attributes[Str::camel($method)] = $arguments[0];
         }
         return $this;
     }
@@ -50,5 +50,10 @@ trait RendersAttributes
     public function setAttribute(string $name, string $arguments)
     {
         $this->attributes[Str::snake($name, '-')] = $arguments;
+    }
+
+    public function removeAllAttributes()
+    {
+        $this->attributes = [];
     }
 }

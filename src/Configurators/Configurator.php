@@ -16,9 +16,7 @@ class Configurator extends SvgElement
     {
         $name = explode('\\', get_class($this));
         $name = strtolower($name[array_key_last($name)]);
-
         $this->contents = $contents;
-
         parent::__construct($name, $contents, $attributes, $context);
     }
 }

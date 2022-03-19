@@ -13,16 +13,16 @@ use NumPHP\Core\NumArray;
 class Ellipse extends Shape
 {
     /** @var float $cx */
-    protected float $cx;
+    protected float $cx = 0;
 
     /** @var float $cy */
-    protected float $cy;
+    protected float $cy = 0;
 
     /** @var float $rx */
-    protected float $rx;
+    protected float $rx = 0;
 
     /** @var float $ry */
-    protected float $ry;
+    protected float $ry = 0;
 
     /**
      * 
