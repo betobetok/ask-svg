@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use NumPHP\Core\NumArray;
 
 /**
- * Shape
+ * An element that make a Shape in a svg document
  */
 abstract class Shape extends SvgElement
 {
@@ -30,7 +30,7 @@ abstract class Shape extends SvgElement
         parent::__construct($name,  $contents,  $attributes, $context);
     }
     /**
-     * getStartPosition
+     * get the Start position o the element
      *
      * @return void
      */
@@ -40,7 +40,8 @@ abstract class Shape extends SvgElement
     }
 
     /**
-     * renderAttributes
+     * renderAttributes return a string with attributes in a HTML format
+     * (overloaded Method from RenderAttributes)
      *
      * @return string
      */
@@ -64,7 +65,7 @@ abstract class Shape extends SvgElement
     }
 
     /**
-     * toHtml
+     * (overloaded Method from SvgElement)
      *
      * @return string
      */

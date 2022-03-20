@@ -2,14 +2,21 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
 use Error;
 
+/**
+ * A comand "s" in a d attribute of a svg path
+ * 
+ * S x2 y2, x y
+ * s dx2 dy2, dx dy
+ */
 class S extends Command
 {
     public function initialization()
     {
+        /** a command s must have parameters in multiples of 4 */
         if (count($this->attributes) % 4 > 0) {
             throw new Error('Incorrect configuration of attributes');
         }

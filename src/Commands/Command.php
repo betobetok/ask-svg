@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
-use BladeUI\Icons\Shapes\Path;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 use Error;
 
+/**
+ * 
+ * A command in a d attribute of a svg path
+ * 
+ */
 abstract class Command implements Htmlable
 {
 
@@ -48,14 +52,14 @@ abstract class Command implements Htmlable
     }
 
     /**
-     * initialization
+     * initialization is a configuration method for the specific type of command
      *
      * @return void
      */
     abstract public function initialization();
 
     /**
-     * getComand
+     * getComand return the name of the command. Uppercase if it's absolute lowercase if relative 
      *
      * @return string
      */
@@ -66,7 +70,7 @@ abstract class Command implements Htmlable
     }
 
     /**
-     * setEndPoint
+     * setEndPoint set the values of the coordinates of the end point in the command list, both Absolute and Relative
      *
      * @param array relativePoint
      * @param array absolutePoint
@@ -115,7 +119,8 @@ abstract class Command implements Htmlable
     }
 
     /**
-     * getEndPoint
+     * getEndPoint returns an array with the x and y value of the end point. If the parameter "absolute" 
+     * is put to true the Absolute value of the end point is returned, relative is returned otherwise
      *
      * @param bool absolute
      *
@@ -124,7 +129,7 @@ abstract class Command implements Htmlable
     public function getEndPoint(bool $absolute = true): array
     {
         $a = $this->count - 1;
-        if($a !== count($this->coordinates)-1){
+        if ($a !== count($this->coordinates) - 1) {
             dump([$this]);
         }
         return $this->getPoint($a, $absolute);
@@ -141,7 +146,7 @@ abstract class Command implements Htmlable
     }
 
     /**
-     * getLastMComand
+     * getLastMComand returns the last M command in the "d" attribute
      *
      * @return Command|null
      */
@@ -155,7 +160,16 @@ abstract class Command implements Htmlable
         }
     }
 
-    public function getPoint($n = null, $absolute = true): array
+    /**
+     * getPoint returns the array with the x and y parameters of the n point, 
+     * if the parameter "absolute" is set to true, the Absolute values are returned, 
+     * relative are retuned otherwise
+     *
+     * @param  int $n
+     * @param  bool $absolute
+     * @return array
+     */
+    public function getPoint(int $n = null, bool $absolute = false): array
     {
         if ($n >= $this->count) {
             throw new Error("Point doesn't exist, max position: " . $this->count - 1, 1);
@@ -206,5 +220,32 @@ abstract class Command implements Htmlable
                 'y' => $this->coordinates[$n]['y'] ?? 0,
             ];
         }
+    }
+
+    /**
+     * getDinstance get the distance between tow points, 
+     * if the second parameter is not gived, returns the Absolut distans of the point
+     *
+     * @param array fromPoint
+     * @param array toPoint
+     *
+     * @return array
+     */
+    public function getDinstance(array $fromPoint, array $toPoint = []): array
+    {
+        if (empty($toPoint)) {
+            $toPoit = [
+                'x' => 0,
+                'y' => 0,
+            ];
+        }
+        $dx = $fromPoint['x'] - $toPoint['x'];
+        $dy = $fromPoint['y'] - $toPoint['y'];
+        $distance = sqrt(pow($dx, 2) + (pow($dy, 2)));
+        return [
+            'dx' => $dx,
+            'dy' => $dy,
+            'distance' => $distance
+        ];
     }
 }

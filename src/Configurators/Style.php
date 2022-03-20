@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use BladeUI\Icons\Configurators\Configurator;
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\Configurators\Configurator;
+use ASK\Svg\SvgElement;
 
 /**
- * Style
+ * The Style element in a svg document
  */
 class Style extends Configurator
 {
@@ -19,15 +18,6 @@ class Style extends Configurator
     /** @var array $classes */
     private $rules;
 
-    /**
-     * 
-     *
-     * @param string svgContent
-     * @param string name
-     * @param SvgElement context
-     *
-     * @return void
-     */
     public function __construct(string $svgContent, array $attributes = [], SvgElement $context = null)
     {
         $name = '';
@@ -35,8 +25,6 @@ class Style extends Configurator
             $name = $context->id();
         }
         $contents = $this->configAttributesAndContent('style', $svgContent, []);
-
-
 
         parent::__construct($contents, [], $context);
         $this->getRules();
@@ -46,9 +34,10 @@ class Style extends Configurator
     }
 
     /**
-     * renameClasses
+     * renameClasses agregate the name of the svg at ende of the classes neme 
+     * to avoid a name conflict between svgs in a merge
      *
-     * @param  mixed $svgElementName
+     * @param  string $svgElementName
      * @return self
      */
     public function renameClasses(string $svgElementName): self
@@ -65,7 +54,12 @@ class Style extends Configurator
         return $this;
     }
 
-    public function getRules()
+    /**
+     * makeRules create an array of roules from the string content
+     *
+     * @return void
+     */
+    public function makeRules()
     {
         $this->rules = [];
         preg_match_all("/([.#a-z0-9-]*)\s?({[^}]*})/i", $this->contents(), $comands);
@@ -79,7 +73,7 @@ class Style extends Configurator
     }
 
     /**
-     * classes get the css classes from style
+     * get the css classes from style
      *
      * @return array
      */
@@ -89,7 +83,7 @@ class Style extends Configurator
     }
 
     /**
-     * rules
+     *  get the css rules from style
      *
      * @return array
      */
@@ -111,7 +105,7 @@ class Style extends Configurator
     }
 
     /**
-     * toHtml
+     * (overloaded Method from SvgElement)
      *
      * @return string
      */
@@ -159,7 +153,7 @@ class Style extends Configurator
     public function toArray()
     {
         $ret = parent::toArray();
-        $ret['classes'] = $this->classes();
+        $ret['rules'] = $this->rules();
         return $ret;
     }
 }

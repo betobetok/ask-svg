@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
 
 /**
- * Line
+ * A Line element in a svg document
  */
 class Line extends Shape
 {
@@ -24,15 +24,6 @@ class Line extends Shape
     /** @var float $y2 */
     protected float $y2 = 0;
 
-    /**
-     *
-     *
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
@@ -51,11 +42,11 @@ class Line extends Shape
     }
 
     /**
-     * getLang
+     * get teh Logitud of the line
      *
      * @return float
      */
-    public function getLang(): float
+    public function long(): float
     {
         return sqrt((pow(($this->x2 - $this->x1), 2) + pow(($this->x2 - $this->x1), 2)));
     }

@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use NumPHP\Core\NumArray;
 
 /**
- * Font
+ * A Font element into a svg document
  */
 class Font extends Configurator
 {

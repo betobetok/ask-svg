@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
+/**
+ * A comand "z" in a d attribute of a svg path
+ */
 class Z extends Command
 {
     public function initialization()

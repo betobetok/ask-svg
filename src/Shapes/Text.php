@@ -2,26 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
-use NumPHP\Core\NumArray;
+use ASK\Svg\SvgElement;
 
 /**
- * Text
+ * a Text element in a svg document
  */
 class Text extends Shape
 {
-
-    /**
-     * 
-     * @param string $name
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);

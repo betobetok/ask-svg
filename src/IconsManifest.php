@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
 use Exception;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
@@ -10,21 +10,14 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
-/**
- * IconsManifest
- */
 final class IconsManifest
-{    
-    /** @var Filesystem $filesystem */
+{
     private Filesystem $filesystem;
-    
-    /** @var string $manifestPath */
+
     private string $manifestPath;
-    
-    /** @var FilesystemFactory|null $disks */
+
     private ?FilesystemFactory $disks;
-    
-    /** @var array|null $manifest */
+
     private ?array $manifest = null;
 
     public function __construct(Filesystem $filesystem, string $manifestPath, FilesystemFactory $disks = null)
@@ -33,13 +26,7 @@ final class IconsManifest
         $this->manifestPath = $manifestPath;
         $this->disks = $disks;
     }
-    
-    /**
-     * build
-     *
-     * @param  array $sets
-     * @return array
-     */
+
     private function build(array $sets): array
     {
         $compiled = [];
@@ -58,7 +45,7 @@ final class IconsManifest
 
                         $icons[$path][] = $this->format($file->getPathName(), $path);
                     } else {
-                        if (! Str::endsWith($file, '.svg')) {
+                        if (!Str::endsWith($file, '.svg')) {
                             continue;
                         }
 
@@ -82,68 +69,45 @@ final class IconsManifest
     {
         return $this->disks && $disk ? $this->disks->disk($disk) : $this->filesystem;
     }
-    
-    /**
-     * delete
-     *
-     * @return bool
-     */
+
     public function delete(): bool
     {
         return $this->filesystem->delete($this->manifestPath);
     }
-    
-    /**
-     * format
-     *
-     * @param  string $pathname
-     * @param  string $path
-     * @return string
-     */
+
     private function format(string $pathname, string $path): string
     {
         return (string) Str::of($pathname)
-            ->after($path.'/')
+            ->after($path . '/')
             ->replace('/', '.')
             ->basename('.svg');
     }
-    
-    /**
-     * getManifest
-     *
-     * @param  array $sets
-     * @return array
-     */
+
     public function getManifest(array $sets): array
     {
-        if (! is_null($this->manifest)) {
+        if (!is_null($this->manifest)) {
             return $this->manifest;
         }
 
-        if (! $this->filesystem->exists($this->manifestPath)) {
+        if (!$this->filesystem->exists($this->manifestPath)) {
             return $this->manifest = $this->build($sets);
         }
 
         return $this->manifest = $this->filesystem->getRequire($this->manifestPath);
     }
 
-      
     /**
-     * write
-     *
-     * @param  array $sets
-     * @return void
      * @throws Exception
      */
     public function write(array $sets): void
     {
-        if (! is_writable($dirname = dirname($this->manifestPath))) {
+        if (!is_writable($dirname = dirname($this->manifestPath))) {
             throw new Exception("The {$dirname} directory must be present and writable.");
         }
 
         $this->filesystem->replace(
             $this->manifestPath,
-            '<?php return '.var_export($this->build($sets), true).';',
+            '<?php return ' . var_export($this->build($sets), true) . ';',
         );
     }
 }

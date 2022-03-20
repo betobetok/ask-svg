@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use function PHPUnit\Framework\isEmpty;
 
 /**
- * Defs
+ * The Definitions element in a svg document
  */
 class Defs extends Configurator
 {

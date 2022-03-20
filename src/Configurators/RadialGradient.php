@@ -2,22 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
 /**
- * RadialGradient
+ * A RadialGradient element in a svg document
  */
 class RadialGradient extends Configurator
 {
-    /**
-     *
-     * @param string name
-     * @param string contents
-     * @param array attributes
-     * @param SvgElement context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
         foreach ($attributes as $key => $attribute) {
@@ -28,6 +19,7 @@ class RadialGradient extends Configurator
         $this->name = 'radialGradient';
     }
 
+    /** (overloaded Method from SvgElement) */
     public function toHtml(): string
     {
         if (isset($this->stop)) {

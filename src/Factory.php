@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
 use BladeUI\Icons\Components\Svg as SvgComponent;
 use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
@@ -60,7 +60,7 @@ final class Factory
      */
     public function add(string $set, array $options): self
     {
-        if (! isset($options['prefix'])) {
+        if (!isset($options['prefix'])) {
             throw CannotRegisterIconSet::prefixNotDefined($set);
         }
 
@@ -218,12 +218,24 @@ final class Factory
         } elseif (is_array($class)) {
             $attributes = $class;
 
-            if (! isset($attributes['class']) && $class = $this->buildClass($set, '')) {
+            if (!isset($attributes['class']) && $class = $this->buildClass($set, '')) {
                 $attributes['class'] = $class;
             }
         }
 
-        return array_merge($attributes, $this->config['attributes'], (array) ($this->sets[$set]['attributes'] ?? []));
+        $attributes = array_merge(
+            $attributes,
+            $this->config['attributes'],
+            (array) ($this->sets[$set]['attributes'] ?? []),
+        );
+
+        foreach ($attributes as $key => $value) {
+            if (is_string($value)) {
+                $attributes[$key] = str_replace('"', '&quot;', $value);
+            }
+        }
+
+        return $attributes;
     }
 
     private function buildClass(string $set, string $class): string

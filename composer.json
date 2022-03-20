@@ -1,6 +1,6 @@
 {
     "name": "betobetok/ask-svg",
-    "description": "This is a personal extention from https://github.com/blade-ui-kit/blade-icons",
+    "description": "This is a extention from https://github.com/blade-ui-kit/blade-icons",
     "keywords": ["Blade", "Icons", "Laravel", "SVG"],
     "homepage": "https://github.com/betobetok/ask-svg",
     "license": "MIT",
@@ -14,13 +14,15 @@
     }],
     "require": {
         "php": "^7.4|^8.0",
+        "ext-imagick": "^3.4",
+        "blade-ui-kit/blade-icons": "^1.2",
         "illuminate/contracts": "^8.0",
         "illuminate/filesystem": "^8.0",
         "illuminate/support": "^8.0",
         "illuminate/view": "^8.0",
+        "numphp/numphp": "^1.2.0 ",
         "symfony/console": "^5.3",
-        "symfony/finder": "^5.3",
-        "numphp/numphp": "^1.2.0 "
+        "symfony/finder": "^5.3"
     },
     "require-dev": {
         "mockery/mockery": "^1.3",
@@ -32,7 +34,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "BladeUI\\Icons\\": "src"
+            "ASK\\Svg\\": "src"
         },
         "files": [
             "src/helpers.php"

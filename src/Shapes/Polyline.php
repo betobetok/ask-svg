@@ -2,29 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use Exception;
 use NumPHP\Core\NumArray;
 
 /**
- * Polyline
+ * A Polyline element in a svg document
  */
 class Polyline extends Shape
 {
     /** @var array $points */
     protected array $points = [];
 
-    /**
-     * 
-     *
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
@@ -40,15 +31,21 @@ class Polyline extends Shape
         $this->startPosition = $this->points[0];
     }
 
+    /**
+     * (overloaded Method from SvgElement)
+     *
+     * @return string
+     */
     public function toHtml(): string
     {
         return sprintf('<%s points="%s" %s/>', $this->name(), $this->pointsString(), $this->renderAttributes());
     }
 
     /**
-     * getPoints
+     * get the array Points from a string 
      *
-     * @param  string $points
+     * @param string $points
+     *
      * @return array
      */
     public function getPoints(string $points): array

@@ -2,17 +2,27 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
 use Error;
 
+/**
+ * A comand "m" in a d attribute of a svg path
+ * 
+ * M x y
+ * m dx dy
+ */
 class M extends Command
 {
-    private $x;
-    private $y;
+    /** @var float x */
+    private float $x;
+
+    /** @var float y */
+    private float $y;
 
     public function initialization()
     {
+        /** a command m must have even nummer of parameters */
         if (count($this->attributes) % 2 > 0) {
             throw new Error('Incorrect configuration of attributes');
         }
@@ -38,31 +48,66 @@ class M extends Command
         unset($this->attributes);
     }
 
-    public function getX()
+    /**
+     * getMDinstance get the distance between last m point and the point of parameter
+     *
+     * @param array toPoint
+     *
+     * @return array
+     */
+    public function getMDinstance(array $toPoint = []): array
+    {
+        $fromPoint = [
+            'x' => $this->x,
+            'y' => $this->y
+        ];
+
+        return parent::getDinstance($fromPoint, $toPoint);
+    }
+
+    /**
+     * Get the value of x
+     *
+     * @return float
+     */
+    public function getX(): float
     {
         return $this->x;
     }
 
-    public function getY()
+    /**
+     * Set the value of x
+     *
+     * @param  float $x
+     * @return self
+     */
+    public function setX(float $x): self
+    {
+        $this->x = $x;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of y
+     *
+     * @return float
+     */
+    public function getY(): float
     {
         return $this->y;
     }
 
-    public function getDinstance($toPoint = [])
+    /**
+     * Set the value of y
+     *
+     * @param  float $y
+     * @return self
+     */
+    public function setY(float $y): self
     {
-        if (empty($toPoint)) {
-            $toPoit = [
-                'x' => 0,
-                'y' => 0,
-            ];
-        }
-        $dx = $this->x - $toPoint['x'];
-        $dy = $this->y - $toPoint['y'];
-        $distance = sqrt(pow($dx, 2) + (pow($dy, 2)));
-        return [
-            'dx' => $dx,
-            'dy' => $dy,
-            'distance' => $distance
-        ];
+        $this->y = $y;
+
+        return $this;
     }
 }

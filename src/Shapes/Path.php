@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use Exception;
 
 /**
- * Path
+ * A Path element in a svg document
  */
 class Path extends Shape
 {
@@ -18,15 +18,6 @@ class Path extends Shape
     /** @var array d*/
     protected array $d = [];
 
-    /**
-     * 
-     *
-     * @param  mixed $name
-     * @param  mixed $contents
-     * @param  mixed $attributes
-     * @param  SvgElement $context
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
@@ -44,7 +35,7 @@ class Path extends Shape
     }
 
     /**
-     * toHtml
+     * (overloaded Method from SvgElement)
      *
      * @return string
      */
@@ -71,7 +62,7 @@ class Path extends Shape
     }
 
     /**
-     * getExistingComands get the existing comands in a d attribute of a Paht element
+     * getExistingComands get the existing comands in a d attribute from a string
      *
      * @param  string $d
      * @return array
@@ -94,6 +85,12 @@ class Path extends Shape
         return $commands;
     }
 
+    /**
+     * renderAttributes return a string with attributes in a HTML format
+     * (overloaded Method from RenderAttributes)
+     *
+     * @return string
+     */
     protected function renderAttributes(): string
     {
         if (count($this->attributes()) == 0) {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
 
 /**
- * Ellipse
+ * A Ellipse element in a svg document
  */
 class Ellipse extends Shape
 {
@@ -24,15 +24,6 @@ class Ellipse extends Shape
     /** @var float $ry */
     protected float $ry = 0;
 
-    /**
-     * 
-     *
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
@@ -46,11 +37,11 @@ class Ellipse extends Shape
     }
 
     /**
-     * getCenter
+     * get the Center of the ellipse
      *
      * @return NumArray
      */
-    public function getCenter(): NumArray
+    public function center(): NumArray
     {
         return new NumArray([
             'x' => $this->cx,
@@ -59,31 +50,31 @@ class Ellipse extends Shape
     }
 
     /**
-     * getRadioX
+     * get the x Radio of the ellipse
      *
      * @return float
      */
-    public function getRadioX(): float
+    public function radioX(): float
     {
         return $this->rx;
     }
 
     /**
-     * getRadioY
+     * get the y Radio of the ellipse
      *
      * @return float
      */
-    public function getRadioY(): float
+    public function radioY(): float
     {
         return $this->ry;
     }
 
     /**
-     * getArea
+     * get the Area of the ellipse
      *
      * @return float
      */
-    public function getArea(): float
+    public function area(): float
     {
         return pi() * $this->ry * $this->rx;
     }

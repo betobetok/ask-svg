@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
-
-use BladeUI\Icons\Concerns\RendersAttributes;
-use NumPHP\Core\NumArray;
+namespace ASK\Svg\Configurators;
 
 /**
- * ClipPhat
+ * ClipPhat in a svg document
  */
 class ClipPhat extends Configurator
 {

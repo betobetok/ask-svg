@@ -2,12 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
 use Error;
 
+/**
+ * A comand "v" in a d attribute of a svg path
+ * 
+ * V y
+ * v dy
+ */
 class V extends Command
 {
+    /** @var float $y */
     protected float $y;
 
     public function initialization()
@@ -29,5 +36,28 @@ class V extends Command
         $this->setEndPoint($relativePoint, $absolutePoint);
         unset($this->attributes);
     }
-    
+
+    /**
+     * getY
+     *
+     * @return float
+     */
+    public function getY(): float
+    {
+        return $this->y;
+    }
+
+    /**
+     * setY
+     *
+     * @param float y
+     *
+     * @return self
+     */
+    public function setY(float $y)
+    {
+        $this->y = $y;
+
+        return $this;
+    }
 }

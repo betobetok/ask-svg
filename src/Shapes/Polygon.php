@@ -2,29 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
-use Exception;
+use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
 
 /**
- * Polygon
+ * A Polygon element in a svg document
  */
 class Polygon extends Shape
 {
     /** @var array $points */
     protected array $points = [];
 
-    /**
-     *
-     *
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
@@ -42,7 +32,7 @@ class Polygon extends Shape
     }
 
     /**
-     * toHtml
+     * (overloaded Method from SvgElement)
      *
      * @return string
      */
@@ -52,7 +42,7 @@ class Polygon extends Shape
     }
 
     /**
-     * getPoints
+     * get the array Points from a string 
      *
      * @param string $points
      *

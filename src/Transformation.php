@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
 use NumPHP\Core\NumArray;
 use NumPHP\LinAlg\LinAlg;
 
 /**
- * Transformation
+ * a Transformation Objet that represent the transformation matrix of a svg transformation
  */
 class Transformation
 {
@@ -24,12 +24,6 @@ class Transformation
     /** @var array $transformations */
     protected $transformations;
 
-    /**
-     *
-     *
-     * @param  string $svgTransformAttribute
-     * @return void
-     */
     public function __construct(string $svgTransformAttribute = '')
     {
         preg_match_all('/([a-z]+)\(([0-9.-]+)[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?\)/', $svgTransformAttribute, $transformations);
@@ -162,7 +156,7 @@ class Transformation
     }
 
     /**
-     * getOriginal
+     * get the original point (x, y) from a transformed point (x', y') through the transformations in the svg object
      *
      * @param  mixed $transformedPoint
      * @return NumArray
@@ -187,7 +181,7 @@ class Transformation
     }
 
     /**
-     * getTransformed
+     * get the transformed point (x', y') from an original point (x, y) through the transformations in the svg object
      *
      * @param  mixed $OriginalPoint
      * @return NumArray

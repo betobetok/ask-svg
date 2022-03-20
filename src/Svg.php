@@ -2,29 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
-use BladeUI\Icons\Configurators\Defs;
-use BladeUI\Icons\Configurators\G;
-use BladeUI\Icons\Configurators\Style;
-use Illuminate\Support\Arr;
+use ASK\Svg\Configurators\G;
+use ASK\Svg\Configurators\Style;
 
 /**
- * Svg
+ * the Svg document
  */
 final class Svg extends SvgElement implements Conteiner
 {
     /** @var Style $style */
     public Style $style;
 
-    /**
-     * 
-     *
-     * @param  string $fileName
-     * @param  string $contents
-     * @param  array $attributes
-     * @return void
-     */
     public function __construct(string $fileName, string $contents, array $attributes = [])
     {
         $name = explode('/', $fileName);
@@ -46,7 +36,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getStylefromContent
+     * get the Style element from the string content
      *
      * @return string
      */
@@ -57,18 +47,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getDefsfromContent
-     *
-     * @return string
-     */
-    public function getDefsfromContent(): string
-    {
-        preg_match("/(<defs[^>]*>)[^á]*<\/defs>/i", $this->contents(), $match);
-        return $match[0] ?? '';
-    }
-
-    /**
-     * removeStylefromContent
+     * remove the string Style from the string content
      *
      * @return self
      */
@@ -80,20 +59,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * removeDefsfromContent
-     *
-     * @return self
-     */
-    public function removeDefsfromContent(): self
-    {
-        $styleText = $this->getDefsfromContent();
-        $this->contents = str_replace($styleText, '', $this->contents());
-        return $this;
-    }
-
-
-    /**
-     * style
+     * get the Style element
      *
      * @return Style
      */
@@ -103,21 +69,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getSVGAtributes
-     *
-     * @return array
-     */
-    public function getSVGAtributes(): array
-    {
-        $svg = $this->getElements('svg');
-        if (isset($svg[0])) {
-            return $svg[0]->attributes();
-        }
-        return [];
-    }
-
-    /**
-     * setStyle
+     * set the Style element
      *
      * @param  Style $style
      * @return self
@@ -129,7 +81,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * replaceClasses
+     * replace the Classes names in the string content
      *
      * @param  Style $style
      * @param  string $content
@@ -145,7 +97,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * mergeSvgs
+     * merge one or more Svgs in this svg
      *
      * @param  Svg[] $param
      * @return Svg
@@ -211,13 +163,19 @@ final class Svg extends SvgElement implements Conteiner
         return $this;
     }
 
+    /**
+     * implements of Htmlable, toHtml return a string form of the svg in HTML format
+     *
+     * @return string
+     */
     public function toHtml(): string
     {
         return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n" . $this->contents() . "\n" . '</svg>';
     }
 
     /**
-     * getAllSvgElements
+     * get all the Svg elements in this svg, 
+     * this array conteins all the elements in order
      *
      * @param  mixed $svg
      * @return array
@@ -228,7 +186,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * cleanContent
+     * cleanContent remove all string contents in the complet object
      *
      * @return self
      */
@@ -250,6 +208,7 @@ final class Svg extends SvgElement implements Conteiner
 
     /**
      * Get the value of content
+     * (Conteiner implement) //TODO implementation of container
      */
     public function getContent()
     {
@@ -258,6 +217,7 @@ final class Svg extends SvgElement implements Conteiner
 
     /**
      * Set the value of content
+     * (Conteiner implement) //TODO implementation of container
      *
      * @return  self
      */
@@ -267,7 +227,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * removeSvgAttribute
+     * removes those attributes that belong exclusively to the svg element
      *
      * @return void
      */
@@ -288,7 +248,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getOnlySvgAttribute
+     * get those attributes that belong exclusively to the svg element
      *
      * @return array
      */

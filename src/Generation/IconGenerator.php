@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Generation;
+namespace ASK\Svg\Generation;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
@@ -35,7 +35,7 @@ final class IconGenerator
                 $filename = Str::of($file->getFilename());
                 $filename = $this->applyPrefixes($set, $filename);
                 $filename = $this->applySuffixes($set, $filename);
-                $pathname = $destination.$filename;
+                $pathname = $destination . $filename;
 
                 $this->filesystem->copy($file->getRealPath(), $pathname);
 
@@ -50,7 +50,7 @@ final class IconGenerator
     {
         $destination = Str::finish($set['destination'], DIRECTORY_SEPARATOR);
 
-        if (! Arr::get($set, 'safe', false)) {
+        if (!Arr::get($set, 'safe', false)) {
             $this->filesystem->deleteDirectory($destination);
         }
 
@@ -75,11 +75,11 @@ final class IconGenerator
     private function applySuffixes($set, Stringable $filename): Stringable
     {
         if ($set['input-suffix'] ?? false) {
-            $filename = $filename->replace($set['input-suffix'].'.svg', '.svg');
+            $filename = $filename->replace($set['input-suffix'] . '.svg', '.svg');
         }
 
         if ($set['output-suffix'] ?? false) {
-            $filename = $filename->replace('.svg', $set['output-suffix'].'.svg');
+            $filename = $filename->replace('.svg', $set['output-suffix'] . '.svg');
         }
 
         return $filename;

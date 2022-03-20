@@ -2,15 +2,22 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Commands;
+namespace ASK\Svg\Commands;
 
 use Error;
 
+/**
+ * A comand "a" in a d attribute of a svg path
+ * 
+ * A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+ * a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
+ */
 class A extends Command
 {
 
     public function initialization()
     {
+        /** a command a must have parameters in multiples of 7 */
         if (count($this->attributes) % 7 > 0) {
             throw new Error('Incorrect configuration of attributes');
         }
@@ -52,7 +59,13 @@ class A extends Command
         unset($this->attributes);
     }
 
-    public function getCenter($n = null)
+    /**
+     * getCenter get the centero of the n arc 
+     *
+     * @param  int $n the arc number of which we want the center 
+     * @return void
+     */
+    public function getCenter(int $n = null)
     {
         if ($n >= $this->count) {
             throw new Error("Point doesn't exist, max position: " . $this->count, 1);
@@ -67,12 +80,14 @@ class A extends Command
             }
         }
 
+        /** first point aPoint, if ist the first parameters group in the a command, the aPoint must be taken from the previus command */
         if ($n < 1) {
             $aPoint = $this->prev->getEndPoint();
         } else {
             $aPoint = $this->getPoint($n - 1);
         }
 
+        /** last point bPoint*/
         $bPoint = $this->getPoint($n);
 
         $angle = $this->coordinates[$n]['xRotation'] * 180 / pi();
