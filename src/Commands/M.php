@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Commands;
-=======
 namespace ASK\Svg\DCommands;
->>>>>>> Stashed changes
 
 use ASK\Svg\Exceptions\ComandException;
 
@@ -17,14 +13,9 @@ class M extends Command
 
     public function initialization($parameters)
     {
-<<<<<<< Updated upstream
-        if (count($this->attributes) % 2 > 0) {
-            throw new Error('Incorrect configuration of attributes');
-=======
         /** a command m must have even nummer of parameters */
         if (count($parameters) % 2 > 0 || count($parameters) === 0) {
             throw ComandException::configuration(self::class, count($parameters), 2);
->>>>>>> Stashed changes
         }
         $count = 0;
         foreach ($parameters as $k => $coordinate) {

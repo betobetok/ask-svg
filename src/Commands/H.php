@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Commands;
-=======
 namespace ASK\Svg\DCommands;
->>>>>>> Stashed changes
 
 use ASK\Svg\Exceptions\ComandException;
 
