@@ -1,2 +1,5 @@
 composer.lock
 vendor
+phpdoc.xml
+templates
+/build/api-cache

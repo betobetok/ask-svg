@@ -2,27 +2,31 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 /** 
  * A comand "c" in a d attribute of a svg path
+ * 
+ * The cubic curve, C, is the slightly more complex curve. 
+ * Cubic Béziers take in two control points for each point. 
+ * Therefore, to create a cubic Bézier, three sets of coordinates need to be specified.
  * 
  * C x1 y1, x2 y2, x y
  * c dx1 dy1, dx2 dy2, dx dy
  */
 class C extends Command
 {
-    public function initialization()
+    public function initialization($parameters)
     {
         /** a command c must have parameters in multiples of 6 */
-        if (count($this->attributes) % 6 > 0) {
-            throw new Error('Incorrect configuration of attributes ');
+        if (count($parameters) % 6 > 0 || count($parameters) <= 0) {
+            throw ComandException::configuration(self::class, count($parameters), 6);
         }
 
         $count = 0;
-        foreach ($this->attributes as $k => $coordinate) {
+        foreach ($parameters as $k => $coordinate) {
             switch ($k % 6) {
                 case 0:
                     $coordinates[$count]['x1'] = $coordinate;
@@ -50,6 +54,6 @@ class C extends Command
         $absolutePoint = $this->getEndPoint();
         $relativePoint = $this->getEndPoint(false);
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
 }

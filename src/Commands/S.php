@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 /**
  * A comand "s" in a d attribute of a svg path
@@ -14,15 +14,15 @@ use Error;
  */
 class S extends Command
 {
-    public function initialization()
+    public function initialization($parameters)
     {
         /** a command s must have parameters in multiples of 4 */
-        if (count($this->attributes) % 4 > 0) {
-            throw new Error('Incorrect configuration of attributes');
+        if (count($parameters) % 4 > 0 || count($parameters) === 0) {
+            throw ComandException::configuration(self::class, count($parameters), 4);
         }
 
         $count = 0;
-        foreach ($this->attributes as $k => $coordinate) {
+        foreach ($parameters as $k => $coordinate) {
             switch ($k % 4) {
                 case 0:
                     $coordinates[$count]['x2'] = $coordinate;
@@ -46,6 +46,6 @@ class S extends Command
         $relativePoint = $this->getEndPoint(false);
         $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
 }

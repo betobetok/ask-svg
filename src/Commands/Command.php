@@ -2,15 +2,32 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
 
+use ASK\Svg\Exceptions\ComandException;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
-use Error;
 
 /**
  * 
- * A command in a d attribute of a svg path
+ * A command in a *d* attribute of a svg path
+ * 
+ * There are five line commands for <path> nodes. 
+ * * M - *Move*
+ * * L - *Line*
+ * * H - *Horizontal*
+ * * V - *Vertical*
+ * * Z - *Close*
+ * und five arc  commands.
+ * * C - *Cubic Curve*
+ * * Q - *Quadratic Curve*
+ * * S - *Short Cubic Curve*
+ * * T - *Together Multiple Quadratic Curve*
+ * * A - *Arc*
+ * 
+ * Each command contains a $coordinates array with all the parameters of each point, 
+ * as well as a reference to the previous command.
+ * 
  * 
  */
 abstract class Command implements Htmlable
@@ -28,9 +45,6 @@ abstract class Command implements Htmlable
     /** @var array $coordinates */
     protected array $coordinates;
 
-    /** @var array $attributes */
-    protected array $attributes;
-
     /** @var Command $prev */
     protected Command $prev;
 
@@ -41,25 +55,28 @@ abstract class Command implements Htmlable
     protected array $endPointCoordinates;
 
 
-    public function __construct(string $type, array $attributes = [], ?Command $prev = null)
+    public function __construct(string $type, array $parameters = [], ?Command $prev = null)
     {
         $this->type = $type;
         if (!empty($prev)) {
             $this->prev = $prev;
         }
-        $this->attributes = $attributes;
-        $this->initialization();
+
+        $this->initialization($parameters);
     }
 
     /**
      * initialization is a configuration method for the specific type of command
      *
+     * @param  mixed $parameters
      * @return void
      */
-    abstract public function initialization();
+    abstract public function initialization($parameters);
 
     /**
-     * getComand return the name of the command. Uppercase if it's absolute lowercase if relative 
+     * getComand 
+     * 
+     * return the name of the command. Uppercase if it's absolute lowercase if relative 
      *
      * @return string
      */
@@ -172,7 +189,7 @@ abstract class Command implements Htmlable
     public function getPoint(int $n = null, bool $absolute = false): array
     {
         if ($n >= $this->count) {
-            throw new Error("Point doesn't exist, max position: " . $this->count - 1, 1);
+            throw ComandException::pointNotFound($n, $this->count);
         }
         if ($n === null) {
             $n = $this->nextPoint;

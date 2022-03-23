@@ -8,6 +8,7 @@ use ASK\Svg\SvgElement;
 
 /**
  * Configurator is an element within the document that is used to set or modify the behavior of the svg
+ * 
  */
 class Configurator extends SvgElement
 {

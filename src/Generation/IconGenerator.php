@@ -26,6 +26,11 @@ final class IconGenerator
         return new self($config);
     }
 
+    /**
+     * generate
+     *
+     * @return void
+     */
     public function generate(): void
     {
         foreach ($this->sets as $set) {
@@ -46,6 +51,12 @@ final class IconGenerator
         }
     }
 
+    /**
+     * getDestinationDirectory
+     *
+     * @param  array $set
+     * @return string
+     */
     private function getDestinationDirectory(array $set): string
     {
         $destination = Str::finish($set['destination'], DIRECTORY_SEPARATOR);
@@ -59,6 +70,13 @@ final class IconGenerator
         return $destination;
     }
 
+    /**
+     * applyPrefixes
+     *
+     * @param  mixed $set
+     * @param  mixed $filename
+     * @return Stringable
+     */
     private function applyPrefixes($set, Stringable $filename): Stringable
     {
         if ($set['input-prefix'] ?? false) {
@@ -72,6 +90,13 @@ final class IconGenerator
         return $filename;
     }
 
+    /**
+     * applySuffixes
+     *
+     * @param  mixed $set
+     * @param  mixed $filename
+     * @return Stringable
+     */
     private function applySuffixes($set, Stringable $filename): Stringable
     {
         if ($set['input-suffix'] ?? false) {
