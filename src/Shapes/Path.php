@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons\Shapes;
 
-<<<<<<< Updated upstream
-use BladeUI\Icons\SvgElement;
-use Exception;
-=======
 use ASK\Svg\SvgElement;
->>>>>>> Stashed changes
 
 /**
  * Path

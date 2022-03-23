@@ -2,26 +2,17 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Commands;
-
-use BladeUI\Icons\Shapes\Path;
-=======
 namespace ASK\Svg\DCommands;
 
 use ASK\Svg\Exceptions\ComandException;
->>>>>>> Stashed changes
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 
-<<<<<<< Updated upstream
-=======
 /**
  * 
  * A command in a d attribute of a svg path
  * @ignore
  */
->>>>>>> Stashed changes
 abstract class Command implements Htmlable
 {
 
@@ -135,7 +126,7 @@ abstract class Command implements Htmlable
     public function getEndPoint(bool $absolute = true): array
     {
         $a = $this->count - 1;
-        if($a !== count($this->coordinates)-1){
+        if ($a !== count($this->coordinates) - 1) {
             dump([$this]);
         }
         return $this->getPoint($a, $absolute);

@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Commands;
-=======
 namespace ASK\Svg\DCommands;
->>>>>>> Stashed changes
 
 use ASK\Svg\Exceptions\ComandException;
 
@@ -15,14 +11,9 @@ class A extends Command
 
     public function initialization($parameters)
     {
-<<<<<<< Updated upstream
-        if (count($this->attributes) % 7 > 0) {
-            throw new Error('Incorrect configuration of attributes');
-=======
         /** a command a must have parameters in multiples of 7 */
         if (count($this->parameters) % 7 > 0 || count($parameters) <= 0) {
             throw ComandException::configuration(self::class, count($parameters), 7);
->>>>>>> Stashed changes
         }
 
         $count = 0;

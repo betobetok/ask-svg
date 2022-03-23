@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons;
-
-use BladeUI\Icons\Components\Icon;
-=======
 namespace ASK\Svg;
 
 use ASK\Svg\Components\Icon;
->>>>>>> Stashed changes
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Filesystem\Filesystem;
@@ -37,11 +31,7 @@ final class BladeIconsServiceProvider extends ServiceProvider
 
     private function registerConfig(): void
     {
-<<<<<<< Updated upstream
-        $this->mergeConfigFrom(__DIR__.'/../config/blade-icons.php', 'blade-icons');
-=======
         $this->mergeConfigFrom(__DIR__ . '/../config/blade-icons.php', 'blade-icons');
->>>>>>> Stashed changes
     }
 
     private function registerFactory(): void
@@ -57,11 +47,7 @@ final class BladeIconsServiceProvider extends ServiceProvider
             );
 
             foreach ($config['sets'] ?? [] as $set => $options) {
-<<<<<<< Updated upstream
-                if (! isset($options['disk']) || ! $options['disk']) {
-=======
                 if (!isset($options['disk']) || !$options['disk']) {
->>>>>>> Stashed changes
                     $paths = $options['paths'] ?? $options['path'] ?? [];
 
                     $options['paths'] = array_map(
@@ -123,11 +109,7 @@ final class BladeIconsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-<<<<<<< Updated upstream
-                __DIR__.'/../config/blade-icons.php' => $this->app->configPath('blade-icons.php'),
-=======
                 __DIR__ . '/../config/blade-icons.php' => $this->app->configPath('blade-icons.php'),
->>>>>>> Stashed changes
             ], 'blade-icons');
         }
     }

@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons;
 
-<<<<<<< Updated upstream
-use BladeUI\Icons\Concerns\RendersAttributes;
-=======
 use ASK\Svg\Concerns\RendersAttributes;
 use ASK\Svg\Shapes\Shape;
->>>>>>> Stashed changes
 use Error;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 
 /**
-<<<<<<< Updated upstream
- * SvgElement
-=======
  * # An element belonging to a svg structure
  * 
  * This object represents all the elements within an svg document
@@ -38,7 +31,6 @@ use NumPHP\Core\NumArray;
  * @author  Alberto Solorzano Kraemer
  *
  * @since 1.0
->>>>>>> Stashed changes
  */
 class SvgElement implements Htmlable
 {
@@ -189,8 +181,6 @@ class SvgElement implements Htmlable
         unset($this->transforms);
     }
 
-<<<<<<< Updated upstream
-=======
     /**
      * @internal configAttributesAndContent
      * prepare the content and attributes when a new Svg element is creted
@@ -201,7 +191,6 @@ class SvgElement implements Htmlable
      * 
      * @return string
      */
->>>>>>> Stashed changes
     protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
     {
         $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
@@ -272,13 +261,6 @@ class SvgElement implements Htmlable
     /**
      * transforms get the Transformation Object for the element 
      *
-<<<<<<< Updated upstream
-     * @return Transformation
-     */
-    public function transforms(): Transformation
-    {
-        return $this->transforms;
-=======
      * @return Transformation|string
      * 
      * @return string|self|null
@@ -299,7 +281,6 @@ class SvgElement implements Htmlable
                 return $this;
             }
         }
->>>>>>> Stashed changes
     }
     /**
      * contents

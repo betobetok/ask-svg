@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Commands;
-=======
 namespace ASK\Svg\DCommands;
 
 use ASK\Svg\Exceptions\ComandException;
->>>>>>> Stashed changes
 
 class Z extends Command
 {

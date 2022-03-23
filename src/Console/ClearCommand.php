@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-<<<<<<< Updated upstream
-namespace BladeUI\Icons\Console;
-
-use BladeUI\Icons\IconsManifest;
-=======
 namespace ASK\Svg\Console;
 
 use ASK\Svg\IconsManifest;
->>>>>>> Stashed changes
 use Illuminate\Console\Command;
 
 final class ClearCommand extends Command
