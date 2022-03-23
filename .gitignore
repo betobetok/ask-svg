@@ -2,4 +2,4 @@ composer.lock
 vendor
 phpdoc.xml
 templates
-build/api-cache
+/build/api-cache
