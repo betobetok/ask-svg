@@ -9,8 +9,18 @@ use ASK\Svg\Exceptions\ComandException;
 /**
  * A comand "a" in a d attribute of a svg path
  * 
+ * Arcs are sections of circles or ellipses. 
+ * For a given x-radius and y-radius, there are two ellipses that can 
+ * connect any two points (last end point and (x, y)). 
+ * Along either of those circles, there are two possible paths that can 
+ * be taken to connect the points (large way or short way) so in any situation, 
+ * there are four possible arcs available.
+ * 
+ * Because of that, arcs require seven parameters:
  * A rx ry x-axis-rotation large-arc-flag sweep-flag x y
  * a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
+ * 
+ * A command hat in aditional to the other commands a getCenter Methode
  */
 class A extends Command
 {

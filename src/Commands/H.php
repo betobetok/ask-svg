@@ -9,6 +9,9 @@ use ASK\Svg\Exceptions\ComandException;
 /**
  * A comand "h" in a d attribute of a svg path
  * 
+ * A command draws a horizontal line, this command only take 
+ * one parameter since they only move in one direction.
+ * 
  * H x
  * h dx
  */

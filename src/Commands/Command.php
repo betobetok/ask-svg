@@ -10,7 +10,24 @@ use NumPHP\Core\NumArray;
 
 /**
  * 
- * A command in a d attribute of a svg path
+ * A command in a *d* attribute of a svg path
+ * 
+ * There are five line commands for <path> nodes. 
+ * * M - *Move*
+ * * L - *Line*
+ * * H - *Horizontal*
+ * * V - *Vertical*
+ * * Z - *Close*
+ * und five arc  commands.
+ * * C - *Cubic Curve*
+ * * Q - *Quadratic Curve*
+ * * S - *Short Cubic Curve*
+ * * T - *Together Multiple Quadratic Curve*
+ * * A - *Arc*
+ * 
+ * Each command contains a $coordinates array with all the parameters of each point, 
+ * as well as a reference to the previous command.
+ * 
  * 
  */
 abstract class Command implements Htmlable
