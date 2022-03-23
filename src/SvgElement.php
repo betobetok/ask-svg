@@ -6,7 +6,6 @@ namespace BladeUI\Icons;
 
 use ASK\Svg\Concerns\RendersAttributes;
 use ASK\Svg\Shapes\Shape;
-use Error;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
