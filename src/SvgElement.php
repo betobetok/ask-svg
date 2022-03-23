@@ -4,19 +4,47 @@ declare(strict_types=1);
 
 namespace BladeUI\Icons;
 
+<<<<<<< Updated upstream
 use BladeUI\Icons\Concerns\RendersAttributes;
+=======
+use ASK\Svg\Concerns\RendersAttributes;
+use ASK\Svg\Shapes\Shape;
+>>>>>>> Stashed changes
 use Error;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 
 /**
+<<<<<<< Updated upstream
  * SvgElement
+=======
+ * # An element belonging to a svg structure
+ * 
+ * This object represents all the elements within an svg document
+ *
+ * from the svg parent element to the internal elements or 
+ * figures such as <path>, <circle> or <g>, passing through 
+ * configuration elements such as <style>, <defs> among others 
+ *
+ * all elements are accessible in order through the elements array, 
+ * as well as through the array in the element name property
+ *
+ * for example 
+ * @example $svg->g returns all <g> elements
+ * @example $svg->elements[0] return the first element in the <svg></svg>
+ * @example $svg->g[0]->elements[0] return the first element in the <g></g>
+ * 
+ * @author  Alberto Solorzano Kraemer
+ *
+ * @since 1.0
+>>>>>>> Stashed changes
  */
 class SvgElement implements Htmlable
 {
     use RendersAttributes;
 
+    /** @ignore */
     public const SVG_ATTRIBUTES = [
         'version',
         'width',
@@ -24,6 +52,7 @@ class SvgElement implements Htmlable
         'viewBox',
     ];
 
+    /** @ignore */
     public const GRAPH_ELEMENTS = [
         'clipPath',
         'g',
@@ -43,6 +72,7 @@ class SvgElement implements Htmlable
         'radialGradient',
     ];
 
+    /** @ignore */
     public const NON_GROUP_ELEMENTS = [
         'line',
         'rect',
@@ -59,6 +89,7 @@ class SvgElement implements Htmlable
         'stop',
     ];
 
+    /** @ignore */
     public const GROUP_ELEMENTS = [
         'g',
         'style',
@@ -74,6 +105,7 @@ class SvgElement implements Htmlable
         'radialGradient',
     ];
 
+    /** @ignore */
     public const SHAPES = [
         'line',
         'rect',
@@ -85,6 +117,7 @@ class SvgElement implements Htmlable
         'text',
     ];
 
+    /** @ignore */
     private const TO_REPLACE = [
         'serch' => [
             'lineargradient',
@@ -103,7 +136,7 @@ class SvgElement implements Htmlable
     /** @var string $name */
     protected $name;
 
-    /** @var SvgElement[] $elements */
+    /** @var SvgElement[] $elements = []*/
     protected $elements = [];
 
     /** @var string $contents */
@@ -115,7 +148,7 @@ class SvgElement implements Htmlable
     /** @var Transformation $transforms */
     protected $transforms;
 
-    /** @var bool $isTransformable */
+    /** @var bool $isTransformable = false*/
     protected $isTransformable = false;
 
     /**
@@ -156,6 +189,19 @@ class SvgElement implements Htmlable
         unset($this->transforms);
     }
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * @internal configAttributesAndContent
+     * prepare the content and attributes when a new Svg element is creted
+     *
+     * @param  string $tag
+     * @param  string $contents
+     * @param  array $attributes
+     * 
+     * @return string
+     */
+>>>>>>> Stashed changes
     protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
     {
         $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
@@ -177,6 +223,12 @@ class SvgElement implements Htmlable
         return $contents;
     }
 
+    /**
+     * @ignore __get
+     *
+     * @param  mixed $name
+     * @return void
+     */
     public function __get($name)
     {
         try {
@@ -187,7 +239,7 @@ class SvgElement implements Htmlable
                 return $this->$name;
             }
         } catch (Exception $e) {
-            throw new Error("This Methode don't exist" . $e->getMessage() . "\n");
+            throw $e->getMessage();
         }
     }
 
@@ -220,11 +272,34 @@ class SvgElement implements Htmlable
     /**
      * transforms get the Transformation Object for the element 
      *
+<<<<<<< Updated upstream
      * @return Transformation
      */
     public function transforms(): Transformation
     {
         return $this->transforms;
+=======
+     * @return Transformation|string
+     * 
+     * @return string|self|null
+     */
+    public function transform($arg = null)
+    {
+        if (empty($arg) && isset($this->transforms)) {
+            return $this->transforms;
+        } elseif (empty($arg) && !isset($this->transforms)) {
+            return null;
+        } else {
+            if (is_string($arg)) {
+                $this->setAttribute('transform', $arg);
+                $this->getTransformations();
+                return $this;
+            } elseif ($arg instanceof Transformation) {
+                $this->transforms = $arg;
+                return $this;
+            }
+        }
+>>>>>>> Stashed changes
     }
     /**
      * contents
@@ -489,7 +564,7 @@ class SvgElement implements Htmlable
             if ($key === 'contents') {
                 continue;
             }
-            if (is_a($element, 'BladeUI\Icons\SvgElement')) {
+            if (is_a($element, __NAMESPACE__ . '\SvgElement')) {
                 $ret[$key] =  $element->toArray();
                 continue;
             }
@@ -502,7 +577,7 @@ class SvgElement implements Htmlable
             }
             if (is_array($element)) {
                 foreach ($element as $k => $elm) {
-                    if (is_a($elm, 'BladeUI\Icons\SvgElement')) {
+                    if (is_a($elm, __NAMESPACE__ . '\SvgElement')) {
                         $ret[$key . '-' . $k] = $elm->toArray();
                     } else {
                         $ret[$key . '-' . $k] = $elm;
@@ -584,8 +659,8 @@ class SvgElement implements Htmlable
                 preg_match("/<" . $element . "[^>]*>/i", $content, $tag2, 0, $first);
                 $con = trim(substr($content, $first + strlen($tag2[0]) + 1, $key - $first - strlen($tag2[0]) - 1));
                 $attributes = $this->getElementAttributes($tag2[0]);
-                $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
-                $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+                $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
+                $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
                 if (class_exists($classElement)) {
                     $tmp = new $classElement($con, $attributes, $this);
                 } elseif (class_exists($classElement2)) {
@@ -627,8 +702,8 @@ class SvgElement implements Htmlable
 
         $content = '';
         $attributes = $this->getElementAttributes($tag);
-        $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
-        $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+        $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
+        $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
         if (class_exists($classElement)) {
             $tmp = new $classElement($content, $attributes, $this);
         } elseif (class_exists($classElement2)) {
@@ -747,6 +822,10 @@ class SvgElement implements Htmlable
             return null;
         }
 
+        if (!($element instanceof Shape)) {
+            return null;
+        }
+
         $point = $element->getStartPosition();
         $transforms = [];
         $transforms[] = $element->transforms();
@@ -761,7 +840,6 @@ class SvgElement implements Htmlable
             if (!($transforms[$i] instanceof Transformation)) {
                 continue;
             }
-
             $point = $transforms[$i]->getTransformed($point);
         }
         return $point;

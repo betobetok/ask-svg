@@ -2,22 +2,32 @@
 
 declare(strict_types=1);
 
+<<<<<<< Updated upstream
 namespace BladeUI\Icons\Commands;
+=======
+namespace ASK\Svg\DCommands;
+>>>>>>> Stashed changes
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 class M extends Command
 {
     private $x;
     private $y;
 
-    public function initialization()
+    public function initialization($parameters)
     {
+<<<<<<< Updated upstream
         if (count($this->attributes) % 2 > 0) {
             throw new Error('Incorrect configuration of attributes');
+=======
+        /** a command m must have even nummer of parameters */
+        if (count($parameters) % 2 > 0 || count($parameters) === 0) {
+            throw ComandException::configuration(self::class, count($parameters), 2);
+>>>>>>> Stashed changes
         }
         $count = 0;
-        foreach ($this->attributes as $k => $coordinate) {
+        foreach ($parameters as $k => $coordinate) {
             switch ($k % 2) {
                 case 0:
                     $coordinates[$count]['x'] = $coordinate;
@@ -30,12 +40,12 @@ class M extends Command
         }
         $this->coordinates = $coordinates;
         $this->count = $count;
-        $this->x = $this->attributes[0];
-        $this->y = $this->attributes[1];
+        $this->x = (float)$parameters[0];
+        $this->y = (float)$parameters[1];
         $absolutePoint = $this->getEndPoint();
         $relativePoint = $this->getEndPoint(false);
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
 
     public function getX()

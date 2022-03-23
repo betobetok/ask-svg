@@ -14,6 +14,7 @@ use Symfony\Component\Finder\SplFileInfo;
  * IconsManifest
  */
 final class IconsManifest
+<<<<<<< Updated upstream
 {    
     /** @var Filesystem $filesystem */
     private Filesystem $filesystem;
@@ -24,6 +25,18 @@ final class IconsManifest
     /** @var FilesystemFactory|null $disks */
     private ?FilesystemFactory $disks;
     
+=======
+{
+    /** @var Filesystem $filesystem */
+    private Filesystem $filesystem;
+
+    /** @var string $manifestPath */
+    private string $manifestPath;
+
+    /** @var FilesystemFactory|null $disks */
+    private ?FilesystemFactory $disks;
+
+>>>>>>> Stashed changes
     /** @var array|null $manifest */
     private ?array $manifest = null;
 
@@ -33,7 +46,11 @@ final class IconsManifest
         $this->manifestPath = $manifestPath;
         $this->disks = $disks;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * build
      *
@@ -82,7 +99,11 @@ final class IconsManifest
     {
         return $this->disks && $disk ? $this->disks->disk($disk) : $this->filesystem;
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * delete
      *
@@ -92,7 +113,11 @@ final class IconsManifest
     {
         return $this->filesystem->delete($this->manifestPath);
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * format
      *
@@ -107,7 +132,11 @@ final class IconsManifest
             ->replace('/', '.')
             ->basename('.svg');
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     /**
      * getManifest
      *
@@ -127,7 +156,11 @@ final class IconsManifest
         return $this->manifest = $this->filesystem->getRequire($this->manifestPath);
     }
 
+<<<<<<< Updated upstream
       
+=======
+
+>>>>>>> Stashed changes
     /**
      * write
      *

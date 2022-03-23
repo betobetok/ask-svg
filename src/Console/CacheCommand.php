@@ -2,10 +2,17 @@
 
 declare(strict_types=1);
 
+<<<<<<< Updated upstream
 namespace BladeUI\Icons\Console;
 
 use BladeUI\Icons\Factory;
 use BladeUI\Icons\IconsManifest;
+=======
+namespace ASK\Svg\Console;
+
+use ASK\Svg\Factory;
+use ASK\Svg\IconsManifest;
+>>>>>>> Stashed changes
 use Illuminate\Console\Command;
 
 final class CacheCommand extends Command

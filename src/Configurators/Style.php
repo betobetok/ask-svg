@@ -39,7 +39,7 @@ class Style extends Configurator
 
 
         parent::__construct($contents, [], $context);
-        $this->getRules();
+        $this->rules();
         $this->renameClasses($name);
         $this->removeContents();
         unset($this->elements);
@@ -54,6 +54,7 @@ class Style extends Configurator
     public function renameClasses(string $svgElementName): self
     {
         $this->classes = [];
+        $this->rules = [];
         foreach ($this->rules as $selector => $declarations) {
             if (strpos($selector, '.') === 0) {
                 $className = $selector . '-' . $svgElementName;
@@ -91,9 +92,9 @@ class Style extends Configurator
     /**
      * rules
      *
-     * @return array
+     * @return array|null
      */
-    public function rules(): array
+    public function rules(): ?array
     {
         return $this->rules;
     }
@@ -143,6 +144,7 @@ class Style extends Configurator
     public function mergeStyles(Style $add): ?self
     {
         $this->rules = array_merge($this->rules, $add->rules);
+
         $array = array_merge($this->attributes(), $add->attributes());
         foreach ($array as $name => $arguments) {
             $this->setAttribute($name, $arguments);

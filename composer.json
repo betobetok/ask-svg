@@ -46,7 +46,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "BladeUI\\Icons\\BladeIconsServiceProvider"
+                "ASK\\Svg\\BladeIconsServiceProvider"
             ]
         }
     },

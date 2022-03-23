@@ -2,32 +2,36 @@
 
 declare(strict_types=1);
 
+<<<<<<< Updated upstream
 namespace BladeUI\Icons\Commands;
+=======
+namespace ASK\Svg\DCommands;
+>>>>>>> Stashed changes
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 class V extends Command
 {
     protected float $y;
 
-    public function initialization()
+    public function initialization($parameters)
     {
-        if (count($this->attributes) <= 0) {
-            throw new Error('Incorrect configuration of attributes');
+        if (count($parameters) <= 0 || count($parameters) === 0) {
+            throw ComandException::configuration(self::class, count($parameters), 1);
         }
 
-        foreach ($this->attributes as $k => $coordinate) {
+        foreach ($parameters as $k => $coordinate) {
             $coordinates[$k]['y'] = $coordinate;
             $this->y = (float)$coordinate;
         }
         $this->coordinates = $coordinates;
-        $this->count = count($this->attributes);
+        $this->count = count($parameters);
         $absolutePoint = $this->getEndPoint();
         $this->resetNext();
         $relativePoint = $this->getEndPoint(false);
         $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
     
 }
