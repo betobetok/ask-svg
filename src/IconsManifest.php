@@ -12,12 +12,16 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class IconsManifest
 {
+    /** @var Filesystem $filesystem */
     private Filesystem $filesystem;
 
+    /** @var string $manifestPath */
     private string $manifestPath;
 
+    /** @var FilesystemFactory|null $disks */
     private ?FilesystemFactory $disks;
 
+    /** @var array|null $manifest */
     private ?array $manifest = null;
 
     public function __construct(Filesystem $filesystem, string $manifestPath, FilesystemFactory $disks = null)
@@ -26,7 +30,12 @@ final class IconsManifest
         $this->manifestPath = $manifestPath;
         $this->disks = $disks;
     }
-
+    /**
+     * build
+     *
+     * @param  array $sets
+     * @return array
+     */
     private function build(array $sets): array
     {
         $compiled = [];
@@ -69,12 +78,22 @@ final class IconsManifest
     {
         return $this->disks && $disk ? $this->disks->disk($disk) : $this->filesystem;
     }
-
+    /**
+     * delete
+     *
+     * @return bool
+     */
     public function delete(): bool
     {
         return $this->filesystem->delete($this->manifestPath);
     }
-
+    /**
+     * format
+     *
+     * @param  string $pathname
+     * @param  string $path
+     * @return string
+     */
     private function format(string $pathname, string $path): string
     {
         return (string) Str::of($pathname)
@@ -82,7 +101,12 @@ final class IconsManifest
             ->replace('/', '.')
             ->basename('.svg');
     }
-
+    /**
+     * getManifest
+     *
+     * @param  array $sets
+     * @return array
+     */
     public function getManifest(array $sets): array
     {
         if (!is_null($this->manifest)) {

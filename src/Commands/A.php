@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 /**
  * A comand "a" in a d attribute of a svg path
@@ -15,15 +15,15 @@ use Error;
 class A extends Command
 {
 
-    public function initialization()
+    public function initialization($parameters)
     {
         /** a command a must have parameters in multiples of 7 */
-        if (count($this->attributes) % 7 > 0) {
-            throw new Error('Incorrect configuration of attributes');
+        if (count($this->parameters) % 7 > 0 || count($parameters) <= 0) {
+            throw ComandException::configuration(self::class, count($parameters), 7);
         }
 
         $count = 0;
-        foreach ($this->attributes as $k => $condition) {
+        foreach ($parameters as $k => $condition) {
             switch ($k % 7) {
                 case 0:
                     $coordinates[$count]['rx'] = $condition;
@@ -56,7 +56,7 @@ class A extends Command
         $relativePoint = $this->getEndPoint(false);
         $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
 
     /**
@@ -68,7 +68,7 @@ class A extends Command
     public function getCenter(int $n = null)
     {
         if ($n >= $this->count) {
-            throw new Error("Point doesn't exist, max position: " . $this->count, 1);
+            throw ComandException::pointNotFound($n, $this->count);
         }
 
         if ($n === null) {

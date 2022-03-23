@@ -2,15 +2,20 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
+
+use ASK\Svg\Exceptions\ComandException;
 
 /**
  * A comand "z" in a d attribute of a svg path
  */
 class Z extends Command
 {
-    public function initialization()
+    public function initialization($parameters)
     {
+        if (count($parameters) !== 0) {
+            throw ComandException::configuration(self::class, count($parameters), 0);
+        }
         $this->coordinates = [];
     }
 

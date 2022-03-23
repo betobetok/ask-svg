@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace ASK\Svg;
 
-use BladeUI\Icons\Components\Svg as SvgComponent;
-use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
-use BladeUI\Icons\Exceptions\SvgNotFound;
+use ASK\Svg\Components\Svg as SvgComponent;
+use ASK\Svg\Exceptions\CannotRegisterIconSet;
+use ASK\Svg\Exceptions\SvgNotFound;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;

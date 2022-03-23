@@ -11,6 +11,7 @@ use NumPHP\Core\NumArray;
 
 /**
  * An element that make a Shape in a svg document
+ *
  */
 abstract class Shape extends SvgElement
 {

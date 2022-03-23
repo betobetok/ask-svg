@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ASK\Svg\Commands;
+namespace ASK\Svg\DCommands;
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 /**
  * A comand "h" in a d attribute of a svg path
@@ -17,17 +17,17 @@ class H extends Command
     /** @var float $x */
     protected float $x;
 
-    public function initialization()
+    public function initialization($parameters)
     {
-        if (count($this->attributes) <= 0) {
-            throw new Error('Incorrect configuration of attributes');
+        if (count($parameters) <= 0) {
+            throw ComandException::configuration(self::class, count($parameters), 1);
         }
 
-        foreach ($this->attributes as $k => $coordinate) {
+        foreach ($parameters as $k => $coordinate) {
             $coordinates[$k]['x'] = $coordinate;
             $this->x = (float)$coordinate;
         }
-        $this->count = count($this->attributes);
+        $this->count = count($parameters);
         $this->coordinates = $coordinates;
         $absolutePoint = $this->getEndPoint();
         $this->resetNext();
@@ -35,7 +35,7 @@ class H extends Command
         $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
 
-        unset($this->attributes);
+        unset($parameters);
     }
 
     /**
