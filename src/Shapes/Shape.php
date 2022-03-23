@@ -10,7 +10,12 @@ use Illuminate\Support\Str;
 use NumPHP\Core\NumArray;
 
 /**
+<<<<<<< Updated upstream
  * Shape
+=======
+ * An element that make a Shape in a svg document
+ * 
+>>>>>>> Stashed changes
  */
 abstract class Shape extends SvgElement
 {

@@ -8,7 +8,12 @@ use BladeUI\Icons\Concerns\RendersAttributes;
 use BladeUI\Icons\SvgElement;
 
 /**
+<<<<<<< Updated upstream
  * Configurator
+=======
+ * Configurator is an element within the document that is used to set or modify the behavior of the svg
+ * @ignore
+>>>>>>> Stashed changes
  */
 class Configurator extends SvgElement
 {

@@ -2,21 +2,31 @@
 
 declare(strict_types=1);
 
+<<<<<<< Updated upstream
 namespace BladeUI\Icons\Commands;
+=======
+namespace ASK\Svg\DCommands;
+>>>>>>> Stashed changes
 
-use Error;
+use ASK\Svg\Exceptions\ComandException;
 
 class A extends Command
 {
 
-    public function initialization()
+    public function initialization($parameters)
     {
+<<<<<<< Updated upstream
         if (count($this->attributes) % 7 > 0) {
             throw new Error('Incorrect configuration of attributes');
+=======
+        /** a command a must have parameters in multiples of 7 */
+        if (count($this->parameters) % 7 > 0 || count($parameters) <= 0) {
+            throw ComandException::configuration(self::class, count($parameters), 7);
+>>>>>>> Stashed changes
         }
 
         $count = 0;
-        foreach ($this->attributes as $k => $condition) {
+        foreach ($parameters as $k => $condition) {
             switch ($k % 7) {
                 case 0:
                     $coordinates[$count]['rx'] = $condition;
@@ -49,13 +59,13 @@ class A extends Command
         $relativePoint = $this->getEndPoint(false);
         $this->resetNext();
         $this->setEndPoint($relativePoint, $absolutePoint);
-        unset($this->attributes);
+        unset($parameters);
     }
 
     public function getCenter($n = null)
     {
         if ($n >= $this->count) {
-            throw new Error("Point doesn't exist, max position: " . $this->count, 1);
+            throw ComandException::pointNotFound($n, $this->count);
         }
 
         if ($n === null) {

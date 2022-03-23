@@ -2,13 +2,26 @@
 
 declare(strict_types=1);
 
+<<<<<<< Updated upstream
 namespace BladeUI\Icons\Commands;
 
 use BladeUI\Icons\Shapes\Path;
+=======
+namespace ASK\Svg\DCommands;
+
+use ASK\Svg\Exceptions\ComandException;
+>>>>>>> Stashed changes
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
-use Error;
 
+<<<<<<< Updated upstream
+=======
+/**
+ * 
+ * A command in a d attribute of a svg path
+ * @ignore
+ */
+>>>>>>> Stashed changes
 abstract class Command implements Htmlable
 {
 
@@ -24,9 +37,6 @@ abstract class Command implements Htmlable
     /** @var array $coordinates */
     protected array $coordinates;
 
-    /** @var array $attributes */
-    protected array $attributes;
-
     /** @var Command $prev */
     protected Command $prev;
 
@@ -37,22 +47,23 @@ abstract class Command implements Htmlable
     protected array $endPointCoordinates;
 
 
-    public function __construct(string $type, array $attributes = [], ?Command $prev = null)
+    public function __construct(string $type, array $parameters = [], ?Command $prev = null)
     {
         $this->type = $type;
         if (!empty($prev)) {
             $this->prev = $prev;
         }
-        $this->attributes = $attributes;
-        $this->initialization();
+
+        $this->initialization($parameters);
     }
 
     /**
      * initialization
      *
+     * @param  mixed $parameters
      * @return void
      */
-    abstract public function initialization();
+    abstract public function initialization($parameters);
 
     /**
      * getComand
@@ -158,7 +169,7 @@ abstract class Command implements Htmlable
     public function getPoint($n = null, $absolute = true): array
     {
         if ($n >= $this->count) {
-            throw new Error("Point doesn't exist, max position: " . $this->count - 1, 1);
+            throw ComandException::pointNotFound($n, $this->count);
         }
         if ($n === null) {
             $n = $this->nextPoint;
