@@ -6,6 +6,9 @@ namespace ASK\Svg\Concerns;
 
 use Illuminate\Support\Str;
 
+/**
+ *@trait RendersAttributes
+ */
 trait RendersAttributes
 {
     /** @var array $attributes */

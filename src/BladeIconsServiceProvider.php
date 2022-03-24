@@ -12,6 +12,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * BladeIconsServiceProvider
+ * @ignore
+ */
 final class BladeIconsServiceProvider extends ServiceProvider
 {
     public function register(): void

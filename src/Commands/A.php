@@ -18,6 +18,7 @@ use ASK\Svg\Exceptions\ComandException;
  * 
  * Because of that, arcs require seven parameters:
  * A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+ * 
  * a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
  * 
  * A command hat in aditional to the other commands a getCenter Methode
@@ -73,9 +74,9 @@ class A extends Command
      * getCenter get the centero of the n arc 
      *
      * @param  int $n the arc number of which we want the center 
-     * @return void
+     * @return array
      */
-    public function getCenter(int $n = null)
+    public function getCenter(int $n = null): array
     {
         if ($n >= $this->count) {
             throw ComandException::pointNotFound($n, $this->count);

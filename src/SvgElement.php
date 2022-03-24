@@ -16,17 +16,17 @@ use NumPHP\Core\NumArray;
  * This object represents all the elements within an svg document
  *
  * from the svg parent element to the internal elements or 
- * figures such as <path>, <circle> or <g>, passing through 
- * configuration elements such as <style>, <defs> among others 
+ * figures such as \<path\>, \<circle\> or \<g\>, passing through 
+ * configuration elements such as \<style\>, \<defs\> among others 
  *
- * all elements are accessible in order through the elements array, 
- * as well as through the array in the element name property
+ * all elements are accessible in order through the attribute $elements, 
+ * as well as through the array in the property with the name of the element
  *
- * for example 
- * @example $svg->g returns all <g> elements
- * @example $svg->elements[0] return the first element in the <svg></svg>
- * @example $svg->g[0]->elements[0] return the first element in the <g></g>
- * 
+ * for example: 
+ * - $svg->g returns all <g> elements
+ * - $svg->elements[0] return the first element in the <svg></svg>
+ * - $svg->g[0]->elements[0] return the first element in the <g></g>
+ *
  * @author  Alberto Solorzano Kraemer
  *
  * @since 1.0

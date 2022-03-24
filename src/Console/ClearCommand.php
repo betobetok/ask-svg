@@ -7,6 +7,10 @@ namespace ASK\Svg\Console;
 use ASK\Svg\IconsManifest;
 use Illuminate\Console\Command;
 
+/**
+ * ClearCommand
+ * @ignore description
+ */
 final class ClearCommand extends Command
 {
     /**
