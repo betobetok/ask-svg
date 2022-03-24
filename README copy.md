@@ -27,6 +27,7 @@ There are five line commands for <path> nodes.
 * H - *Horizontal*
 * V - *Vertical*
 * Z - *Close*
+
 und five arc  commands.
 * C - *Cubic Curve*
 * Q - *Quadratic Curve*

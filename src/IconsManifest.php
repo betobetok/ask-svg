@@ -10,6 +10,10 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * IconsManifest
+ * @ignore
+ */
 final class IconsManifest
 {
     /** @var Filesystem $filesystem */

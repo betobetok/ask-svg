@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace ASK\Svg;
 
 use ASK\Svg\Components\Svg as SvgComponent;
-use ASK\Svg\Exceptions\CannotRegisterIconSet;
-use ASK\Svg\Exceptions\SvgNotFound;
+use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
+use BladeUI\Icons\Exceptions\SvgNotFound;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Str;
 
+/**
+ * Factory
+ * @ignore
+ */
 final class Factory
 {
     private Filesystem $filesystem;

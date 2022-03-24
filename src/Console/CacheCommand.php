@@ -8,6 +8,10 @@ use ASK\Svg\Factory;
 use ASK\Svg\IconsManifest;
 use Illuminate\Console\Command;
 
+/**
+ * CacheCommand
+ * @ignore description
+ */
 final class CacheCommand extends Command
 {
     /**

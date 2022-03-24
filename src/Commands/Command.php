@@ -12,12 +12,13 @@ use NumPHP\Core\NumArray;
  * 
  * A command in a *d* attribute of a svg path
  * 
- * There are five line commands for <path> nodes. 
+ * There are five line commands for &lt;path&gt; nodes. 
  * * M - *Move*
  * * L - *Line*
  * * H - *Horizontal*
  * * V - *Vertical*
  * * Z - *Close*
+ * 
  * und five arc  commands.
  * * C - *Cubic Curve*
  * * Q - *Quadratic Curve*
@@ -33,7 +34,7 @@ use NumPHP\Core\NumArray;
 abstract class Command implements Htmlable
 {
 
-    /** nextPoint @var int */
+    /** @var int $nextPoint*/
     protected $nextPoint = 0;
 
     /** @var mixed $count */
