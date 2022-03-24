@@ -1,10 +1,21 @@
 # ASK - PHP Svg Manipulation 
 
-> This file is public domain. Use it for any purpose, including commercial
-> applications. Attribution would be nice, but is not required. There is
-> no warranty of any kind, including its correctness, usefulness, or safety.
+<a href="https://github.com/blade-ui-kit/blade-icons/">
+    <img src="https://github.com/blade-ui-kit/blade-icons/workflows/Tests/badge.svg" alt="Tests">
+</a>
+<a href="https://github.styleci.io/repos/">
+    <img src="https://github.styleci.io/repos/" alt="Code Style">
+</a>
+<a href="https://packagist.org/packages/">
+    <img src="https://img.shields.io/packagist/" alt="Latest Stable Version">
+</a>
+<a href="https://packagist.org/packages/">
+    <img src="https://img.shields.io/packagist/" alt="Total Downloads">
+</a>
 
-> **Author: Alberto Solorzano Kraemer ( alberto.kraemer@gmail.com, @betobetok )**
+A package to easily make use of SVG icons in your Laravel Blade views. Originally "Blade SVG" by [Adam Wathan](https://twitter.com/adamwathan).
+
+Turn...
 
 ---
 
@@ -3297,7 +3308,13 @@ Text (string contents, array attributes = [], SvgElement context = null): mixed
 	- [Rect - A Rect element in a svg document](#Rect).
 	- [Text - a Text element in a svg document](#Text).
 
---------
+---
+> This file is public domain. Use it for any purpose, including commercial
+> applications. Attribution would be nice, but is not required. There is
+> no warranty of any kind, including its correctness, usefulness, or safety.
+
+> **Author: Alberto Solorzano Kraemer ( alberto.kraemer@gmail.com, @betobetok )**
+---
 > This document was automatically generated from source code comments 
 > on 2022-03-24 using [phpDocumentor](http://www.phpdoc.org/) 
 > and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)
