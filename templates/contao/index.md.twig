@@ -1,0 +1,108 @@
+{% set codeColor = '#88888811'%}
+{% set classColor = '#8888AA11'%}
+{% set codePadding = '35px'%}
+{% set classPadding = '25px'%}
+# ASK - PHP Svg Manipulation 
+
+<a href="https://github.com/">
+    <img src="https://github.com/" alt="Tests">
+</a>
+<a href="https://github.styleci.io/repos/">
+    <img src="https://github.styleci.io/repos/" alt="Code Style">
+</a>
+<a href="https://packagist.org/packages/">
+    <img src="https://img.shields.io/packagist/" alt="Latest Stable Version">
+</a>
+<a href="https://packagist.org/packages/">
+    <img src="https://img.shields.io/packagist/" alt="Total Downloads">
+</a>
+
+A package to convert an svg graphic file into a Php object. based on [Blade UIkit](https://github.com/blade-ui-kit/blade-icons)
+
+by using the `svg()` function we can retrieve an svg file using the file name and convert it into an object of the Svg class and manipulate it as such.
+
+<pre style = "padding-left: {{ codePadding }}; background-color: {{ codeColor }}; margin: 5px;">
+$mySvg = svg('my_svg');
+dd($mySvg);
+</pre>
+svg file [my_svg.svg](resources/svg/my_svg.svg)
+
+<pre style = "padding-left: {{ codePadding }}; background-color: {{ codeColor }}; margin: 5px;">
+ASK\Svg\Svg ({)#427 ▼
+  #name: "svg"
+  #elements: array:1 [▼
+    0 => ASK\Svg\Configurators\G ({)#301 ▼
+      #name: "g"
+      #elements: array:37 [▶]
+      #context: ASK\Svg\Svg ({)#427(})
+      #transforms: ASK\Svg\Transformation ({)#424 ▼
+        #transformations: array:1 [▼
+          0 => array:1 [▼
+            "matrix" => NumPHP\Core\NumArray ({)#423 ▶(})
+          ]
+        ]
+      (})
+      #isTransformable: true
+      -attributes: array:1 [▶]
+      +"g": array:37 [▶]
+    (})
+  ]
+  #context: null
+  #isTransformable: false
+  -attributes: array:6 [▼
+    "id" => "my_svg"
+    "width" => "473"
+    "height" => "477"
+    "viewBox" => "0 0 473 477"
+    "fill" => "none"
+    "xmlns" => "http://www.w3.org/2000/svg"
+  ]
+  +style: ASK\Svg\Configurators\Style ({)#426 ▼
+    #name: "style"
+    #context: ASK\Svg\Svg ({)#427(})
+    #isTransformable: false
+    -attributes: []
+    -classes: []
+    -rules: []
+  (})
+  +"g": array:1 [▼
+    0 => ASK\Svg\Configurators\G ({)#301 ▶(})
+  ]
+(})
+</pre>
+
+{% for firstClass in project.indexes.classes|filter(v => v.FullyQualifiedStructuralElementName == '\\ASK\\Svg\\Svg') %}
+{% include 'firstClass.md.twig' %}
+{% endfor %}
+---
+{% for firstClass in project.indexes.classes|filter(v => v.name == 'SvgElement') %}
+{% include 'firstClass.md.twig' %}
+{% endfor %}
+
+
+{% for abstractClass in project.indexes.classes %}
+{% if abstractClass.abstract %}
+{% include 'abstract.md.twig' %}
+{% for class in project.indexes.classes %}
+{% if not class.abstract and class.parent.name == abstractClass.name %}
+<div style = "padding-left: {{ classPadding }}; background-color: {{ classColor }}; border-radius: 5px; border: 1px #FFFFFF solid; margin: 5px">
+{% include 'class.md.twig' %}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+## alphabetical listing 
+{% include 'toc.md.twig' %}
+
+---
+> This file is public domain. Use it for any purpose, including commercial
+> applications. Attribution would be nice, but is not required. There is
+> no warranty of any kind, including its correctness, usefulness, or safety.
+
+> **Author: Alberto Solorzano Kraemer ( alberto.kraemer@gmail.com, @betobetok )**
+---
+> This document was automatically generated from source code comments 
+> on {{ "now"|date("Y-m-d") }} using [phpDocumentor](http://www.phpdoc.org/) 
+> and [cvuorinen/phpdoc-markdown-public](https://github.com/cvuorinen/phpdoc-markdown-public)

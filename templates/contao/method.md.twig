@@ -1,0 +1,82 @@
+
+{% if method.name == '__construct' %}
+<h2 style = "color:#aa88cc"> {{ class.name }} :: constructor </h2>
+{% else %}
+<h2 style = "color:#aa88cc"> {{ class.name }} :: {{ method.name }} </h2>
+{% endif %}
+
+{{ method.summary|raw }}
+
+{{ method.description|raw }}
+
+{# Method signature #}
+
+<pre style = "padding-left: {{ codePadding }}; background-color: {{ codeColor }};">
+{% if method.name == '__construct' %}
+{{ class.name }} ({% for argument in method.arguments %}
+{% set typeS = [] %}
+{% for type in argument.types %}
+{% set typeS = typeS|merge([type|replace({'\\ASK\\Svg\\': ''})]) %}
+{% endfor %}
+{{- typeS ? typeS|join('|')~' ' }}
+{{- argument.byReference ? '&' }}
+{{- argument.name }}{{ argument.default ? ' = '~argument.default }}
+{%- if not loop.last %}, {% endif %}
+{%- endfor %})
+{%- else %}
+{{- method.visibility }}{{ method.static ? ' static ' : ' ' }}{{ method.name }}({% for argument in method.arguments %}
+{%- set typeS = [] %}
+{%- for type in argument.types %}
+{%- set typeS = typeS|merge([type|replace({'\\ASK\\Svg\\': ''})]) %}
+{%- endfor %}
+{{- typeS ? typeS|join('|')~' ' }}
+{{- argument.byReference ? '&' }}
+{{- argument.name }}{{ argument.default ? ' = '~argument.default|replace({'\'': '\''}) }}
+{%- if not loop.last %}, {% endif %}
+{%- endfor %})
+{%- endif %}
+{%- set typeS = [] %}
+{%- for type in method.response.types %}
+{%- set typeS = typeS|merge([type|replace({'\\ASK\\Svg\\': ''})]) %}
+{%- endfor %}
+{{- typeS ? ': ' ~typeS|join('|') }}
+</pre>
+
+{#{% if method.static %}* This method is **static**.{% endif %} #}
+{% if method.deprecated %} **Warning:** this method is **deprecated**. This means that this method will likely be removed in a future version.
+{% endif %}
+
+{% if method.arguments is not empty %}
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+{% for argument in method.arguments %}
+{% set typeS = [] %}
+{% for type in argument.types %}
+{% set typeS = typeS|merge([type|replace({'\\ASK\\Svg\\': ''})]) %}
+{% endfor %}
+| *{{ argument.name }}* | `{{ typeS ? typeS|join('&#124;')|raw }}` | {{ argument.description|replace({'|': '&#124;'})|raw }} |
+{% endfor %}
+
+{% endif %}{# method.arguments is not empty #}
+
+{% if method.response.description %}
+
+**returns** {{ method.response.description|raw }}
+
+{% endif %}
+
+{% if method.tags.see is not empty or method.tags.link is not empty %}
+**See Also:**
+
+{% for see in method.tags.see %}
+* {{ see.reference }} {% if see.description %}- {{ see.description|raw }}{% endif %}
+{% endfor %}
+{% for link in method.tags.link %}
+* {{ link.link }} {% if link.description and link.description != link.link %}- {{ link.description|raw }}{% endif %}
+{% endfor %}
+
+{% endif %}{# method.tags.see || method.tags.link #}
+
+---
+

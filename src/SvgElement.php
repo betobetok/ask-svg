@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ASK\Svg;
 
 use ASK\Svg\Concerns\RendersAttributes;
+use ASK\Svg\Configurators\uSvgElement;
 use ASK\Svg\Shapes\Shape;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
@@ -27,15 +28,16 @@ use NumPHP\Core\NumArray;
  * - $svg->elements[0] return the first element in the <svg></svg>
  * - $svg->g[0]->elements[0] return the first element in the <g></g>
  *
+ * 
  * @author  Alberto Solorzano Kraemer
  *
  * @since 1.0
  */
-class SvgElement implements Htmlable
+abstract class SvgElement implements Htmlable
 {
     use RendersAttributes;
 
-    /** @ignore */
+    /** @internal description*/
     public const SVG_ATTRIBUTES = [
         'version',
         'width',
@@ -124,24 +126,57 @@ class SvgElement implements Htmlable
         ],
     ];
 
-    /** @var string $name */
+    /**
+     * The name of some SVG element, for example, path, g, circle
+     *  
+     * @var string $name 
+     */
     protected $name;
 
-    /** @var SvgElement[] $elements = []*/
+    /** 
+     * The array $elements contains all the elements of the parent SVG element in the order in which they are found.
+     * @var SvgElement[] $elements = [] 
+     */
     protected $elements = [];
 
-    /** @var string $contents */
+    /**
+     * A temporari string with the content of the file .svg 
+     *    
+     * @var string $contents 
+     */
     protected $contents;
 
-    /** @var SvgElement $context */
+    /**
+     * If exist, the parent element is saved in the context property 
+     * 
+     * @var SvgElement $context 
+     */
     protected $context;
 
-    /** @var Transformation $transforms */
+    /**
+     * When the SVG element has some transformations, the Transformation 
+     * property allows you to save and manipulate these transformations within a matrix context
+     * 
+     * @var Transformation $transforms 
+     */
     protected $transforms;
 
-    /** @var bool $isTransformable = false*/
+    /** 
+     * If the element allows the use of the Transformation attribute, this element is set to true, 
+     * if this property is set to false, the element does not allow saving transformations. 
+     * 
+     * @var bool $isTransformable = false
+     */
     protected $isTransformable = false;
 
+    /**
+     *      
+     * @param  string $name
+     * @param  string $contents
+     * @param  array $attributes
+     * @param  mixed $context
+     * @return void
+     */
     public function __construct(string $name, string $contents, array $attributes = [], SvgElement $context = null)
     {
         $this->name = $name;
@@ -422,7 +457,7 @@ class SvgElement implements Htmlable
             if (isset($this->$name)) {
                 $this->$name[] = $element;
             } else {
-                $this->$name = [$element];
+                array_push($this->$name, $element);
             }
         }
     }
@@ -602,7 +637,7 @@ class SvgElement implements Htmlable
                 } elseif (class_exists($classElement2)) {
                     $tmp = new $classElement2($con, $attributes, $this);
                 } else {
-                    $tmp = new SvgElement($element, $con, $attributes, $this);
+                    $tmp = new uSvgElement($element, $con, $attributes, $this);
                 }
 
                 $elementsToRemove[] = trim(substr($content, $first, $key - $first + strlen('</' . $element . '>')));
@@ -614,7 +649,7 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * return the first Element in the elements array
+     * return the first Element by name in the array "elements" 
      * or null if not found
      *
      * @param  string $elementName
@@ -662,7 +697,7 @@ class SvgElement implements Htmlable
         } elseif (class_exists($classElement2)) {
             $tmp = new $classElement2($content, $attributes, $this);
         } else {
-            $tmp = new SvgElement($element, $content, $attributes, $this);
+            $tmp = new uSvgElement($element, $content, $attributes, $this);
         }
         $this->contents = str_replace($tag, '', $this->contents);
         return $tmp;
