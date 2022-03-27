@@ -11,3 +11,11 @@ if (!function_exists('svg')) {
         return app(Factory::class)->svg($name, $class, $attributes);
     }
 }
+
+if (!function_exists('svgCache')) {
+    function svgCache(Svg $svg): Svg
+    {
+        dd(app(Factory::class)->svgCache($svg));
+        // return app(Factory::class)->cache($svg);
+    }
+}

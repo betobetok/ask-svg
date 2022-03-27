@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>    Documentation &raquo; \ASK\Svg\Shapes\Line
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+            <!--[if lt IE 9]>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+        <![endif]-->
+        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
+        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/template.js" type="text/javascript"></script>
+        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
+    
+            <link rel="shortcut icon" href="../img/favicon.ico"/>
+        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
+        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
+    </head>
+<body>
+
+        <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> </a>
+                <a class="brand" href="../index.html">Documentation</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="dropdown">
+                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                API Documentation <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                                                    <li><a>Namespaces</a></li>
+                                                                        <li><a href="../\ASK">ASK</a></li>
+                                                                                                                                </ul>
+                        </li>
+                        <li class="dropdown" id="charts-menu">
+                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                Charts <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../graph_class.html">
+                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="reports-menu">
+                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                Reports <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../errors.html">
+                                        <i class="icon-list-alt"></i>&#160;Errors
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../markers.html">
+                                        <i class="icon-list-alt"></i>&#160;Markers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../deprecated.html">
+                                        <i class="icon-list-alt"></i>&#160;Deprecated
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="go_to_top">
+            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
+        </div>
+    </div>
+    
+    <div id="___" class="container">
+        <noscript>
+            <div class="alert alert-warning">
+                Javascript is disabled; several features are only available if Javascript is enabled.
+            </div>
+        </noscript>
+
+        
+            <style>
+        .deprecated h2 {
+            text-decoration: line-through;
+        }
+    </style>
+    <div class="row">
+        <div class="span4">
+                    <div class="btn-group view pull-right" data-toggle="buttons-radio">
+        <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+        <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+    </div>
+    <div class="btn-group visibility" data-toggle="buttons-checkbox">
+        <button class="btn public active" title="Show public elements">Public</button>
+        <button class="btn protected" title="Show protected elements">Protected</button>
+        <button class="btn private" title="Show private elements">Private</button>
+        <button class="btn inherited active" title="Show inherited elements">Inherited</button>
+    </div>
+
+        <ul class="side-nav nav nav-list">
+        <li class="nav-header">
+            <i class="icon-custom icon-method"></i> Methods
+            <ul>
+                                                                                                    <li class="method public inherited">
+        <a href="#method___call" title="__call :: ">
+            <span class="description"></span><pre>__call</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method___construct" title="__construct :: ">
+            <span class="description"></span><pre>__construct</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_attributes" title="attributes :: get attributes">
+            <span class="description">get attributes</span><pre>attributes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_contents" title="contents :: get the string contents of the elements
+- this method is similar at toHtml
+  but get just the string of the content without the tag string">
+            <span class="description">get the string contents of the elements
+- this method is similar at toHtml
+  but get just the string of the content without the tag string</span><pre>contents</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_findFirstElement" title="findFirstElement :: return the first Element by name in the array &quot;elements&quot;
+or null if not found">
+            <span class="description">return the first Element by name in the array &quot;elements&quot;
+or null if not found</span><pre>findFirstElement</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_findFirstGroupElement" title="findFirstGroupElement :: find the first group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found">
+            <span class="description">find the first group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found</span><pre>findFirstGroupElement</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_findFirstNonGroupElement" title="findFirstNonGroupElement :: find the first non-group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found">
+            <span class="description">find the first non-group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found</span><pre>findFirstNonGroupElement</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getAllElements" title="getAllElements :: get all Elements from the string content
+this method make all found elements as SvgElement Objects and
+put in a property with the element name">
+            <span class="description">get all Elements from the string content
+this method make all found elements as SvgElement Objects and
+put in a property with the element name</span><pre>getAllElements</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getContext" title="getContext :: get the property Context that is the parent SVG element of this element">
+            <span class="description">get the property Context that is the parent SVG element of this element</span><pre>getContext</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getElementAttributes" title="getElementAttributes :: get the attributes of a element froma string tag
+(&lt;tag attribute=&quot;value&quot;&gt;&lt;/tag&gt;)">
+            <span class="description">get the attributes of a element froma string tag
+(&lt;tag attribute=&quot;value&quot;&gt;&lt;/tag&gt;)</span><pre>getElementAttributes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getElementById" title="getElementById :: find an element by its id and return it
+or null if not found">
+            <span class="description">find an element by its id and return it
+or null if not found</span><pre>getElementById</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getStartPointById" title="getStartPointById :: get the start position point of an Shape element by its Id
+and return it or null if not found">
+            <span class="description">get the start position point of an Shape element by its Id
+and return it or null if not found</span><pre>getStartPointById</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getStartPosition" title="getStartPosition :: get the Start position o the element">
+            <span class="description">get the Start position o the element</span><pre>getStartPosition</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getTransformations" title="getTransformations :: get the Transformations of the element and make the corresponding Transformation Object">
+            <span class="description">get the Transformations of the element and make the corresponding Transformation Object</span><pre>getTransformations</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_hasContext" title="hasContext :: return true if the element has content or false otherwise">
+            <span class="description">return true if the element has content or false otherwise</span><pre>hasContext</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_id" title="id :: get or set the id attribute of the element in the attributes property">
+            <span class="description">get or set the id attribute of the element in the attributes property</span><pre>id</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_long" title="long :: get teh Logitud of the line">
+            <span class="description">get teh Logitud of the line</span><pre>long</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_makeTransformable" title="makeTransformable :: Make this element Transformable">
+            <span class="description">Make this element Transformable</span><pre>makeTransformable</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_makeUntransformable" title="makeUntransformable :: make this element Untransformable">
+            <span class="description">make this element Untransformable</span><pre>makeUntransformable</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_mergeAttributes" title="mergeAttributes :: merge the attributes conteined in a string tag with the array attributes">
+            <span class="description">merge the attributes conteined in a string tag with the array attributes</span><pre>mergeAttributes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_name" title="name :: get or set the name of the element">
+            <span class="description">get or set the name of the element</span><pre>name</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_removeAllAttributes" title="removeAllAttributes :: removeAllAttributes remove all attributes from the attributes list">
+            <span class="description">removeAllAttributes remove all attributes from the attributes list</span><pre>removeAllAttributes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_removeAtt" title="removeAtt :: removeAtt remove an Attribute from the attributes list">
+            <span class="description">removeAtt remove an Attribute from the attributes list</span><pre>removeAtt</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_removeComents" title="removeComents :: remove coments from the string content">
+            <span class="description">remove coments from the string content</span><pre>removeComents</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_removeContents" title="removeContents :: remove the string Contents property from the object">
+            <span class="description">remove the string Contents property from the object</span><pre>removeContents</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_removeId" title="removeId :: remove the property Id">
+            <span class="description">remove the property Id</span><pre>removeId</pre>
+        </a>
+    </li>
+
+                                                                                                                                                                <li class="method public inherited">
+        <a href="#method_serialize" title="serialize :: ">
+            <span class="description"></span><pre>serialize</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_setAttribute" title="setAttribute :: setAttribute set an attribute with the own value in the Attributes list">
+            <span class="description">setAttribute set an attribute with the own value in the Attributes list</span><pre>setAttribute</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_setContents" title="setContents :: set the string Contents property in the object">
+            <span class="description">set the string Contents property in the object</span><pre>setContents</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_setElement" title="setElement :: set a neu Element in this object">
+            <span class="description">set a neu Element in this object</span><pre>setElement</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_toArray" title="toArray :: toArray">
+            <span class="description">toArray</span><pre>toArray</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_toHtml" title="toHtml :: implements of Htmlable, toHtml return a string form of the svg element in HTML format">
+            <span class="description">implements of Htmlable, toHtml return a string form of the svg element in HTML format</span><pre>toHtml</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_transform" title="transform :: set or get the Transformation Object for the element">
+            <span class="description">set or get the Transformation Object for the element</span><pre>transform</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_unserialize" title="unserialize :: ">
+            <span class="description"></span><pre>unserialize</pre>
+        </a>
+    </li>
+
+                                                </ul>
+        </li>
+        <li class="nav-header protected">» Protected
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <li class="method protected inherited">
+                            <a href="#method_renderAttributes" title="renderAttributes :: renderAttributes return a string with attributes in a HTML format">
+                                <span class="description">renderAttributes return a string with attributes in a HTML format</span><pre>renderAttributes</pre>
+                            </a>
+                        </li>
+                                                                                                                                                                                                                                                                                                                                                </ul>
+        </li>
+        <li class="nav-header private">» Private
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </ul>
+        </li>
+        <li class="nav-header">
+            <i class="icon-custom icon-constant"></i> Constants
+            <ul>
+                            </ul>
+        </li>
+    </ul>
+
+
+        </div>
+
+        <div class="span8">
+            <div class="element class">
+                <h1>Line</h1>
+                <small style="display: block; text-align: right">
+                                            Extends <a href="classes/ASK-Svg-Shapes-Shape.html"><abbr title="\ASK\Svg\Shapes\Shape">Shape</abbr></a>
+                                                        </small>
+                <p class="short_description">A Line element in a svg document</p>
+                <div class="details">
+                    <div class="long_description">
+                        
+                    </div>
+                    <table class="table table-bordered">
+                                                                                    <tr>
+                                    <th>
+                                        package
+                                                                            </th>
+                                    <td>
+                                                                                    
+                                                                                <p>ASK-Svg</p>
+
+                                    </td>
+                                </tr>
+                                                                                                                            </table>
+
+                    <h3><i class="icon-custom icon-method"></i> Methods</h3>
+                                                                <a id="method___call"></a>
+                        <div class="element clickable method public  method___call inherited" data-toggle="collapse" data-target=".method___call .collapse">
+                            <h2>__call</h2>
+                            <pre>__call(stringmethod, arrayarguments) : self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>method</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method___construct"></a>
+                        <div class="element clickable method public  method___construct inherited" data-toggle="collapse" data-target=".method___construct .collapse">
+                            <h2>__construct</h2>
+                            <pre>__construct(stringname, stringcontents, arrayattributes = [], mixedcontext = null) : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>name</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>contents</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>attributes</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>context</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_attributes"></a>
+                        <div class="element clickable method public  method_attributes inherited" data-toggle="collapse" data-target=".method_attributes .collapse">
+                            <h2>get attributes</h2>
+                            <pre>attributes() : array</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_contents"></a>
+                        <div class="element clickable method public  method_contents inherited" data-toggle="collapse" data-target=".method_contents .collapse">
+                            <h2>get the string contents of the elements
+- this method is similar at toHtml
+  but get just the string of the content without the tag string</h2>
+                            <pre>contents() : string</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_findFirstElement"></a>
+                        <div class="element clickable method public  method_findFirstElement inherited" data-toggle="collapse" data-target=".method_findFirstElement .collapse">
+                            <h2>return the first Element by name in the array &quot;elements&quot;
+or null if not found</h2>
+                            <pre>findFirstElement(stringelementName) : \ASK\Svg\SvgElement|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>elementName</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\SvgElement|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_findFirstGroupElement"></a>
+                        <div class="element clickable method public  method_findFirstGroupElement inherited" data-toggle="collapse" data-target=".method_findFirstGroupElement .collapse">
+                            <h2>find the first group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found</h2>
+                            <pre>findFirstGroupElement(stringelement) : \ASK\Svg\SvgElement|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>element</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\SvgElement|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_findFirstNonGroupElement"></a>
+                        <div class="element clickable method public  method_findFirstNonGroupElement inherited" data-toggle="collapse" data-target=".method_findFirstNonGroupElement .collapse">
+                            <h2>find the first non-group element with the name $element and
+return the new corresponding SvgElement instance
+or null if not found</h2>
+                            <pre>findFirstNonGroupElement(stringelement) : \ASK\Svg\SvgElement|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>element</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\SvgElement|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getAllElements"></a>
+                        <div class="element clickable method public  method_getAllElements inherited" data-toggle="collapse" data-target=".method_getAllElements .collapse">
+                            <h2>get all Elements from the string content
+this method make all found elements as SvgElement Objects and
+put in a property with the element name</h2>
+                            <pre>getAllElements() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getContext"></a>
+                        <div class="element clickable method public  method_getContext inherited" data-toggle="collapse" data-target=".method_getContext .collapse">
+                            <h2>get the property Context that is the parent SVG element of this element</h2>
+                            <pre>getContext() : \ASK\Svg\SvgElement|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\SvgElement|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getElementAttributes"></a>
+                        <div class="element clickable method public  method_getElementAttributes inherited" data-toggle="collapse" data-target=".method_getElementAttributes .collapse">
+                            <h2>get the attributes of a element froma string tag
+(&lt;tag attribute=&quot;value&quot;&gt;&lt;/tag&gt;)</h2>
+                            <pre>getElementAttributes(stringtag) : array</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>tag</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getElementById"></a>
+                        <div class="element clickable method public  method_getElementById inherited" data-toggle="collapse" data-target=".method_getElementById .collapse">
+                            <h2>find an element by its id and return it
+or null if not found</h2>
+                            <pre>getElementById(stringid) : \ASK\Svg\SvgElement|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>id</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\SvgElement|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getStartPointById"></a>
+                        <div class="element clickable method public  method_getStartPointById inherited" data-toggle="collapse" data-target=".method_getStartPointById .collapse">
+                            <h2>get the start position point of an Shape element by its Id
+and return it or null if not found</h2>
+                            <pre>getStartPointById(stringid) : \NumPHP\Core\NumArray|null</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>id</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\NumPHP\Core\NumArray|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getStartPosition"></a>
+                        <div class="element clickable method public  method_getStartPosition inherited" data-toggle="collapse" data-target=".method_getStartPosition .collapse">
+                            <h2>get the Start position o the element</h2>
+                            <pre>getStartPosition() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getTransformations"></a>
+                        <div class="element clickable method public  method_getTransformations inherited" data-toggle="collapse" data-target=".method_getTransformations .collapse">
+                            <h2>get the Transformations of the element and make the corresponding Transformation Object</h2>
+                            <pre>getTransformations() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_hasContext"></a>
+                        <div class="element clickable method public  method_hasContext inherited" data-toggle="collapse" data-target=".method_hasContext .collapse">
+                            <h2>return true if the element has content or false otherwise</h2>
+                            <pre>hasContext() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_id"></a>
+                        <div class="element clickable method public  method_id inherited" data-toggle="collapse" data-target=".method_id .collapse">
+                            <h2>get or set the id attribute of the element in the attributes property</h2>
+                            <pre>id(stringarg = &#039;&#039;) : string|self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>arg</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string|self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_long"></a>
+                        <div class="element clickable method public  method_long" data-toggle="collapse" data-target=".method_long .collapse">
+                            <h2>get teh Logitud of the line</h2>
+                            <pre>long() : float</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>float</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_makeTransformable"></a>
+                        <div class="element clickable method public  method_makeTransformable inherited" data-toggle="collapse" data-target=".method_makeTransformable .collapse">
+                            <h2>Make this element Transformable</h2>
+                            <pre>makeTransformable() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_makeUntransformable"></a>
+                        <div class="element clickable method public  method_makeUntransformable inherited" data-toggle="collapse" data-target=".method_makeUntransformable .collapse">
+                            <h2>make this element Untransformable</h2>
+                            <pre>makeUntransformable() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_mergeAttributes"></a>
+                        <div class="element clickable method public  method_mergeAttributes inherited" data-toggle="collapse" data-target=".method_mergeAttributes .collapse">
+                            <h2>merge the attributes conteined in a string tag with the array attributes</h2>
+                            <pre>mergeAttributes(stringtag, arrayattributes) : array</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>tag</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>attributes</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_name"></a>
+                        <div class="element clickable method public  method_name inherited" data-toggle="collapse" data-target=".method_name .collapse">
+                            <h2>get or set the name of the element</h2>
+                            <pre>name(stringarg = &#039;&#039;) : string|self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>arg</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string|self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_removeAllAttributes"></a>
+                        <div class="element clickable method public  method_removeAllAttributes inherited" data-toggle="collapse" data-target=".method_removeAllAttributes .collapse">
+                            <h2>removeAllAttributes remove all attributes from the attributes list</h2>
+                            <pre>removeAllAttributes() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_removeAtt"></a>
+                        <div class="element clickable method public  method_removeAtt inherited" data-toggle="collapse" data-target=".method_removeAtt .collapse">
+                            <h2>removeAtt remove an Attribute from the attributes list</h2>
+                            <pre>removeAtt(stringattribute) : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>attribute</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_removeComents"></a>
+                        <div class="element clickable method public  method_removeComents inherited" data-toggle="collapse" data-target=".method_removeComents .collapse">
+                            <h2>remove coments from the string content</h2>
+                            <pre>removeComents() : self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_removeContents"></a>
+                        <div class="element clickable method public  method_removeContents inherited" data-toggle="collapse" data-target=".method_removeContents .collapse">
+                            <h2>remove the string Contents property from the object</h2>
+                            <pre>removeContents() : self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_removeId"></a>
+                        <div class="element clickable method public  method_removeId inherited" data-toggle="collapse" data-target=".method_removeId .collapse">
+                            <h2>remove the property Id</h2>
+                            <pre>removeId() : self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_renderAttributes"></a>
+                        <div class="element clickable method protected  method_renderAttributes inherited" data-toggle="collapse" data-target=".method_renderAttributes .collapse">
+                            <h2>renderAttributes return a string with attributes in a HTML format</h2>
+                            <pre>renderAttributes() : string</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_serialize"></a>
+                        <div class="element clickable method public  method_serialize inherited" data-toggle="collapse" data-target=".method_serialize .collapse">
+                            <h2>serialize</h2>
+                            <pre>serialize(mixeddata) : mixed</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>data</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>mixed</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_setAttribute"></a>
+                        <div class="element clickable method public  method_setAttribute inherited" data-toggle="collapse" data-target=".method_setAttribute .collapse">
+                            <h2>setAttribute set an attribute with the own value in the Attributes list</h2>
+                            <pre>setAttribute(stringname, stringarguments) : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>name</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>arguments</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_setContents"></a>
+                        <div class="element clickable method public  method_setContents inherited" data-toggle="collapse" data-target=".method_setContents .collapse">
+                            <h2>set the string Contents property in the object</h2>
+                            <pre>setContents(stringcontents) : self</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>contents</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>self</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_setElement"></a>
+                        <div class="element clickable method public  method_setElement inherited" data-toggle="collapse" data-target=".method_setElement .collapse">
+                            <h2>set a neu Element in this object</h2>
+                            <pre>setElement(stringname, mixedelement) : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>name</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>element</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_toArray"></a>
+                        <div class="element clickable method public  method_toArray inherited" data-toggle="collapse" data-target=".method_toArray .collapse">
+                            <h2>toArray</h2>
+                            <pre>toArray() : void</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_toHtml"></a>
+                        <div class="element clickable method public  method_toHtml inherited" data-toggle="collapse" data-target=".method_toHtml .collapse">
+                            <h2>implements of Htmlable, toHtml return a string form of the svg element in HTML format</h2>
+                            <pre>toHtml() : string</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_transform"></a>
+                        <div class="element clickable method public  method_transform inherited" data-toggle="collapse" data-target=".method_transform .collapse">
+                            <h2>set or get the Transformation Object for the element</h2>
+                            <pre>transform(mixedarg = null) : \ASK\Svg\Transformation|string</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>arg</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\ASK\Svg\Transformation|string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_unserialize"></a>
+                        <div class="element clickable method public  method_unserialize inherited" data-toggle="collapse" data-target=".method_unserialize .collapse">
+                            <h2>unserialize</h2>
+                            <pre>unserialize(mixeddata) : mixed</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>data</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>mixed</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                    
+                    
+                                                                <h3><i class="icon-custom icon-property"></i> Properties</h3>
+                                                    <a id="property_x1"> </a>
+                            <div class="element clickable property  protected property_x1" data-toggle="collapse" data-target=".property_x1 .collapse">
+                                <h2></h2>
+                                <pre>x1 : float</pre>
+                                <div class="labels">
+                                                                                                        </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_y1"> </a>
+                            <div class="element clickable property  protected property_y1" data-toggle="collapse" data-target=".property_y1 .collapse">
+                                <h2></h2>
+                                <pre>y1 : float</pre>
+                                <div class="labels">
+                                                                                                        </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_x2"> </a>
+                            <div class="element clickable property  protected property_x2" data-toggle="collapse" data-target=".property_x2 .collapse">
+                                <h2></h2>
+                                <pre>x2 : float</pre>
+                                <div class="labels">
+                                                                                                        </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_y2"> </a>
+                            <div class="element clickable property  protected property_y2" data-toggle="collapse" data-target=".property_y2 .collapse">
+                                <h2></h2>
+                                <pre>y2 : float</pre>
+                                <div class="labels">
+                                                                                                        </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_startPosition"> </a>
+                            <div class="element clickable property  protected property_startPosition inherited" data-toggle="collapse" data-target=".property_startPosition .collapse">
+                                <h2></h2>
+                                <pre>startPosition : \NumPHP\Core\NumArray</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>\NumPHP\Core\NumArray</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_name"> </a>
+                            <div class="element clickable property  protected property_name inherited" data-toggle="collapse" data-target=".property_name .collapse">
+                                <h2>The name of some SVG element, for example, path, g, circle</h2>
+                                <pre>name : string</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>string</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_elements"> </a>
+                            <div class="element clickable property  protected property_elements inherited" data-toggle="collapse" data-target=".property_elements .collapse">
+                                <h2>The array $elements contains all the elements of the parent SVG element in the order in which they are found.</h2>
+                                <pre>elements : \ASK\Svg\SvgElement[]</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    <p>= []</p>
+
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>array&lt;string|int, <a href="classes/ASK-Svg-SvgElement.html"><abbr title="\ASK\Svg\SvgElement">SvgElement</abbr></a>&gt;</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_contents"> </a>
+                            <div class="element clickable property  protected property_contents inherited" data-toggle="collapse" data-target=".property_contents .collapse">
+                                <h2>A temporari string with the content of the file .svg</h2>
+                                <pre>contents : string</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>string</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_context"> </a>
+                            <div class="element clickable property  protected property_context inherited" data-toggle="collapse" data-target=".property_context .collapse">
+                                <h2>If exist, the parent element is saved in the context property</h2>
+                                <pre>context : \ASK\Svg\SvgElement</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code><a href="classes/ASK-Svg-SvgElement.html"><abbr title="\ASK\Svg\SvgElement">SvgElement</abbr></a></code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_transforms"> </a>
+                            <div class="element clickable property  protected property_transforms inherited" data-toggle="collapse" data-target=".property_transforms .collapse">
+                                <h2>When the SVG element has some transformations, the Transformation
+property allows you to save and manipulate these transformations within a matrix context</h2>
+                                <pre>transforms : \ASK\Svg\Transformation</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code><a href="classes/ASK-Svg-Transformation.html"><abbr title="\ASK\Svg\Transformation">Transformation</abbr></a></code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_isTransformable"> </a>
+                            <div class="element clickable property  protected property_isTransformable inherited" data-toggle="collapse" data-target=".property_isTransformable .collapse">
+                                <h2>If the element allows the use of the Transformation attribute, this element is set to true,
+if this property is set to false, the element does not allow saving transformations.</h2>
+                                <pre>isTransformable : bool</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    <p>= false</p>
+
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>bool</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_attributes"> </a>
+                            <div class="element clickable property  private property_attributes inherited" data-toggle="collapse" data-target=".property_attributes .collapse">
+                                <h2></h2>
+                                <pre>attributes : array</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>array&lt;string|int, mixed&gt;</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                            </div>
+            </div>
+            <a id="\ASK\Svg\Shapes\Line"></a>
+            <ul class="breadcrumb">
+                <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
+                    
+    
+    <li><span class="divider">\</span><a href="../\ASK\Svg\Shapes">Shapes</a></li>
+
+                <li class="active"><span class="divider">\</span><a href="../\ASK\Svg\Shapes\Line">Line</a></li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+        <footer class="span12">
+            Template is built using <a href="https://getbootstrap.com/">Twitter Bootstrap 2</a> and icons provided by
+            <a href="https://glyphicons.com/">Glyphicons</a>.<br/>
+            Documentation is powered by <a href="https://www.phpdoc.org/">phpDocumentor </a> and<br/>
+            generated on Sun, 27 Mar 2022 21:31:30 +0000.<br/>
+    </footer>
+    </body>
+</html>

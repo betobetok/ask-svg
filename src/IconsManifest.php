@@ -7,6 +7,7 @@ namespace ASK\Svg;
 use Exception;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -137,5 +138,19 @@ final class IconsManifest
             $this->manifestPath,
             '<?php return ' . var_export($this->build($sets), true) . ';',
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function set(Svg $content): void
+    {
+        [$set, $name] = explode('-', $content->id());
+        $path = App::basePath("resources/" . $set);
+        if (isset($this->manifest[$set][$path])) {
+            $this->manifest[$set][$path][] = $name;
+        } else {
+            $this->manifest[$set][$path] = [$name];
+        }
     }
 }

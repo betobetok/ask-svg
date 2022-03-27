@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace ASK\Svg;
 
-use ASK\Svg\Components\Svg as SvgComponent;
-use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
-use BladeUI\Icons\Exceptions\SvgNotFound;
+use ASK\Svg\Components\SvgComponent;
+use ASK\Svg\Exceptions\CannotRegisterIconSet;
+use ASK\Svg\Exceptions\SvgNotFound;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\directoryExists;
 
 /**
  * Factory
@@ -153,6 +156,41 @@ final class Factory
 
             throw $exception;
         }
+    }
+
+    public function svgCache(Svg $svg): Svg
+    {
+        [$set, $name] = explode('-', $svg->id());
+        $set = $set ?? 'default';
+        if (isset($this->cache[$set])) {
+            $this->cache[$set][$name] = $svg->toHtml();
+            return $svg;
+        }
+
+        if ($set === 'default') {
+            $this->cache[$set][$name] = $svg->toHtml();
+            return $svg;
+        }
+        $path = App::basePath("resources/" . $set);
+        $config = [
+            "paths"         => $path,
+            "disk"          => "",
+            "prefix"        => $set,
+            "fallback"      => "",
+            "class"         => "",
+            "attributes"    => [],
+        ];
+
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+
+        $this->add($set, $config);
+        $this->cache[$set][$name] = $svg->toHtml();
+        $this->manifest->set($svg);
+        $this->registerComponents();
+
+        return $svg;
     }
 
     /**
