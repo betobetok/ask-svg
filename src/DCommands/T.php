@@ -14,24 +14,20 @@ use ASK\Svg\Exceptions\ComandException;
  */
 class T extends Command
 {
-    public function initialization($parameters)
+    public function initialization($cmdString)
     {
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?/', $cmdString, $parameters);
+
         /** a command t must have even nummer of parameters */
-        if (count($parameters) % 2 > 0 || count($parameters) === 0) {
+        if (count($parameters[0]) === 0) {
             throw ComandException::configuration(self::class, count($parameters), 2);
         }
 
         $count = 0;
-        foreach ($parameters as $k => $coordinate) {
-            switch ($k % 2) {
-                case 0:
-                    $coordinates[$count]['x'] = $coordinate;
-                    break;
-                case 1:
-                    $coordinates[$count]['y'] = $coordinate;
-                    $count++;
-                    break;
-            }
+        foreach ($parameters[0] as $k => $coordinate) {
+            $coordinates[$k]['x'] = (float)$parameters[1][$k];
+            $coordinates[$k]['y'] = (float)$parameters[2][$k];
+            $count++;
         }
         $this->coordinates = $coordinates;
         $this->count = $count;

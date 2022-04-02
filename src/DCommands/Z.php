@@ -13,7 +13,7 @@ class Z extends Command
 {
     public function initialization($parameters)
     {
-        if (count($parameters) !== 0) {
+        if (!empty($parameters)) {
             throw ComandException::configuration(self::class, count($parameters), 0);
         }
         $this->coordinates = [];

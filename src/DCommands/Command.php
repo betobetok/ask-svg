@@ -56,7 +56,7 @@ abstract class Command implements Htmlable
     protected array $endPointCoordinates;
 
 
-    public function __construct(string $type, array $parameters = [], ?Command $prev = null)
+    public function __construct(string $type, string $parameters = '', ?Command $prev = null)
     {
         $this->type = $type;
         if (!empty($prev)) {
@@ -148,7 +148,7 @@ abstract class Command implements Htmlable
     {
         $a = $this->count - 1;
         if ($a !== count($this->coordinates) - 1) {
-            dump([$this]);
+            dump([$this, $a]);
         }
         return $this->getPoint($a, $absolute);
     }

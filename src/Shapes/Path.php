@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ASK\Svg\Shapes;
 
 use ASK\Svg\SvgElement;
+use Illuminate\Support\Str;
 
 /**
  * A Path element in a svg document
@@ -71,11 +72,10 @@ class Path extends Shape
         $prev = null;
         preg_match_all('/([a-zA-Z]{1})\s?([e0-9\s,.-]+)?[^A-Za-z]?/', $d, $match);
         foreach ($match[1] as $k => $name) {
-            preg_match_all('/(-?[0-9.]+(e-\d+)?)/', $match[2][$k], $arguments);
             $commandClass = 'ASK\\Svg\\DCommands\\' . ucfirst($name);
             $type = $name === strtolower($name) ? 'relative' : 'absolute';
             if (class_exists($commandClass)) {
-                $command = new $commandClass($type, $arguments[0], $prev);
+                $command = new $commandClass($type, $match[2][$k], $prev);
                 $prev = $command;
             }
             $commands[$k][$name] = $command ?? $commandClass;
@@ -100,7 +100,7 @@ class Path extends Shape
                 return $value;
             }
 
-            return sprintf('%s="%s"', $attribute, $value);
+            return sprintf('%s="%s"', Str::snake($attribute, '-'), $value);
         })->implode(' ');
     }
 }

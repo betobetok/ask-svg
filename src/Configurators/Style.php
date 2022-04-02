@@ -27,7 +27,7 @@ class Style extends Configurator
         $contents = $this->configAttributesAndContent('style', $svgContent, []);
 
         parent::__construct($contents, [], $context);
-        $this->rules();
+        $this->makeRules();
         $this->renameClasses($name);
         $this->removeContents();
         unset($this->elements);
@@ -84,13 +84,47 @@ class Style extends Configurator
     }
 
     /**
-     *  get the css rules from style
-     *
+     *  get the css rules from style or set rules for the style element
+     * 
+     * * if it's called without arguments, return the rules array
+     * * if it's called with arguments, set the rules gived in the arguments array
+     * 
+     * a valid roules array look like thisone:
+     * [
+     * selector1 => [
+     *      property1 => values,
+     *      property2 => values,
+     *      ],
+     * selector2 => [
+     *      property1 => values,
+     *      property2 => values
+     *      ]
+     * ]
+     * 
+     * @param  array $arg
      * @return array|null
      */
-    public function rules(): ?array
+    public function rules(array $arg = []): ?array
     {
-        return $this->rules;
+        if (count($arg) <= 0) {
+            return $this->rules;
+        }
+        foreach ($arg as $selector => $rules) {
+            if (!is_array($rules)) {
+                return null;
+            }
+            foreach ($rules as $property => $declarations) {
+                if (isset($this->rules)) {
+                    $this->rules[$selector][$property] = $declarations;
+                } else {
+                    $this->rules = [
+                        $selector => [
+                            $property => $declarations
+                        ]
+                    ];
+                }
+            }
+        }
     }
 
     /**
