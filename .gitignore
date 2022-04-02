@@ -5,3 +5,5 @@ templates/
 tests/
 build/
 laravel
+.phpunit.result.cache
+config/config.php
