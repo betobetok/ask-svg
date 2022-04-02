@@ -2,7 +2,6 @@ composer.lock
 vendor
 phpdoc.xmls
 templates/
-tests/
 build/
 laravel
 .phpunit.result.cache
