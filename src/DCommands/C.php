@@ -18,36 +18,23 @@ use ASK\Svg\Exceptions\ComandException;
  */
 class C extends Command
 {
-    public function initialization($parameters)
+    public function initialization($cmdString)
     {
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?/', $cmdString, $parameters);
         /** a command c must have parameters in multiples of 6 */
-        if (count($parameters) % 6 > 0 || count($parameters) <= 0) {
+        if (count($parameters[0]) <= 0) {
             throw ComandException::configuration(self::class, count($parameters), 6);
         }
 
         $count = 0;
-        foreach ($parameters as $k => $coordinate) {
-            switch ($k % 6) {
-                case 0:
-                    $coordinates[$count]['x1'] = $coordinate;
-                    break;
-                case 1:
-                    $coordinates[$count]['y1'] = $coordinate;
-                    break;
-                case 2:
-                    $coordinates[$count]['x2'] = $coordinate;
-                    break;
-                case 3:
-                    $coordinates[$count]['y2'] = $coordinate;
-                    break;
-                case 4:
-                    $coordinates[$count]['x'] = $coordinate;
-                    break;
-                case 5:
-                    $coordinates[$count]['y'] = $coordinate;
-                    $count++;
-                    break;
-            }
+        foreach ($parameters[0] as $k => $coordinate) {
+            $coordinates[$k]['x1'] = (float)$parameters[1][$k];
+            $coordinates[$k]['y1'] = (float)$parameters[2][$k];
+            $coordinates[$k]['x2'] = (float)$parameters[3][$k];
+            $coordinates[$k]['y2'] = (float)$parameters[4][$k];
+            $coordinates[$k]['x'] = (float)$parameters[5][$k];
+            $coordinates[$k]['y'] = (float)$parameters[6][$k];
+            $count++;
         }
         $this->coordinates = $coordinates;
         $this->count = $count;

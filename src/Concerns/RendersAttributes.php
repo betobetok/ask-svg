@@ -71,11 +71,12 @@ trait RendersAttributes
      * setAttribute set an attribute with the own value in the Attributes list
      *
      * @param  string $name
-     * @param  string $arguments
+     * @param  mixed $arguments
      * @return void
      */
-    public function setAttribute(string $name, string $arguments)
+    public function setAttribute(string $name, $arguments)
     {
+        $arguments = is_string($arguments) ? $arguments : (is_bool($arguments) ? ($arguments ? 'true' : 'false') : (string)$arguments);
         $this->attributes[Str::snake($name, '-')] = $arguments;
     }
 

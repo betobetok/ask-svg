@@ -160,8 +160,7 @@ final class Factory
 
     public function svgCache(Svg $svg): Svg
     {
-        [$set, $name] = explode('-', $svg->id());
-        $set = $set ?? 'default';
+        [$set, $name] = $this->splitSetAndName('-', $svg->id());
         if (isset($this->cache[$set])) {
             $this->cache[$set][$name] = $svg->toHtml();
             return $svg;
@@ -201,7 +200,7 @@ final class Factory
         if (isset($this->cache[$set][$name])) {
             return $this->cache[$set][$name];
         }
-
+        dump($this->sets);
         if (isset($this->sets[$set])) {
             foreach ($this->sets[$set]['paths'] as $path) {
                 try {

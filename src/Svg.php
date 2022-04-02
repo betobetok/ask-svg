@@ -6,6 +6,7 @@ namespace ASK\Svg;
 
 use ASK\Svg\Configurators\G;
 use ASK\Svg\Configurators\Style;
+use ASK\Svg\Exceptions\SvgNotFound;
 
 /**
  * the Svg document
@@ -19,7 +20,12 @@ final class Svg extends SvgElement implements Conteiner
     {
         $name = explode('/', $fileName);
         $this->id(implode('-', $name));
-        $name = $name[count($name) - 1];
+        if (is_array($name) && isset($name[1])) {
+            $this->name = $name[1];
+        } elseif (is_array($name) && count($name) === 1) {
+            $this->name = $name[0];
+        }
+
         $this->contents = $contents;
 
         $styleContent = $this->getStylefromContent();
@@ -27,10 +33,10 @@ final class Svg extends SvgElement implements Conteiner
         $this->removeStylefromContent();
 
         $this->contents = $this->configAttributesAndContent('svg', $this->contents, $attributes);
-
+        $this->formatSvgAtributes();
         $this->contents = $this->replaceClasses($this->style, $this->contents);
 
-        parent::__construct('svg', $this->contents);
+        parent::__construct($this->name, $this->contents);
 
         $this->cleanContent();
     }
@@ -59,13 +65,32 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * get the Style element
-     *
-     * @return Style
+     * get the Style element or set rules in the style element
+     * 
+     * * if it's called without arguments, return the Style Object
+     * * if it's called with arguments, set the rules gived in the arguments array
+     * a valid roules array look like thisone:
+     * [
+     * selector1 => [
+     *      property1 => values,
+     *      property2 => values,
+     *      ],
+     * selector2 => [
+     *      property1 => values,
+     *      property2 => values
+     *      ]
+     * ]
+     * 
+     * @param  array $arg
+     * @return Style|null
      */
-    public function style(): Style
+    public function style(array $arg = []): ?Style
     {
-        return $this->style;
+        if (count($arg) <= 0) {
+            return $this->style;
+        }
+
+        $this->style->rules($arg);
     }
 
     /**
@@ -170,7 +195,7 @@ final class Svg extends SvgElement implements Conteiner
      */
     public function toHtml(): string
     {
-        return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n" . $this->contents() . "\n" . '</svg>';
+        return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . $this->contents() . '</svg>';
     }
 
     /**
@@ -268,5 +293,46 @@ final class Svg extends SvgElement implements Conteiner
             }
         }
         return $response;
+    }
+
+    public function formatSvgAtributes()
+    {
+        $attributes = $this->attributes();
+        $this->removeAllAttributes();
+        foreach ($attributes as $att => $val) {
+            if ($att !== 'style') {
+                $this->$att($val);
+            } else {
+                $this->setAttribute('style', $val);
+            }
+        }
+    }
+    /**
+     * save
+     *
+     * @param  mixed $fileName
+     * @return void
+     */
+    public function save($fileName = '')
+    {
+        $setFile = explode('-', $this->id());
+        if (count($setFile) <= 1) {
+            $file = $setFile;
+            $set = 'default';
+        } else {
+            $file = $setFile[1];
+            $set = $setFile[0];
+        }
+        if (!empty($fileName)) {
+            $file = $fileName;
+        }
+        if (empty($set)) {
+            $set = 'default';
+        }
+        $setPath = app(Factory::class)->getSetByPrefix($set)['paths'][0];
+        $filePath = $setPath . '/' . $file;
+        if (!file_put_contents($filePath, $this->toHtml())) {
+            throw SvgNotFound::pathNotExist($filePath);
+        }
     }
 }

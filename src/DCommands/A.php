@@ -26,39 +26,25 @@ use ASK\Svg\Exceptions\ComandException;
 class A extends Command
 {
 
-    public function initialization($parameters)
+    public function initialization($cmdString)
     {
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)([01]{1})(?:\s|,)?([01]{1})(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)/', $cmdString, $parameters);
+
         /** a command a must have parameters in multiples of 7 */
-        if (count($parameters) % 7 > 0 || count($parameters) <= 0) {
+        if (count($parameters[0]) <= 0) {
             throw ComandException::configuration(self::class, count($parameters), 7);
         }
 
         $count = 0;
-        foreach ($parameters as $k => $condition) {
-            switch ($k % 7) {
-                case 0:
-                    $coordinates[$count]['rx'] = $condition;
-                    break;
-                case 1:
-                    $coordinates[$count]['ry'] = $condition;
-                    break;
-                case 2:
-                    $coordinates[$count]['xRotation'] = $condition;
-                    break;
-                case 3:
-                    $coordinates[$count]['large'] = $condition;
-                    break;
-                case 4:
-                    $coordinates[$count]['sweep'] = $condition;
-                    break;
-                case 5:
-                    $coordinates[$count]['x'] = $condition;
-                    break;
-                case 6:
-                    $coordinates[$count]['y'] = $condition;
-                    $count++;
-                    break;
-            }
+        foreach ($parameters[0] as $k => $condition) {
+            $coordinates[$k]['rx'] = (float)$parameters[1][$k];
+            $coordinates[$k]['ry'] = (float)$parameters[2][$k];
+            $coordinates[$k]['xRotation'] = (float)$parameters[3][$k];
+            $coordinates[$k]['large'] = (float)$parameters[4][$k];
+            $coordinates[$k]['sweep'] = (float)$parameters[5][$k];
+            $coordinates[$k]['x'] = (float)$parameters[6][$k];
+            $coordinates[$k]['y'] = (float)$parameters[7][$k];
+            $count++;
         }
         $this->coordinates = $coordinates;
         $this->count = $count;

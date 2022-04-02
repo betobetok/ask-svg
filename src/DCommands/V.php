@@ -17,18 +17,20 @@ class V extends Command
     /** @var float $y */
     protected float $y;
 
-    public function initialization($parameters)
+    public function initialization($cmdString)
     {
-        if (count($parameters) <= 0 || count($parameters) === 0) {
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?/', $cmdString, $parameters);
+
+        if (count($parameters[0]) === 0) {
             throw ComandException::configuration(self::class, count($parameters), 1);
         }
 
-        foreach ($parameters as $k => $coordinate) {
-            $coordinates[$k]['y'] = $coordinate;
-            $this->y = (float)$coordinate;
+        foreach ($parameters[0] as $k => $coordinate) {
+            $coordinates[$k]['y'] = (float)$parameters[1][$k];
+            $this->y = (float)$parameters[1][$k];
         }
         $this->coordinates = $coordinates;
-        $this->count = count($parameters);
+        $this->count = count($parameters[0]);
         $absolutePoint = $this->getEndPoint();
         $this->resetNext();
         $relativePoint = $this->getEndPoint(false);

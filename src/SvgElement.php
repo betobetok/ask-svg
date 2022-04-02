@@ -188,6 +188,8 @@ abstract class SvgElement implements Htmlable
         $this->configAttributesAndContent('', '', $attributes);
 
         $this->getTransformations();
+        $tmp = explode('\\', get_class($this));
+        $name = strtolower(array_pop($tmp));
 
         if ((in_array($name, self::GROUP_ELEMENTS) && $name !== 'style') || !in_array($name, self::NON_GROUP_ELEMENTS)) {
             $this->getAllElements();
@@ -235,6 +237,10 @@ abstract class SvgElement implements Htmlable
 
         if ($svg !== 0 && $svg !== false) {
             $attributes = $this->mergeAttributes($svgTag[0], $attributes);
+            if (isset($attributes['id'])) {
+                $this->id($attributes['id']);
+            }
+
             if ($tag === 'svg') {
                 $contentFirst = strrpos($contents,  $svgTag[0]) + strlen($svgTag[0]);
                 $contetnleng = strrpos($contents, '</' . $tag . '>') - $contentFirst;
@@ -244,7 +250,7 @@ abstract class SvgElement implements Htmlable
         }
 
         foreach ($attributes as $key => $attribute) {
-            $this->$key($attribute);
+            $this->setAttribute($key, $attribute);
         }
 
         return $contents;
@@ -344,7 +350,7 @@ abstract class SvgElement implements Htmlable
         $ret = '';
         foreach ($this->elements as $element) {
             if ($element instanceof SvgElement) {
-                $ret .= $element->toHtml() . "\n";
+                $ret .= $element->toHtml();
             }
         }
 
@@ -455,9 +461,9 @@ abstract class SvgElement implements Htmlable
         if (!empty($element) && $name !== 'style') {
             $this->elements[] = $element;
             if (isset($this->$name)) {
-                $this->$name[] = $element;
-            } else {
                 array_push($this->$name, $element);
+            } else {
+                $this->$name = [$element];
             }
         }
     }
