@@ -250,7 +250,11 @@ abstract class SvgElement implements Htmlable
         }
 
         foreach ($attributes as $key => $attribute) {
-            $this->setAttribute($key, $attribute);
+            if (is_int($key)) {
+                $this->setAttribute($attribute);
+            } else {
+                $this->setAttribute($key, $attribute);
+            }
         }
 
         return $contents;

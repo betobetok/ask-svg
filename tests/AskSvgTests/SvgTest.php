@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\AskSvgTests;
 
 use ASK\Svg\BladeIconsServiceProvider;
 use ASK\Svg\Factory;
@@ -30,6 +30,5 @@ class SvgTest extends TestCase
         // $blade->register();
         $factory->registerComponents();
         $this->assertClassHasAttribute('sets', Factory::class);
-        dump($factory->manifest);
     }
 }

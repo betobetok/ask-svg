@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\BladeUiTests;
 
 use ASK\Svg\Components\Svg;
 use Illuminate\Support\Facades\Blade;
@@ -218,7 +218,7 @@ class ComponentsTest extends TestCase
         $view = $this->blade('<x-mixed-flag/>');
 
         $expected = <<<'HTML'
-            <svg id="flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path d="M 7.667 12 H 2 v 8 H 0 V 0 h 12 l 0.333 2 H 20 l -3 6, 3 6 H 8 l -0.333 -2 z " /><path d="M 7.667 12 H 2 v 8 H 0 V 0 h 12 l 0.333 2 H 20 l -2 6, 3 6 H 8 l -0.333 -2 z " /></svg>
+            <svg id="flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path d="M 7.667 12 H 2 v 8 H 0 V 0 h 12 l 0.333 2 H 20 l -3 6, 3 6 H 8 l -0.333 -2 z " /></svg>
             HTML;
 
         $view->assertSee($expected, false);

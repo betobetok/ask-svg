@@ -7,6 +7,7 @@ namespace ASK\Svg;
 use ASK\Svg\Configurators\G;
 use ASK\Svg\Configurators\Style;
 use ASK\Svg\Exceptions\SvgNotFound;
+use Illuminate\Support\Str;
 
 /**
  * the Svg document
@@ -68,7 +69,7 @@ final class Svg extends SvgElement implements Conteiner
      * get the Style element or set rules in the style element
      * 
      * * if it's called without arguments, return the Style Object
-     * * if it's called with arguments, set the rules gived in the arguments array
+     * * if it's called with an array as argument, set the rules gived in the arguments array
      * a valid roules array look like thisone:
      * [
      * selector1 => [
@@ -81,11 +82,25 @@ final class Svg extends SvgElement implements Conteiner
      *      ]
      * ]
      * 
+     *  * if it's called wit a string, add the style property in the style attribute of the svg element
+     *  a valid string is: 'property: value;'
+     * 
      * @param  array $arg
-     * @return Style|null
+     * @return Style|null|self
      */
-    public function style(array $arg = []): ?Style
+    public function style($arg = [])
     {
+        if (is_string($arg)) {
+            if (isset($this->attributes()['style'])) {
+                $style = $this->attributes()['style'];
+                $style = (Str::endsWith($style, ';') ? '' : ';') . $arg;
+                $this->setAttribute('style', $style);
+            } else {
+                $this->setAttribute('style', $arg);
+            }
+
+            return $this;
+        }
         if (count($arg) <= 0) {
             return $this->style;
         }

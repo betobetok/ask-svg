@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\BladeUiTests;
 
 use ASK\Svg\BladeIconsServiceProvider;
 use ASK\Svg\Factory;
@@ -15,16 +15,6 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     use InteractsWithViews;
-
-    /**
-     * Get base path.
-     *
-     * @return string
-     */
-    protected function getBasePath()
-    {
-        return __DIR__ . '/../laravel';
-    }
 
     protected function prepareSets(array $config = [], array $setOptions = []): Factory
     {
