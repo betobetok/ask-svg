@@ -74,7 +74,7 @@ trait RendersAttributes
      * @param  mixed $arguments
      * @return void
      */
-    public function setAttribute(string $name, $arguments)
+    public function setAttribute(string $name, $arguments = true)
     {
         $arguments = is_string($arguments) ? $arguments : (is_bool($arguments) ? ($arguments ? 'true' : 'false') : (string)$arguments);
         $this->attributes[Str::snake($name, '-')] = $arguments;

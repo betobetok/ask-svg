@@ -200,7 +200,6 @@ final class Factory
         if (isset($this->cache[$set][$name])) {
             return $this->cache[$set][$name];
         }
-        dump($this->sets);
         if (isset($this->sets[$set])) {
             foreach ($this->sets[$set]['paths'] as $path) {
                 try {

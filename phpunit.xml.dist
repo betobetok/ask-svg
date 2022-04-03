@@ -6,10 +6,14 @@
 >
     <testsuites>
         <testsuite name="Blade Icons Test Suite">
-            <directory>tests</directory>
+            <directory>tests/bladeUiTests</directory>
         </testsuite>
-    </testsuites>
+        <testsuite name="ASK SVG">
+            <directory>tests/AskSvgTests</directory>
+        </testsuite>
+    </testsuites
+    >
     <php>
-        <env name="APP_ENV" value="blade-icons-testing"/>
+        <env name="APP_ENV" value="ask-svg-testing"/>
     </php>
 </phpunit>
