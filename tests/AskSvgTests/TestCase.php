@@ -16,34 +16,16 @@ abstract class TestCase extends OrchestraTestCase
 {
     use InteractsWithViews;
 
-    /**
-     * Get base path.
-     *
-     * @return string
-     */
-    protected function getBasePath()
-    {
-        return __DIR__ . '/../../laravel';
-    }
-
     protected function prepareSets(array $config = [], array $setOptions = []): Factory
     {
+        $manifest = new IconsManifest(new Filesystem(), __DIR__ . '/fixtures/blade-icons.php');
+
         $factory = new Factory(
             new Filesystem(),
-            $this->app->make(IconsManifest::class),
+            $manifest,
             $this->app->make(FilesystemFactory::class),
             $config,
         );
-
-        $factory = $factory
-            ->add('default', array_merge([
-                'path' => __DIR__ . '/resources/svg',
-                'prefix' => 'icon',
-            ], $setOptions['default'] ?? []))
-            ->add('zondicons', array_merge([
-                'path' => __DIR__ . '/resources/zondicons',
-                'prefix' => 'zondicon',
-            ], $setOptions['zondicons'] ?? []));
 
         return $this->app->instance(Factory::class, $factory);
     }
