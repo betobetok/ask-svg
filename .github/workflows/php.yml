@@ -33,6 +33,9 @@ jobs:
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
+    
+    - name: Test Blade UI Kit
+      run: phpunit --testsuite "Blade Icons Test Suite"
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
