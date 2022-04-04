@@ -6,6 +6,7 @@ namespace ASK\Svg\Shapes;
 
 use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
+use Illuminate\Support\Str;
 
 /**
  * A Polygon element in a svg document
@@ -19,12 +20,12 @@ class Polygon extends Shape
     {
         parent::__construct($contents,  $attributes, $context);
 
-        if (isset($this->attributes()['points']) && !empty($this->attributes()['points'])) {
-            $this->points = $this->attributes()['points'];
+        if (isset($attributes['points']) && !empty($attributes['points'])) {
+            $points = $attributes['points'];
         } else {
-            $this->points = '';
+            $points = '';
         }
-        $this->points = $this->getPoints($this->points);
+        $this->points = $this->getPoints($points);
         if (!empty($this->points)) {
             $this->removeAtt('points');
         }
@@ -51,13 +52,50 @@ class Polygon extends Shape
     public function getPoints(string $points): array
     {
         $points2ret = [];
-        preg_match_all('/([e0-9\s.-]+),([e0-9\s.-]+)/', $points, $match);
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?/', $points, $match);
         foreach ($match[1] as $k => $name) {
             $points2ret[$k] = new NumArray([
-                'x' => $match[1],
-                'y' => $match[2]
+                'x' => $match[1][$k],
+                'y' => $match[2][$k]
             ]);
         }
         return $points2ret;
+    }
+
+    /**
+     * renderAttributes return a string with attributes in a HTML format
+     * (overloaded Method from RenderAttributes)
+     *
+     * @return string
+     */
+    protected function renderAttributes(): string
+    {
+        if (count($this->attributes()) == 0) {
+            return '';
+        }
+
+        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+            if (is_int($attribute)) {
+                return $value;
+            }
+            if ($attribute === 'points') {
+                return sprintf('%s="%s"', Str::snake($attribute, '-'), $this->pointsString());
+            }
+
+            return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
+        })->implode(' ');
+    }
+
+    public function pointsString(): string
+    {
+        $pointsStr = '';
+        foreach ($this->points as $k => $point) {
+            $pointArray = $point->getData();
+            $pointsStr .= sprintf('%s,%s', $pointArray['x'], $pointArray['y']);
+            if (array_key_last($this->points) !== $k) {
+                $pointsStr .= ' ';
+            }
+        }
+        return $pointsStr;
     }
 }

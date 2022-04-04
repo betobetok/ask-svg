@@ -210,7 +210,7 @@ final class Svg extends SvgElement implements Conteiner
      */
     public function toHtml(): string
     {
-        return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . $this->contents() . '</svg>';
+        return  sprintf('<svg %s >' . NEW_LINE . TAB . '%s' . NEW_LINE . '</svg>', $this->renderAttributes(), $this->contents());
     }
 
     /**

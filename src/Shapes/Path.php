@@ -21,8 +21,8 @@ class Path extends Shape
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents,  $attributes, $context);
-        if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
-            $this->dString = $this->attributes()['d'];
+        if (isset($attributes['d']) && !empty($attributes['d'])) {
+            $this->dString = $attributes['d'];
         }
         $this->d = $this->getExistingComands($this->dString);
         $this->removeAtt('d');
@@ -40,8 +40,7 @@ class Path extends Shape
      */
     public function toHtml(): string
     {
-        $dString = $this->content();
-        return sprintf('<%s d="%s" %s/>', $this->name(), $dString, $this->renderAttributes());
+        return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
     }
 
     /**
@@ -95,11 +94,13 @@ class Path extends Shape
             return '';
         }
 
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+        return collect($this->attributes())->map(function ($value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
             }
-
+            if ($attribute === 'd') {
+                return sprintf('d="%s"', $this->content());
+            }
             return sprintf('%s="%s"', Str::snake($attribute, '-'), $value);
         })->implode(' ');
     }

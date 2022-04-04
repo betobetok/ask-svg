@@ -35,7 +35,7 @@ trait RendersAttributes
             return '';
         }
 
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+        return collect($this->attributes())->map(function (string $value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
             }

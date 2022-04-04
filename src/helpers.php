@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+define('NEW_LINE', "");
+define('TAB', "");
 
 use ASK\Svg\Factory;
 use ASK\Svg\Svg;

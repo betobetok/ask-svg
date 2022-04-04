@@ -1,0 +1,34 @@
+<svg id="test" height="130" width="500">
+  <defs id="Element_0">
+    <linearGradient id="Element_1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop id="Element_2" offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+      <stop id="Element_3" offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+    </linearGradient>
+    <filter id="Element_4" x="0" y="3406.34" width="5079.26" height="2172.07" filterUnits="userSpaceOnUse"
+      color-interpolation-filters="sRGB">
+      <feFlood id="Element_5" flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix id="Element_6" in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+        result="hardAlpha" />
+      <feOffset id="Element_7" dy="4" />
+      <feGaussianBlur id="Element_8" stdDeviation="2" />
+      <feComposite id="Element_9" in2="hardAlpha" operator="out" />
+      <feColorMatrix id="Element_10" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+      <feBlend id="Element_11" mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_165_2" />
+      <feBlend id="Element_12" mode="normal" in="SourceGraphic" in2="effect1_dropShadow_165_2" result="shape" />
+    </filter>
+  </defs>
+  <ellipse id="Element_13" cx="100" cy="70" rx="85" ry="55" fill="url(#grad1)" />
+  <text id="Element_14" fill="#ffffff" font-size="45" font-family="Verdana" x="50" y="86">SVG</text>
+  <rect id="Element_15" fill="#fff" stroke="#000" x="-70" y="-70" width="390" height="390" />
+  <g id="Element_16" opacity="0.8">
+    <rect id="Element_17" x="25" y="25" width="200" height="200" fill="lime" stroke-width="4" stroke="pink" />
+    <circle id="Element_18" cx="125" cy="125" r="75" fill="orange" />
+    <polyline id="Element_19" points="50,150 50,200 200,200 200,100" stroke="red" stroke-width="4" fill="none" />
+    <line id="Element_20" x1="50" y1="50" x2="200" y2="200" stroke="blue" stroke-width="4" />
+    <g id="Element_21">
+      <polygon id="Element_22" fill="red" stroke="blue" stroke-width="10" points="350,75  379,161 469,161 397,215
+                    423,301 350,250 277,301 303,215
+                    231,161 321,161" />
+    </g>
+  </g>
+</svg>

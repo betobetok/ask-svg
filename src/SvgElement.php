@@ -233,7 +233,7 @@ abstract class SvgElement implements Htmlable
      */
     protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
     {
-        $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
+        $svg = preg_match("/<" . $tag . "[^>]*\/?>/i", $contents, $svgTag);
 
         if ($svg !== 0 && $svg !== false) {
             $attributes = $this->mergeAttributes($svgTag[0], $attributes);
@@ -353,8 +353,9 @@ abstract class SvgElement implements Htmlable
 
         $ret = '';
         foreach ($this->elements as $element) {
-            if ($element instanceof SvgElement) {
-                $ret .= $element->toHtml();
+            if (is_subclass_of($element, SvgElement::class)) {
+
+                $ret .= $element->toHtml() . NEW_LINE;
             }
         }
 
@@ -507,12 +508,18 @@ abstract class SvgElement implements Htmlable
      */
     public function toHtml(): string
     {
-        if (in_array($this->name(), self::GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
-        } elseif (in_array($this->name(), self::NON_GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+        if (is_a($this, Conteiner::class)) {
+            return sprintf(
+                '<%s %s>' . NEW_LINE .
+                    TAB . '%s' . NEW_LINE .
+                    '</%s>' . NEW_LINE,
+                $this->name(),
+                $this->renderAttributes(),
+                $this->contents(),
+                $this->name()
+            );
         } else {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+            return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
         }
     }
 
@@ -826,5 +833,15 @@ abstract class SvgElement implements Htmlable
     public function hasContext()
     {
         return $this->context !== null;
+    }
+
+    /**
+     * Get $elements = []
+     *
+     * @return  SvgElement[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 }

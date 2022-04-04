@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Shapes;
 
+use ASK\Svg\Configurators\uSvgElement;
 use ASK\Svg\SvgElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -52,15 +53,15 @@ abstract class Shape extends SvgElement
             return '';
         }
 
-        $thisAttributes = Arr::except(get_object_vars($this), array_keys(get_object_vars(new SvgElement('', '', ['transform' => '']))));
-
         return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
             }
 
-            return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
-        })->implode(' ') . ' ' . collect($thisAttributes)->map(function ($value, $attribute) {
+            if ($attribute === 'points') {
+                return sprintf('%s="%s"', Str::snake($attribute, '-'), $this->pointsString());
+            }
+
             return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
         })->implode(' ');
     }
@@ -73,5 +74,12 @@ abstract class Shape extends SvgElement
     public function toHtml(): string
     {
         return sprintf('<%s %s/>', $this->name(), $this->renderAttributes());
+    }
+
+    public function attributes(): array
+    {
+        $thisAttributes = Arr::except(get_object_vars($this), array_keys(get_object_vars(new uSvgElement('', '', ['transform' => '']))));
+        $thisAttributes = Arr::except($thisAttributes, ['startPosition']);
+        return array_merge(parent::attributes(), $thisAttributes);
     }
 }

@@ -6,7 +6,7 @@
 >
     <testsuites>
         <testsuite name="Blade Icons Test Suite">
-            <directory>tests/bladeUiTests</directory>
+            <directory>tests/BladeUiTests</directory>
         </testsuite>
         <testsuite name="ASK SVG">
             <directory>tests/AskSvgTests</directory>

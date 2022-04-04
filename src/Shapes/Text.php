@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Shapes;
 
+use ASK\Svg\Conteiner;
 use ASK\Svg\SvgElement;
 
 /**
  * a Text element in a svg document
  */
-class Text extends Shape
+class Text extends Shape implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
@@ -21,5 +22,11 @@ class Text extends Shape
                 $this->removeAtt($k);
             }
         }
+    }
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

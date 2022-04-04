@@ -33,8 +33,7 @@ class Rect extends Shape
     public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
     {
         parent::__construct($contents, $attributes, $context);
-        $att = $this->attributes();
-        foreach ($att as $k => $val) {
+        foreach ($attributes as $k => $val) {
             if (property_exists($this, $k)) {
                 $this->$k = (float)$val;
                 $this->removeAtt($k);

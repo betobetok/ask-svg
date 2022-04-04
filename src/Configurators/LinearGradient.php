@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Configurators;
 
+use ASK\Svg\Conteiner;
+
 /**
  * A LinearGradient element in a svg document
  */
-class LinearGradient extends Configurator
+class LinearGradient extends Configurator implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
@@ -24,9 +26,16 @@ class LinearGradient extends Configurator
     public function toHtml(): string
     {
         if (isset($this->stop)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+            return sprintf('<%s %s>' . NEW_LINE . TAB . '%s' . NEW_LINE . '</%s>', $this->name(), $this->renderAttributes(), $this->contents(), $this->name());
         } else {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+            return sprintf('<%s %s />' . $this->name(), $this->renderAttributes());
         }
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

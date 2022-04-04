@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Configurators;
 
+use ASK\Svg\Conteiner;
+
 /**
  * A Filter element to be used in a definitions element in a svg document
  */
-class Filter extends Configurator
+class Filter extends Configurator implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
@@ -42,5 +44,12 @@ class Filter extends Configurator
             $this->setElement('fe' . $name, $ret);
             $this->contents = trim(str_replace($tag[0], '', $this->contents));
         }
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }
