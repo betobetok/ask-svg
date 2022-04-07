@@ -2,13 +2,16 @@
 
 namespace Tests\AskSvgTests;
 
-use ASK\Svg\BladeIconsServiceProvider;
+
 use ASK\Svg\Factory;
-use ASK\Svg\Generation\IconGenerator;
-use ASK\Svg\IconsManifest;
+use ASK\Svg\Shapes\Circle;
+use ASK\Svg\Shapes\Ellipse;
+use ASK\Svg\Shapes\Line;
+use ASK\Svg\Shapes\Path;
+use ASK\Svg\Shapes\Polygon;
+use ASK\Svg\Shapes\Polyline;
+use ASK\Svg\Shapes\Rect;
 use ASK\Svg\Svg;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use NumPHP\Core\NumArray;
 
 class SvgTest extends TestCase
@@ -120,12 +123,7 @@ class SvgTest extends TestCase
             "stroke-width" => "4",
             "fill" => "none",
             "style" => "opacity:1",
-            'points' => [
-                0 => new NumArray(['x' => '50', 'y' => '150']),
-                1 => new NumArray(['x' => '50', 'y' => '200']),
-                2 => new NumArray(['x' => '200', 'y' => '200']),
-                3 => new NumArray(['x' => '200', 'y' => '100']),
-            ]
+            'points' => '50,150 50,200 200,200 200,100'
         ];
 
         $this->assertEquals($toCompare, $polylineAtt);
@@ -170,5 +168,125 @@ class SvgTest extends TestCase
             }
         }
         return $elementsRet;
+    }
+
+    /** @test */
+    public function i_can_creat_a_new_svg_object_and_add_a_new_element()
+    {
+        $svg = new Svg('ask-svg');
+        $this->assertTrue($svg instanceof Svg);
+        $expected = <<<'HTML'
+            <svg id="ask-svg" ></svg>
+            HTML;
+        $this->assertEquals($expected, $svg->toHtml());
+
+        $svg->addAnElement(new Path(['d' => 'M0 0 c 2 3 4 1 2 3 z']));
+        $expected = <<<'HTML'
+            <svg id="ask-svg" ><path d="M 0 0 c 2 3 4 1 2 3 z " /></svg>
+            HTML;
+
+        $this->assertEquals($expected, $svg->toHtml());
+    }
+
+    /** @test */
+    public function i_can_add_attributes_to_the_svg_element_and_their_elements()
+    {
+        $svg = new Svg('ask-svg');
+        $svg->setAttribute('style', 'stroke:5px'); // add attribute calling the explicite methode for that
+        $svg->viewBox('0 0 1 1'); // add attribute calling a methode whit the name of attribute
+        $expected = <<<'HTML'
+            <svg id="ask-svg" style="stroke:5px" viewBox="0 0 1 1" ></svg>
+            HTML;
+        $this->assertEquals($expected, $svg->toHtml());
+
+        /** add attribute in the constructor a methode */
+        $svg->addAnElement(new Path([
+            'd'     => 'M0 0 c 2-3 4 1 2 3 z',
+            'style' => 'stroke:2',
+            'class' => 'one'
+        ]));
+        $expected = <<<'HTML'
+            <svg id="ask-svg" style="stroke:5px" viewBox="0 0 1 1" ><path style="stroke:2" class="one" d="M 0 0 c 2 -3 4 1 2 3 z " /></svg>
+            HTML;
+        $this->assertEquals($expected, $svg->toHtml());
+
+        $svg->path[0]->fill('transparent');
+        $expected = <<<'HTML'
+            <svg id="ask-svg" style="stroke:5px" viewBox="0 0 1 1" ><path style="stroke:2" class="one" fill="transparent" d="M 0 0 c 2 -3 4 1 2 3 z " /></svg>
+            HTML;
+        $this->assertEquals($expected, $svg->toHtml());
+    }
+
+    /** @test */
+    public function i_can_create_basic_shapes_in_a_svg()
+    {
+        $svg = new Svg('svg-with-elements');
+        //Add a Path
+        $svg->addAnElement(new Path([
+            'd'         => 'M 10 10 C 20 20, 40 20, 50 10',
+            'stroke'    => 'black',
+            'fill'      => 'transparent'
+        ]));
+
+        //Add a Path
+        $svg->addAnElement(new Circle([
+            'r' => '10',
+            'cx' => '25',
+            'cy' => '50'
+        ]));
+
+        //Add a Rect
+        $svg->addAnElement(new Rect([
+            'x'             => '50',
+            'y'             => '50',
+            'width'         => '30',
+            'height'        => '30',
+            'stroke'        => 'black',
+            'fill'          => 'transparent',
+            'stroke-width'  => '5'
+        ]));
+
+        //Add a Line
+        $svg->addAnElement(new Line([
+            'x1'            => '50',
+            'x2'            => '50',
+            'y1'            => '75',
+            'y2'            => '75',
+            'stroke'        => 'green',
+            'fill'          => 'transparent',
+            'stroke-width'  => '5'
+        ]));
+
+        //Add a Polyline
+        $svg->addAnElement(new Polyline([
+            'points'        => '60 110 65 120 70 115 75 130 80 125 85 140 90 135 95 150 100 145',
+            'stroke'        => 'green',
+            'fill'          => 'transparent',
+            'stroke-width'  => '5'
+        ]));
+
+        //Add a Polygon
+        $svg->addAnElement(new Polygon([
+            'points'        => '50 160 55 180 70 180 60 190 65 205 50 195 35 205 40 190 30 180 45 180',
+            'stroke'        => 'blue',
+            'fill'          => 'transparent',
+            'stroke-width'  => '5'
+        ]));
+
+        //Add a Ellipse
+        $svg->addAnElement(new Ellipse([
+            'rx'            => '10',
+            'ry'            => '30',
+            'cx'            => '25',
+            'cy'            => '50',
+            'stroke'        => 'red',
+            'fill'          => 'blue',
+            'stroke-width'  => '2'
+        ]));
+        file_put_contents(__DIR__ . '/laravel/resources/test/test3.svg', $svg->toHtml());
+        $expected = <<<'HTML'
+            <svg id="svg-with-elements" ><path stroke="black" fill="transparent" d="M 10 10 C 20 20 40 20 50 10 " /><circle r="10" cx="25" cy="50"/><rect x="50" y="50" width="30" height="30" stroke="black" fill="transparent" stroke-width="5"/><line x1="50" x2="50" y1="75" y2="75" stroke="green" fill="transparent" stroke-width="5"/><polyline stroke="green" fill="transparent" stroke-width="5" points="60,110 65,120 70,115 75,130 80,125 85,140 90,135 95,150 100,145" /><polygon stroke="blue" fill="transparent" stroke-width="5" points="50,160 55,180 70,180 60,190 65,205 50,195 35,205 40,190 30,180 45,180" /><ellipse rx="10" ry="30" cx="25" cy="50" stroke="red" fill="blue" stroke-width="2"/></svg>
+            HTML;
+        $this->assertEquals($expected, $svg->toHtml());
     }
 }

@@ -17,7 +17,7 @@ final class Svg extends SvgElement implements Conteiner
     /** @var Style $style */
     public Style $style;
 
-    public function __construct(string $fileName, string $contents, array $attributes = [])
+    public function __construct(string $fileName, string $contents = '', array $attributes = [])
     {
         $name = explode('/', $fileName);
         $this->id(implode('-', $name));

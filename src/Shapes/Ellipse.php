@@ -12,21 +12,9 @@ use NumPHP\Core\NumArray;
  */
 class Ellipse extends Shape
 {
-    /** @var float $cx */
-    protected float $cx = 0;
-
-    /** @var float $cy */
-    protected float $cy = 0;
-
-    /** @var float $rx */
-    protected float $rx = 0;
-
-    /** @var float $ry */
-    protected float $ry = 0;
-
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
+        parent::__construct($attributes, $context);
         $att = $this->attributes();
         foreach ($att as $k => $val) {
             if (property_exists($this, $k)) {

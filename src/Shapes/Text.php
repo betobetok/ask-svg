@@ -12,9 +12,13 @@ use ASK\Svg\SvgElement;
  */
 class Text extends Shape implements Conteiner
 {
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    /** @var string textContent */
+    private $textContent;
+
+    public function __construct(array $attributes = [], SvgElement $context = null, string $contet = '')
     {
-        parent::__construct($contents,  $attributes, $context);
+        $this->textContent = $contet;
+        parent::__construct($attributes, $context);
         $att = $this->attributes();
         foreach ($att as $k => $val) {
             if (property_exists($this, $k)) {
@@ -23,9 +27,12 @@ class Text extends Shape implements Conteiner
             }
         }
     }
+
     public function getContent()
     {
+        return $this->textContent;
     }
+
     public function setContent($content)
     {
     }

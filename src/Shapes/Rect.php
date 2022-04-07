@@ -12,27 +12,9 @@ use NumPHP\Core\NumArray;
  */
 class Rect extends Shape
 {
-    /** @var float $x */
-    protected float $x = 0;
-
-    /** @var float $y */
-    protected float $y = 0;
-
-    /** @var float $width */
-    protected float $width = 0;
-
-    /** @var float $height */
-    protected float $height = 0;
-
-    /** @var float $rx */
-    protected float $rx = 0;
-
-    /** @var float $ry */
-    protected float $ry = 0;
-
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents, $attributes, $context);
+        parent::__construct($attributes, $context);
         foreach ($attributes as $k => $val) {
             if (property_exists($this, $k)) {
                 $this->$k = (float)$val;

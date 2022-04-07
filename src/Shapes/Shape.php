@@ -20,14 +20,14 @@ abstract class Shape extends SvgElement
     /** @var NumArray $startPosition */
     protected NumArray $startPosition;
 
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
         $name = explode('\\', get_class($this));
         $name = strtolower($name[array_key_last($name)]);
 
         $this->isTransformable = true;
 
-        $contents = $this->configAttributesAndContent($name, $contents, $attributes);
+        $contents = $this->configAttributesAndContent($name, '', $attributes);
 
         parent::__construct($name,  $contents,  $attributes, $context);
     }
@@ -53,13 +53,9 @@ abstract class Shape extends SvgElement
             return '';
         }
 
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+        return collect($this->attributes())->map(function (string $value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
-            }
-
-            if ($attribute === 'points') {
-                return sprintf('%s="%s"', Str::snake($attribute, '-'), $this->pointsString());
             }
 
             return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
@@ -76,10 +72,12 @@ abstract class Shape extends SvgElement
         return sprintf('<%s %s/>', $this->name(), $this->renderAttributes());
     }
 
-    public function attributes(): array
+    public function __get($name)
     {
-        $thisAttributes = Arr::except(get_object_vars($this), array_keys(get_object_vars(new uSvgElement('', '', ['transform' => '']))));
-        $thisAttributes = Arr::except($thisAttributes, ['startPosition']);
-        return array_merge(parent::attributes(), $thisAttributes);
+        $attributes = $this->attributes();
+        if (in_array($name, array_keys($attributes))) {
+            return $attributes[$name];
+        }
+        return '';
     }
 }

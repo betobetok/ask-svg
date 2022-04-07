@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Shapes;
 
+use ASK\Svg\Concerns\RendersAttributes;
 use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
 
@@ -12,21 +13,9 @@ use NumPHP\Core\NumArray;
  */
 class Line extends Shape
 {
-    /** @var float $x1 */
-    protected float $x1 = 0;
-
-    /** @var float $y1 */
-    protected float $y1 = 0;
-
-    /** @var float $x2 */
-    protected float $x2 = 0;
-
-    /** @var float $y2 */
-    protected float $y2 = 0;
-
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
+        parent::__construct($attributes, $context);
         $att = $this->attributes();
         foreach ($att as $k => $val) {
             if (property_exists($this, $k)) {

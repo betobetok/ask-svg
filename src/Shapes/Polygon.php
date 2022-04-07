@@ -16,9 +16,9 @@ class Polygon extends Shape
     /** @var array $points */
     protected array $points = [];
 
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
+        parent::__construct($attributes, $context);
 
         if (isset($attributes['points']) && !empty($attributes['points'])) {
             $points = $attributes['points'];
@@ -39,7 +39,7 @@ class Polygon extends Shape
      */
     public function toHtml(): string
     {
-        return sprintf('<%s points="%s" %s/>', $this->name(), $this->pointsString(), $this->renderAttributes());
+        return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
     }
 
     /**
@@ -62,29 +62,27 @@ class Polygon extends Shape
         return $points2ret;
     }
 
-    /**
-     * renderAttributes return a string with attributes in a HTML format
-     * (overloaded Method from RenderAttributes)
-     *
-     * @return string
-     */
-    protected function renderAttributes(): string
-    {
-        if (count($this->attributes()) == 0) {
-            return '';
-        }
+    // /**
+    //  * renderAttributes return a string with attributes in a HTML format
+    //  * (overloaded Method from RenderAttributes)
+    //  *
+    //  * @return string
+    //  */
+    // protected function renderAttributes(): string
+    // {
+    //     $attributes = $this->attributes();
+    //     if (count($attributes) == 0) {
+    //         return '';
+    //     }
 
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
-            if (is_int($attribute)) {
-                return $value;
-            }
-            if ($attribute === 'points') {
-                return sprintf('%s="%s"', Str::snake($attribute, '-'), $this->pointsString());
-            }
+    //     return ' ' . collect($attributes)->map(function (string $value, $attribute) {
+    //         if (is_int($attribute)) {
+    //             return $value;
+    //         }
 
-            return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
-        })->implode(' ');
-    }
+    //         return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
+    //     })->implode(' ');
+    // }
 
     public function pointsString(): string
     {
@@ -97,5 +95,17 @@ class Polygon extends Shape
             }
         }
         return $pointsStr;
+    }
+
+    /**
+     * attributes
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $attributes = parent::attributes();
+        $attributes['points'] = $this->pointsString();
+        return $attributes;
     }
 }

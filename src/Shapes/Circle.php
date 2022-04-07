@@ -12,18 +12,9 @@ use NumPHP\Core\NumArray;
  */
 class Circle extends Shape
 {
-    /** @var float $cx */
-    protected float $cx = 0;
-
-    /** @var float $cy */
-    protected float $cy = 0;
-
-    /** @var float $r */
-    protected float $r = 0;
-
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
+        parent::__construct($attributes, $context);
 
         $att = $this->attributes();
         foreach ($att as $k => $val) {
