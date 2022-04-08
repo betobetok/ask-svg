@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 
 /**
- * Configurator
+ * Configurator is an element within the document that is used to set or modify the behavior of the svg
+ * 
  */
 class Configurator extends SvgElement
 {

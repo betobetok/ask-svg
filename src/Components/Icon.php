@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Components;
+namespace ASK\Svg\Components;
 
 use Closure;
 use Illuminate\View\Component;
 
+/**
+ * Icon
+ */
 final class Icon extends Component
 {
     public string $name;
@@ -16,6 +19,11 @@ final class Icon extends Component
         $this->name = $name;
     }
 
+    /**
+     * render
+     *
+     * @return Closure
+     */
     public function render(): Closure
     {
         return function (array $data) {

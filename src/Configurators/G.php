@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Conteiner;
+use ASK\Svg\Conteiner;
 
 /**
- * G
+ * A group element "g" in a svg document
  */
 class G extends Configurator implements Conteiner
 {
@@ -24,8 +24,10 @@ class G extends Configurator implements Conteiner
 
     /**
      * Get the value of content
+     *
+     * @return array
      */
-    public function getContent()
+    public function getContent(): array
     {
         $vars = get_object_vars($this);
         $att = array_keys(get_class_vars(__CLASS__));
@@ -42,9 +44,10 @@ class G extends Configurator implements Conteiner
     /**
      * Set the value of content
      *
-     * @return  self
+     * @param  mixed $content
+     * @return self
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 

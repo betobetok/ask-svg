@@ -2,26 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use NumPHP\Core\NumArray;
+use ASK\Svg\Conteiner;
 
 /**
- * Pattern
+ * A Pattern element in a svg document
  */
-class Pattern extends Configurator
+class Pattern extends Configurator implements Conteiner
 {
-    /**
-     * 
-     *
-     * @param string $name
-     * @param string $contents
-     * @param array $attributes
-     * @param mixed $context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
         $this->isTransformable = true;
@@ -31,5 +20,12 @@ class Pattern extends Configurator
         }
 
         parent::__construct($contents,  $attributes, $context);
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

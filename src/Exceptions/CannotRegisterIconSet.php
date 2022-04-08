@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Exceptions;
+namespace ASK\Svg\Exceptions;
 
 use Exception;
 

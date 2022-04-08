@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
 use NumPHP\Core\NumArray;
 use NumPHP\LinAlg\LinAlg;
 
 /**
- * Transformation
+ * a Transformation Objet that represent the transformation matrix of a svg transformation
  */
 class Transformation
 {
@@ -24,12 +24,6 @@ class Transformation
     /** @var array $transformations */
     protected $transformations;
 
-    /**
-     *
-     *
-     * @param  string $svgTransformAttribute
-     * @return void
-     */
     public function __construct(string $svgTransformAttribute = '')
     {
         preg_match_all('/([a-z]+)\(([0-9.-]+)[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?[,\s]?([0-9.-]+)?\)/', $svgTransformAttribute, $transformations);
@@ -49,7 +43,7 @@ class Transformation
                     break;
                 case 'scale':
                     $sx = (float)$transformations[2][$k] ?? 1;
-                    $sy = (float)$transformations[3][$k] === 0 ? $sx : (float)$transformations[3][$k];
+                    $sy = (float)$transformations[3][$k] === 0.0 ? $sx : (float)$transformations[3][$k];
                     $matrixS = new NumArray(
                         [
                             [$sx, 0, 0],
@@ -162,7 +156,7 @@ class Transformation
     }
 
     /**
-     * getOriginal
+     * get the original point (x, y) from a transformed point (x', y') through the transformations in the svg object
      *
      * @param  mixed $transformedPoint
      * @return NumArray
@@ -187,7 +181,7 @@ class Transformation
     }
 
     /**
-     * getTransformed
+     * get the transformed point (x', y') from an original point (x, y) through the transformations in the svg object
      *
      * @param  mixed $OriginalPoint
      * @return NumArray
@@ -252,5 +246,25 @@ class Transformation
             }
         }
         return $ret;
+    }
+
+    public function getTransformMatrix($toString = false)
+    {
+        $return = new NumArray([
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+        ]);
+        foreach ($this->transformations as $transformgroup) {
+            foreach ($transformgroup as $transform); {
+                $return->dot($transform);
+            }
+        }
+        if ($toString) {
+            $m = $return->getData();
+            return 'transform="matrix(' . $m[0][0] . ',' . $m[0][1] . ',' . $m[1][0] . ',' . $m[1][1] . ',' . $m[0][2] . ',' . $m[1][2] . ')"';
+        } else {
+            return $return;
+        }
     }
 }

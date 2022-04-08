@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
-use BladeUI\Icons\Components\Icon;
+use ASK\Svg\Components\Icon;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Filesystem\Filesystem;
@@ -12,6 +12,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * BladeIconsServiceProvider
+ * @ignore
+ */
 final class BladeIconsServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -31,7 +35,40 @@ final class BladeIconsServiceProvider extends ServiceProvider
 
     private function registerConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/blade-icons.php', 'blade-icons');
+        $this->mergeConfigFrom(__DIR__ . '/../config/blade-icons.php', 'blade-icons');
+
+        if (file_exists(base_path('ask-svg.json'))) {
+            $config = $this->app->make('config');
+            $configO = $config->get('blade-icons', []);
+            $configFromJ = json_decode(file_get_contents(base_path('ask-svg.json')), true);
+            $result = array_merge_recursive_distinct($configO, $configFromJ);
+            $config->set('blade-icons', $result);
+        }
+    }
+
+    private function makeConfigFile(array $config)
+    {
+        $configFile = '<?php' . PHP_EOL;
+        $configFile .= 'return [' . PHP_EOL;
+        foreach ($config as $key => $value) {
+            $configFile .= $this->writeKeyValue($key, $value);
+        }
+        $configFile .= '];';
+        file_put_contents(__DIR__ . '/../config/config.php', $configFile);
+    }
+
+    private function writeKeyValue(string $key, $value)
+    {
+        if (is_array($value)) {
+            $return = "'" . $key . "' => [" . PHP_EOL;
+            foreach ($value as $k => $val) {
+                $return .= $this->writeKeyValue($k, $val);
+            }
+            $return .= '],' . PHP_EOL;
+        } else {
+            $return = "'" . $key . "' => '" . ($value === false ? 'false' : ($value === true ? 'true' : $value)) . "'," . PHP_EOL;
+        }
+        return $return;
     }
 
     private function registerFactory(): void
@@ -47,7 +84,7 @@ final class BladeIconsServiceProvider extends ServiceProvider
             );
 
             foreach ($config['sets'] ?? [] as $set => $options) {
-                if (! isset($options['disk']) || ! $options['disk']) {
+                if (!isset($options['disk']) || !$options['disk']) {
                     $paths = $options['paths'] ?? $options['path'] ?? [];
 
                     $options['paths'] = array_map(
@@ -109,7 +146,7 @@ final class BladeIconsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/blade-icons.php' => $this->app->configPath('blade-icons.php'),
+                __DIR__ . '/../config/blade-icons.php' => $this->app->configPath('blade-icons.php'),
             ], 'blade-icons');
         }
     }

@@ -2,22 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
+
+use ASK\Svg\Conteiner;
 
 /**
- * RadialGradient
+ * A RadialGradient element in a svg document
  */
-class RadialGradient extends Configurator
+class RadialGradient extends Configurator implements Conteiner
 {
-    /**
-     *
-     * @param string name
-     * @param string contents
-     * @param array attributes
-     * @param SvgElement context
-     *
-     * @return void
-     */
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
         foreach ($attributes as $key => $attribute) {
@@ -28,12 +21,20 @@ class RadialGradient extends Configurator
         $this->name = 'radialGradient';
     }
 
+    /** (overloaded Method from SvgElement) */
     public function toHtml(): string
     {
         if (isset($this->stop)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+            return sprintf('<%s %s>' . NEW_LINE . TAB . '%s' . NEW_LINE . '</%s>', $this->name(), $this->renderAttributes(), $this->contents(), $this->name());
         } else {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+            return sprintf('<%s %s />' . $this->name(), $this->renderAttributes());
         }
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

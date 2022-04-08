@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Console;
+namespace ASK\Svg\Console;
 
-use BladeUI\Icons\Factory;
-use BladeUI\Icons\IconsManifest;
+use ASK\Svg\Factory;
+use ASK\Svg\IconsManifest;
 use Illuminate\Console\Command;
 
+/**
+ * CacheCommand
+ * @ignore description
+ */
 final class CacheCommand extends Command
 {
     /**

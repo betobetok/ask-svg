@@ -1,0 +1,57 @@
+<hr>
+<h2 style = "color:#8888ff" id="{{ class.name }}">Class {{ class.name }}</h2>
+
+<pre> Full name: {{ class.FullyQualifiedStructuralElementName }}</pre>
+{% if class.deprecated %} **Warning:** this class is **deprecated**. This means that this class will likely be removed in a future version.
+{% endif %}
+
+{{ class.summary|raw }}
+
+{{ class.description|raw }}
+
+{% if class.parent is not empty %}      
+Class ***{{ class.name }}*** inherits from class: ```{{ class.parent.name }}```
+{% endif %}
+
+{% if class.interfaces is not empty %}
+>Class *{{ class.name }}* implements: ```{{ class.interfaces|join(', ')|raw }}````
+{% endif %}
+
+---
+
+### {{ class.name }} Properties
+
+<details><summary>Class Properties</summary>
+
+| visibility |    Property    |    Type    |    Description    |
+|:---|---:|:---|:---|
+{% for property in class.properties %}
+{% set typeS = [] %}
+{% for type in property.types %}
+{% set typeS = typeS|merge([type|replace({'\\ASK\\Svg\\': ''})]) %}
+{% endfor %}
+|```{{property.visibility}}```|*{{property.name}}*|`{{typeS ? typeS|join('&#124;')|raw}}`|{{property.description|replace({'|': '&#124;'})|raw}}|
+{% endfor %}
+</details>
+
+---
+
+### {{ firstClass.name }} Methods
+
+<details><summary>Class methods</summary>
+{% for method in class.methods(class) %}
+{% include 'method.md.twig' %}
+{% endfor %}
+</details>
+
+{% if class.tags.see is not empty or class.tags.link is not empty %}
+**See Also:**
+
+{% for see in class.tags.see %}
+* {{ see.reference }} {% if see.description %}- {{ see.description|raw }}{% endif %}
+{% endfor %}
+{% for link in class.tags.link %}
+* {{ link.link }} {% if link.description and link.description != link.link %}- {{ link.description|raw }}{% endif %}
+{% endfor %}
+
+{% endif %}{# class.tags.see || class.tags.link #}

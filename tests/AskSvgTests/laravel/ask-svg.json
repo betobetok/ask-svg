@@ -1,0 +1,8 @@
+{
+    "sets": {
+        "test": {
+            "path": "resources/test",
+            "prefix": "test"
+        }
+    }
+}

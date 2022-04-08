@@ -2,34 +2,31 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
-use BladeUI\Icons\Configurators\Defs;
-use BladeUI\Icons\Configurators\G;
-use BladeUI\Icons\Configurators\Style;
-use Illuminate\Support\Arr;
+use ASK\Svg\Configurators\G;
+use ASK\Svg\Configurators\Style;
+use ASK\Svg\Exceptions\SvgNotFound;
+use Illuminate\Support\Str;
 
 /**
- * Svg
+ * the Svg document
  */
 final class Svg extends SvgElement implements Conteiner
 {
     /** @var Style $style */
     public Style $style;
 
-    /**
-     * 
-     *
-     * @param  string $fileName
-     * @param  string $contents
-     * @param  array $attributes
-     * @return void
-     */
-    public function __construct(string $fileName, string $contents, array $attributes = [])
+    public function __construct(string $fileName, string $contents = '', array $attributes = [])
     {
         $name = explode('/', $fileName);
-        $this->id($fileName);
-        $name = $name[count($name) - 1];
+        $this->id(implode('-', $name));
+        if (is_array($name) && isset($name[1])) {
+            $this->name = $name[1];
+        } elseif (is_array($name) && count($name) === 1) {
+            $this->name = $name[0];
+        }
+
         $this->contents = $contents;
 
         $styleContent = $this->getStylefromContent();
@@ -37,16 +34,16 @@ final class Svg extends SvgElement implements Conteiner
         $this->removeStylefromContent();
 
         $this->contents = $this->configAttributesAndContent('svg', $this->contents, $attributes);
-
+        $this->formatSvgAtributes();
         $this->contents = $this->replaceClasses($this->style, $this->contents);
 
-        parent::__construct('svg', $this->contents);
+        parent::__construct($this->name, $this->contents);
 
         $this->cleanContent();
     }
 
     /**
-     * getStylefromContent
+     * get the Style element from the string content
      *
      * @return string
      */
@@ -57,18 +54,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getDefsfromContent
-     *
-     * @return string
-     */
-    public function getDefsfromContent(): string
-    {
-        preg_match("/(<defs[^>]*>)[^á]*<\/defs>/i", $this->contents(), $match);
-        return $match[0] ?? '';
-    }
-
-    /**
-     * removeStylefromContent
+     * remove the string Style from the string content
      *
      * @return self
      */
@@ -80,44 +66,50 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * removeDefsfromContent
-     *
-     * @return self
+     * get the Style element or set rules in the style element
+     * 
+     * * if it's called without arguments, return the Style Object
+     * * if it's called with an array as argument, set the rules gived in the arguments array
+     * a valid roules array look like thisone:
+     * [
+     * selector1 => [
+     *      property1 => values,
+     *      property2 => values,
+     *      ],
+     * selector2 => [
+     *      property1 => values,
+     *      property2 => values
+     *      ]
+     * ]
+     * 
+     *  * if it's called wit a string, add the style property in the style attribute of the svg element
+     *  a valid string is: 'property: value;'
+     * 
+     * @param  array $arg
+     * @return Style|null|self
      */
-    public function removeDefsfromContent(): self
+    public function style($arg = [])
     {
-        $styleText = $this->getDefsfromContent();
-        $this->contents = str_replace($styleText, '', $this->contents());
-        return $this;
-    }
+        if (is_string($arg)) {
+            if (isset($this->attributes()['style'])) {
+                $style = $this->attributes()['style'];
+                $style = (Str::endsWith($style, ';') ? '' : ';') . $arg;
+                $this->setAttribute('style', $style);
+            } else {
+                $this->setAttribute('style', $arg);
+            }
 
-
-    /**
-     * style
-     *
-     * @return Style
-     */
-    public function style(): Style
-    {
-        return $this->style;
-    }
-
-    /**
-     * getSVGAtributes
-     *
-     * @return array
-     */
-    public function getSVGAtributes(): array
-    {
-        $svg = $this->getElements('svg');
-        if (isset($svg[0])) {
-            return $svg[0]->attributes();
+            return $this;
         }
-        return [];
+        if (count($arg) <= 0) {
+            return $this->style;
+        }
+
+        $this->style->rules($arg);
     }
 
     /**
-     * setStyle
+     * set the Style element
      *
      * @param  Style $style
      * @return self
@@ -129,7 +121,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * replaceClasses
+     * replace the Classes names in the string content
      *
      * @param  Style $style
      * @param  string $content
@@ -145,7 +137,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * mergeSvgs
+     * merge one or more Svgs in this svg
      *
      * @param  Svg[] $param
      * @return Svg
@@ -211,13 +203,19 @@ final class Svg extends SvgElement implements Conteiner
         return $this;
     }
 
+    /**
+     * implements of Htmlable, toHtml return a string form of the svg in HTML format
+     *
+     * @return string
+     */
     public function toHtml(): string
     {
-        return '<svg' . sprintf('%s', $this->renderAttributes()) . ' >' . "\n" . $this->contents() . "\n" . '</svg>';
+        return  sprintf('<svg %s >' . NEW_LINE . TAB . '%s' . NEW_LINE . '</svg>', $this->renderAttributes(), $this->contents());
     }
 
     /**
-     * getAllSvgElements
+     * get all the Svg elements in this svg, 
+     * this array conteins all the elements in order
      *
      * @param  mixed $svg
      * @return array
@@ -228,7 +226,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * cleanContent
+     * cleanContent remove all string contents in the complet object
      *
      * @return self
      */
@@ -250,6 +248,7 @@ final class Svg extends SvgElement implements Conteiner
 
     /**
      * Get the value of content
+     * (Conteiner implement) //TODO implementation of container
      */
     public function getContent()
     {
@@ -258,6 +257,7 @@ final class Svg extends SvgElement implements Conteiner
 
     /**
      * Set the value of content
+     * (Conteiner implement) //TODO implementation of container
      *
      * @return  self
      */
@@ -267,7 +267,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * removeSvgAttribute
+     * removes those attributes that belong exclusively to the svg element
      *
      * @return void
      */
@@ -288,7 +288,7 @@ final class Svg extends SvgElement implements Conteiner
     }
 
     /**
-     * getOnlySvgAttribute
+     * get those attributes that belong exclusively to the svg element
      *
      * @return array
      */
@@ -308,5 +308,54 @@ final class Svg extends SvgElement implements Conteiner
             }
         }
         return $response;
+    }
+
+    public function formatSvgAtributes()
+    {
+        $attributes = $this->attributes();
+        $this->removeAllAttributes();
+        foreach ($attributes as $att => $val) {
+            if ($att !== 'style') {
+                $this->$att($val);
+            } else {
+                $this->setAttribute('style', $val);
+            }
+        }
+    }
+    /**
+     * save
+     *
+     * @param  string $fileName
+     * @param  string $set
+     * @return void
+     */
+    public function save(string $fileName = '', string $inSet = '')
+    {
+        $setFile = explode('-', $this->id());
+        if (count($setFile) <= 1) {
+            $file = $setFile;
+            $set = 'default';
+        } else {
+            $file = $setFile[1];
+            $set = $setFile[0];
+        }
+        if (!empty($fileName)) {
+            $file = $fileName;
+        }
+        if (empty($set)) {
+            $set = 'default';
+        }
+
+        $set = empty($inSet) ? $set : $inSet;
+
+        $sets = app(Factory::class)->all();
+        $setPath = $sets['default']['paths'][0];
+        if (isset($sets[$set])) {
+            $setPath = $sets[$set]['paths'][0];
+        }
+        $filePath = $setPath . '/' . $file . (Str::endsWith($file, '.svg') ? '' : '.svg');
+        if (!file_put_contents($filePath, $this->toHtml())) {
+            throw SvgNotFound::pathNotExist($filePath);
+        }
     }
 }
