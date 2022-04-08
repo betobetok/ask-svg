@@ -10,6 +10,7 @@ on:
     branches: 
     - main
     - dev-Test
+    - Test
 
 jobs:
   build:
@@ -36,6 +37,9 @@ jobs:
     
     - name: Test Blade UI Kit
       run: phpunit --testsuite "Blade Icons Test Suite"
+      
+    - name: Test Blade UI Kit
+      run: phpunit --testsuite "ASK SVG"
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
