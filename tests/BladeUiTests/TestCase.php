@@ -16,6 +16,11 @@ abstract class TestCase extends OrchestraTestCase
 {
     use InteractsWithViews;
 
+    protected function getBasePath()
+    {
+        return __DIR__ . '/../AskSvgTests/laravel';
+    }
+
     protected function prepareSets(array $config = [], array $setOptions = []): Factory
     {
         $factory = new Factory(
