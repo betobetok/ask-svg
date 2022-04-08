@@ -351,10 +351,14 @@ abstract class SvgElement implements Htmlable
         }
 
         $ret = '';
+        if (isset($this->style) && !empty($this->style->rules())) {
+            $ret = $this->style->toHtml();
+        }
+
         foreach ($this->elements as $element) {
             if (is_subclass_of($element, SvgElement::class)) {
 
-                $ret .= $element->toHtml() . NEW_LINE;
+                $ret .= $element->toHtml();
             }
         }
 
@@ -868,5 +872,11 @@ abstract class SvgElement implements Htmlable
         $this->context = $context;
 
         return $this;
+    }
+
+    public function removeElementById(string $id)
+    {
+        $element = $this->getElementById($id);
+        unset($element);
     }
 }

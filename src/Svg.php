@@ -325,10 +325,11 @@ final class Svg extends SvgElement implements Conteiner
     /**
      * save
      *
-     * @param  mixed $fileName
+     * @param  string $fileName
+     * @param  string $set
      * @return void
      */
-    public function save($fileName = '')
+    public function save(string $fileName = '', string $inSet = '')
     {
         $setFile = explode('-', $this->id());
         if (count($setFile) <= 1) {
@@ -344,8 +345,15 @@ final class Svg extends SvgElement implements Conteiner
         if (empty($set)) {
             $set = 'default';
         }
-        $setPath = app(Factory::class)->getSetByPrefix($set)['paths'][0];
-        $filePath = $setPath . '/' . $file;
+
+        $set = empty($inSet) ? $set : $inSet;
+
+        $sets = app(Factory::class)->all();
+        $setPath = $sets['default']['paths'][0];
+        if (isset($sets[$set])) {
+            $setPath = $sets[$set]['paths'][0];
+        }
+        $filePath = $setPath . '/' . $file . (Str::endsWith($file, '.svg') ? '' : '.svg');
         if (!file_put_contents($filePath, $this->toHtml())) {
             throw SvgNotFound::pathNotExist($filePath);
         }

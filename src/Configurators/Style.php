@@ -126,6 +126,7 @@ class Style extends Configurator implements Conteiner
                 }
             }
         }
+        return $this->rules;
     }
 
     /**
@@ -151,14 +152,14 @@ class Style extends Configurator implements Conteiner
             return '';
         }
 
-        $ret = sprintf("<style %s>" . NEW_LINE, $this->renderAttributes());
+        $ret = sprintf("<style %s>", $this->renderAttributes());
 
         foreach ($this->rules() as $ruleName => $declarations) {
-            $ret .=  sprintf("%s {" . NEW_LINE, $ruleName);
+            $ret .=  sprintf("%s {", $ruleName);
             foreach ($declarations as $property => $value) {
-                $ret .=  sprintf("\t%s: %s;" . NEW_LINE, $property, $value);
+                $ret .=  sprintf("%s: %s;", $property, $value);
             }
-            $ret .= "}" . NEW_LINE;
+            $ret .= "}";
         }
         $ret .= '</style>';
         return $ret;

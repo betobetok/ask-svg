@@ -43,7 +43,7 @@ class Transformation
                     break;
                 case 'scale':
                     $sx = (float)$transformations[2][$k] ?? 1;
-                    $sy = (float)$transformations[3][$k] === 0 ? $sx : (float)$transformations[3][$k];
+                    $sy = (float)$transformations[3][$k] === 0.0 ? $sx : (float)$transformations[3][$k];
                     $matrixS = new NumArray(
                         [
                             [$sx, 0, 0],
@@ -246,5 +246,25 @@ class Transformation
             }
         }
         return $ret;
+    }
+
+    public function getTransformMatrix($toString = false)
+    {
+        $return = new NumArray([
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+        ]);
+        foreach ($this->transformations as $transformgroup) {
+            foreach ($transformgroup as $transform); {
+                $return->dot($transform);
+            }
+        }
+        if ($toString) {
+            $m = $return->getData();
+            return 'transform="matrix(' . $m[0][0] . ',' . $m[0][1] . ',' . $m[1][0] . ',' . $m[1][1] . ',' . $m[0][2] . ',' . $m[1][2] . ')"';
+        } else {
+            return $return;
+        }
     }
 }
