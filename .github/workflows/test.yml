@@ -2,12 +2,10 @@ name: Tests
 on:
   push:
     branches: 
-    - main
     - dev-Test
     - Test
   pull_request:
     branches: 
-    - main
     - dev-Test
     - Test
 
