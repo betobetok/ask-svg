@@ -224,20 +224,6 @@ class ComponentsTest extends TestCase
         $view->assertSee($expected, false);
     }
 
-    <!-- /** @test */
-    public function it_strips_the_xml_tag_if_resent()
-    {
-        $this->prepareSets();
-
-        $view = $this->blade('<x-icon-xml/>');
-
-        $expected = <<<'HTML'
-            <svg id="Layer_1" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 665 638" style="enable-background:new 0 0 665 638;" xml:space="preserve" >
-            HTML;
-
-        $view->assertSee($expected, false);
-    } -->
-
     /** @test */
     public function it_files_without_an_svg_extension_are_not_registered()
     {
