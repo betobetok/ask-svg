@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use Illuminate\Support\Str;
 
 /**
- * Defs
+ * a Filter efect used in a definitions element to define a filter
  */
 class FeEfect extends Configurator
 {
@@ -17,11 +17,12 @@ class FeEfect extends Configurator
         foreach ($attributes as $key => $attribute) {
             $this->$key($attribute);
         }
-        SvgElement::__construct('fe'.$name, '',  $attributes, $context);
+        SvgElement::__construct('fe' . $name, '',  $attributes, $context);
     }
-        
+
     /**
-     * renderAttributes
+     * renderAttributes return a string with attributes in a HTML format
+     * (overloaded Method from RenderAttributes)
      *
      * @return string
      */

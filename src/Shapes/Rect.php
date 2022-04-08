@@ -2,47 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
+use ASK\Svg\SvgElement;
 use NumPHP\Core\NumArray;
 
 /**
- * Rect
+ * A Rect element in a svg document
  */
 class Rect extends Shape
 {
-    /** @var float $x */
-    protected float $x = 0;
-
-    /** @var float $y */
-    protected float $y = 0;
-
-    /** @var float $width */
-    protected float $width = 0;
-
-    /** @var float $height */
-    protected float $height = 0;
-
-    /** @var float $rx */
-    protected float $rx = 0;
-
-    /** @var float $ry */
-    protected float $ry = 0;
-
-    /**
-     * __construct
-     *
-     * @param  string $contents
-     * @param  array $attributes
-     * @param  SvgElement $context
-     * @return void
-     */
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents, $attributes, $context);
-        $att = $this->attributes();
-        foreach ($att as $k => $val) {
+        parent::__construct($attributes, $context);
+        foreach ($attributes as $k => $val) {
             if (property_exists($this, $k)) {
                 $this->$k = (float)$val;
                 $this->removeAtt($k);
@@ -51,11 +24,11 @@ class Rect extends Shape
     }
 
     /**
-     * getCenter
+     * get the Center of the rectangle
      *
      * @return NumArray
      */
-    public function getCenter(): NumArray
+    public function center(): NumArray
     {
         return new NumArray([
             'x' => $this->x + $this->width / 2,
@@ -64,11 +37,11 @@ class Rect extends Shape
     }
 
     /**
-     * getArea
+     * get the Area of the rectangle
      *
      * @return float
      */
-    public function getArea(): float
+    public function area(): float
     {
         return $this->x * $this->y;
     }

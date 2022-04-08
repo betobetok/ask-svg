@@ -2,21 +2,42 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use Error;
+use ASK\Svg\Concerns\RendersAttributes;
+use ASK\Svg\Configurators\uSvgElement;
+use ASK\Svg\Shapes\Shape;
 use Exception;
 use Illuminate\Contracts\Support\Htmlable;
 use NumPHP\Core\NumArray;
 
 /**
- * SvgElement
+ * # An element belonging to a svg structure
+ * 
+ * This object represents all the elements within an svg document
+ *
+ * from the svg parent element to the internal elements or 
+ * figures such as \<path\>, \<circle\> or \<g\>, passing through 
+ * configuration elements such as \<style\>, \<defs\> among others 
+ *
+ * all elements are accessible in order through the attribute $elements, 
+ * as well as through the array in the property with the name of the element
+ *
+ * for example: 
+ * - $svg->g returns all <g> elements
+ * - $svg->elements[0] return the first element in the <svg></svg>
+ * - $svg->g[0]->elements[0] return the first element in the <g></g>
+ *
+ * 
+ * @author  Alberto Solorzano Kraemer
+ *
+ * @since 1.0
  */
-class SvgElement implements Htmlable
+abstract class SvgElement implements Htmlable
 {
     use RendersAttributes;
 
+    /** @internal description*/
     public const SVG_ATTRIBUTES = [
         'version',
         'width',
@@ -24,6 +45,7 @@ class SvgElement implements Htmlable
         'viewBox',
     ];
 
+    /** @ignore */
     public const GRAPH_ELEMENTS = [
         'clipPath',
         'g',
@@ -43,6 +65,7 @@ class SvgElement implements Htmlable
         'radialGradient',
     ];
 
+    /** @ignore */
     public const NON_GROUP_ELEMENTS = [
         'line',
         'rect',
@@ -59,6 +82,7 @@ class SvgElement implements Htmlable
         'stop',
     ];
 
+    /** @ignore */
     public const GROUP_ELEMENTS = [
         'g',
         'style',
@@ -74,6 +98,7 @@ class SvgElement implements Htmlable
         'radialGradient',
     ];
 
+    /** @ignore */
     public const SHAPES = [
         'line',
         'rect',
@@ -85,6 +110,7 @@ class SvgElement implements Htmlable
         'text',
     ];
 
+    /** @ignore */
     private const TO_REPLACE = [
         'serch' => [
             'lineargradient',
@@ -100,29 +126,56 @@ class SvgElement implements Htmlable
         ],
     ];
 
-    /** @var string $name */
+    /**
+     * The name of some SVG element, for example, path, g, circle
+     *  
+     * @var string $name 
+     */
     protected $name;
 
-    /** @var SvgElement[] $elements */
+    /** 
+     * The array $elements contains all the elements of the parent SVG element in the order in which they are found.
+     * @var SvgElement[] $elements = [] 
+     */
     protected $elements = [];
 
-    /** @var string $contents */
+    /**
+     * A temporari string with the content of the file .svg 
+     *    
+     * @var string $contents 
+     */
     protected $contents;
 
-    /** @var SvgElement $context */
+    /**
+     * If exist, the parent element is saved in the context property 
+     * 
+     * @var SvgElement $context 
+     */
     protected $context;
 
-    /** @var Transformation $transforms */
+    /**
+     * When the SVG element has some transformations, the Transformation 
+     * property allows you to save and manipulate these transformations within a matrix context
+     * 
+     * @var Transformation $transforms 
+     */
     protected $transforms;
 
-    /** @var bool $isTransformable */
+    /** 
+     * If the element allows the use of the Transformation attribute, this element is set to true, 
+     * if this property is set to false, the element does not allow saving transformations. 
+     * 
+     * @var bool $isTransformable = false
+     */
     protected $isTransformable = false;
 
     /**
-     * @var string      $name   the name of a svg element (e. g, svg, path, circle, etc)
-     * @var string      $content  the content of a svg file or a part of them
-     * @var array       $attributes  the array with the attributres for this element
-     * @var SvgElement  $context 
+     *      
+     * @param  string $name
+     * @param  string $contents
+     * @param  array $attributes
+     * @param  mixed $context
+     * @return void
      */
     public function __construct(string $name, string $contents, array $attributes = [], SvgElement $context = null)
     {
@@ -135,6 +188,8 @@ class SvgElement implements Htmlable
         $this->configAttributesAndContent('', '', $attributes);
 
         $this->getTransformations();
+        $tmp = explode('\\', get_class($this));
+        $name = strtolower(array_pop($tmp));
 
         if ((in_array($name, self::GROUP_ELEMENTS) && $name !== 'style') || !in_array($name, self::NON_GROUP_ELEMENTS)) {
             $this->getAllElements();
@@ -144,24 +199,48 @@ class SvgElement implements Htmlable
         }
     }
 
+    /**
+     * Make this element Transformable
+     *
+     * @return void
+     */
     public function makeTransformable()
     {
         $this->isTransformable = true;
         $this->getTransformations();
     }
 
+    /**
+     * make this element Untransformable
+     *
+     * @return void
+     */
     public function makeUntransformable()
     {
         $this->isTransformable = false;
         unset($this->transforms);
     }
 
+    /**
+     * @internal configAttributesAndContent
+     * prepare the content and attributes when a new Svg element is creted
+     *
+     * @param  string $tag
+     * @param  string $contents
+     * @param  array $attributes
+     * 
+     * @return string
+     */
     protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
     {
-        $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
+        $svg = preg_match("/<" . $tag . "[^>]*\/?>/i", $contents, $svgTag);
 
         if ($svg !== 0 && $svg !== false) {
             $attributes = $this->mergeAttributes($svgTag[0], $attributes);
+            if (isset($attributes['id'])) {
+                $this->id($attributes['id']);
+            }
+
             if ($tag === 'svg') {
                 $contentFirst = strrpos($contents,  $svgTag[0]) + strlen($svgTag[0]);
                 $contetnleng = strrpos($contents, '</' . $tag . '>') - $contentFirst;
@@ -171,12 +250,21 @@ class SvgElement implements Htmlable
         }
 
         foreach ($attributes as $key => $attribute) {
-            $this->$key($attribute);
+            if (is_int($key)) {
+                $this->setAttribute($attribute);
+            } else {
+                $this->setAttribute($key, $attribute);
+            }
         }
-
         return $contents;
     }
 
+    /**
+     * @ignore __get
+     *
+     * @param  mixed $name
+     * @return void
+     */
     public function __get($name)
     {
         try {
@@ -187,24 +275,32 @@ class SvgElement implements Htmlable
                 return $this->$name;
             }
         } catch (Exception $e) {
-            throw new Error("This Methode don't exist" . $e->getMessage() . "\n");
+            throw $e->getMessage();
         }
     }
 
     /**
-     * name
+     * get or set the name of the element
      *
-     * @return string
+     * @param string $arg
+
+     * @return string|self
      */
-    public function name(): string
+    public function name(string $arg = ''): string
     {
-        return $this->name;
+        if (empty($arg)) {
+            return $this->name ?? '';
+        } else {
+            $this->name = $arg;
+            return $this;
+        }
     }
 
     /**
-     * id
+     * get or set the id attribute of the element in the attributes property
      *
      * @param string $arg
+     * 
      * @return string|self
      */
     public function id($arg = '')
@@ -218,16 +314,33 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * transforms get the Transformation Object for the element 
+     * set or get the Transformation Object for the element 
      *
-     * @return Transformation
+     * @return Transformation|string
+     * 
+     * @return string|self|null
      */
-    public function transforms(): Transformation
+    public function transform($arg = null)
     {
-        return $this->transforms;
+        if (empty($arg) && isset($this->transforms)) {
+            return $this->transforms;
+        } elseif (empty($arg) && !isset($this->transforms)) {
+            return null;
+        } else {
+            if (is_string($arg)) {
+                $this->setAttribute('transform', $arg);
+                $this->getTransformations();
+                return $this;
+            } elseif ($arg instanceof Transformation) {
+                $this->transforms = $arg;
+                return $this;
+            }
+        }
     }
     /**
-     * contents
+     * get the string contents of the elements
+     * - this method is similar at toHtml 
+     *   but get just the string of the content without the tag string
      *
      * @return string
      */
@@ -238,9 +351,14 @@ class SvgElement implements Htmlable
         }
 
         $ret = '';
+        if (isset($this->style) && !empty($this->style->rules())) {
+            $ret = $this->style->toHtml();
+        }
+
         foreach ($this->elements as $element) {
-            if ($element instanceof SvgElement) {
-                $ret .= $element->toHtml() . "\n";
+            if (is_subclass_of($element, SvgElement::class)) {
+
+                $ret .= $element->toHtml();
             }
         }
 
@@ -248,7 +366,7 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * removeContents
+     * remove the string Contents property from the object
      *
      * @return self
      */
@@ -259,7 +377,7 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * setContents
+     * set the string Contents property in the object
      *
      * @param  string $contents
      * @return self
@@ -271,21 +389,23 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * getContext
+     * get the property Context that is the parent SVG element of this element
      *
-     * @return self
+     * @return SvgElement|null
      */
-    public function getContext(): self
+    public function getContext(): ?SvgElement
     {
         return $this->context;
     }
 
     /**
-     * getAllElements
+     * get all Elements from the string content
+     * this method make all found elements as SvgElement Objects and
+     * put in a property with the element name
      *
      * @return void
      */
-    public function getAllElements(): void
+    public function getAllElements(): void  //TODO get comentar as element
     {
         if (!empty($this->elements)) {
             return;
@@ -337,20 +457,36 @@ class SvgElement implements Htmlable
         }
     }
 
-    public function setElement(string $name, ?SvgElement $element)
+    /**
+     * set a neu Element in this object
+     *
+     * @param  string $name
+     * @param  mixed $element
+     * @return void
+     */
+    public function setElement(string $name = '', ?SvgElement $element)
     {
+        if (empty($name) || in_array($name, self::GRAPH_ELEMENTS)) {
+            $name = $element->name();
+        }
         if (!empty($element) && $name !== 'style') {
             $this->elements[] = $element;
             if (isset($this->$name)) {
-                $this->$name[] = $element;
+                array_push($this->$name, $element);
             } else {
                 $this->$name = [$element];
             }
         }
     }
 
+    public function addAnElement(SvgElement $element)
+    {
+        $element->setContext($this);
+        $this->setElement('', $element);
+    }
+
     /**
-     * mergeAttributes
+     * merge the attributes conteined in a string tag with the array attributes
      *
      * @param string    $tag
      * @param array     $attributes
@@ -364,107 +500,43 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * getElements
-     *
-     * @param  string    $element
-     * 
-     * @return SvgElement|false
-     */
-    public function getElements(string $element)
-    {
-        $ret = [];
-        if (in_array($element, self::GROUP_ELEMENTS) || $element === 'svg') {
-            if ($this->contents !== '') {
-                $ret = $this->findGroupElement($this->contents, $element);
-            }
-        } elseif (in_array($element, self::NON_GROUP_ELEMENTS)) {
-            $content = $this->removeGroupElements($this->contents);
-            $ret = $this->findNonGroupElement($content, $element);
-        } else {
-            return false;
-        }
-        return $ret;
-    }
-
-    /**
-     * removeGroupElements
-     *
-     * @param  string $contents
-     * @return string
-     */
-    public function removeGroupElements(string $contents): string
-    {
-        $ret = $contents;
-        foreach (self::GROUP_ELEMENTS as $groupElement) {
-            $count = mb_substr_count($ret, '<' . $groupElement);
-            if ($count <= 0) {
-                continue;
-            }
-
-            if ($count === 1) {
-                $posStart = stripos($ret, '<' . $groupElement);
-                $posEnde = stripos($ret, '</' . $groupElement . '>');
-                $cont = trim(substr($ret, $posStart, $posEnde - $posStart + strlen('</' . $groupElement . '>')));
-                $ret = str_replace($cont, '', $ret);
-                continue;
-            }
-
-            $posStart[0] = stripos($ret, '<' . $groupElement);
-            $posEnde[0] = stripos($ret, '</' . $groupElement . '>');
-            for ($i = 1; $i < $count; $i++) {
-                $posStart[$i] = stripos($ret, '<' . $groupElement, $posStart[$i - 1] + 2);
-                $posEnde[$i] = stripos($ret, '</' . $groupElement, $posEnde[$i - 1] + 2);
-            }
-            for ($i = 0; $i < $count; $i++) {
-                $pos[$posStart[$i]] = 1;
-                $pos[$posEnde[$i]] = -1;
-            }
-            ksort($pos);
-            $n = 0;
-
-            $first = array_key_first($pos);
-            $tmp = [];
-            foreach ($pos as $key => $val) {
-                if ($first === true) {
-                    $first = $key;
-                }
-                $n += $val;
-                if ($n === 0) {
-                    preg_match("/<" . $groupElement . "[^>]*>/i", $ret, $tag, 0, $first);
-                    $tmp[] = trim(substr($ret, $first, $key - $first + strlen('</' . $groupElement . '>')));
-                    $first = true;
-                }
-            }
-            $ret = trim(str_replace($tmp, '', $ret));
-        }
-        return $ret;
-    }
-
-    /**
-     * removeComents Deprecate
+     * remove coments from the string content
      *
      * @return self
      */
     public function removeComents(): self
     {
-        // $this->contents = preg_replace("/(<!--.+-->\n)/i", '', $this->contents());
+        if (!isset($this->contents)) {
+            return $this;
+        }
+        $this->contents = preg_replace("/(<!--.+-->\n?)/i", '', $this->contents);
         return $this;
     }
 
-
+    /**
+     * implements of Htmlable, toHtml return a string form of the svg element in HTML format
+     *
+     * @return string
+     */
     public function toHtml(): string
     {
-        if (in_array($this->name(), self::GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
-        } elseif (in_array($this->name(), self::NON_GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+        if (is_a($this, Conteiner::class)) {
+            return sprintf(
+                '<%s %s>' . NEW_LINE .
+                    TAB . '%s' . NEW_LINE .
+                    '</%s>' . NEW_LINE,
+                $this->name(),
+                $this->renderAttributes(),
+                $this->contents(),
+                $this->name()
+            );
         } else {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+            return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
         }
     }
 
     /**
-     * removeId
+     * remove the property Id
      *
      * @return self
      */
@@ -489,7 +561,7 @@ class SvgElement implements Htmlable
             if ($key === 'contents') {
                 continue;
             }
-            if (is_a($element, 'BladeUI\Icons\SvgElement')) {
+            if (is_a($element, __NAMESPACE__ . '\SvgElement')) {
                 $ret[$key] =  $element->toArray();
                 continue;
             }
@@ -502,7 +574,7 @@ class SvgElement implements Htmlable
             }
             if (is_array($element)) {
                 foreach ($element as $k => $elm) {
-                    if (is_a($elm, 'BladeUI\Icons\SvgElement')) {
+                    if (is_a($elm, __NAMESPACE__ . '\SvgElement')) {
                         $ret[$key . '-' . $k] = $elm->toArray();
                     } else {
                         $ret[$key . '-' . $k] = $elm;
@@ -525,16 +597,19 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * findGroupElement
+     * find the first group element with the name $element and 
+     * return the new corresponding SvgElement instance
+     * or null if not found
      *
-     * @param  string $content
      * @param  string $element
      * @return SvgElement|null
      */
     public function findFirstGroupElement(string $element): ?SvgElement
     {
-
         $content = $this->contents;
+        if (empty($content)) {
+            $this->findFirstElement($element);
+        }
         $count = preg_match_all("/<(" . $element . ")(?:\s)?([^>\/]*)(\/)?>/i", $content, $tag);
         if ($count <= 0) {
             return null;
@@ -584,14 +659,18 @@ class SvgElement implements Htmlable
                 preg_match("/<" . $element . "[^>]*>/i", $content, $tag2, 0, $first);
                 $con = trim(substr($content, $first + strlen($tag2[0]) + 1, $key - $first - strlen($tag2[0]) - 1));
                 $attributes = $this->getElementAttributes($tag2[0]);
-                $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
-                $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+                $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
+                $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
                 if (class_exists($classElement)) {
-                    $tmp = new $classElement($con, $attributes, $this);
+                    if (class_implements($classElement) === 'Conteiner') {
+                        $tmp = new $classElement($attributes, $this, $con);
+                    } else {
+                        $tmp = new $classElement($attributes, $this);
+                    }
                 } elseif (class_exists($classElement2)) {
                     $tmp = new $classElement2($con, $attributes, $this);
                 } else {
-                    $tmp = new SvgElement($element, $con, $attributes, $this);
+                    $tmp = new uSvgElement($element, $con, $attributes, $this);
                 }
 
                 $elementsToRemove[] = trim(substr($content, $first, $key - $first + strlen('</' . $element . '>')));
@@ -602,13 +681,27 @@ class SvgElement implements Htmlable
         }
     }
 
-    public function fillterPositions($element)
+    /**
+     * return the first Element by name in the array "elements" 
+     * or null if not found
+     *
+     * @param  string $elementName
+     * @return SvgElement|null
+     */
+    public function findFirstElement(string $elementName): ?SvgElement
     {
-        return $element !== false;
+        foreach ($this->elements as $element) {
+            if ($element->name() === $elementName) {
+                return $element;
+            }
+        }
+        return null;
     }
 
     /**
-     * findNonGroupElement
+     * find the first non-group element with the name $element and 
+     * return the new corresponding SvgElement instance
+     * or null if not found
      *
      * @param  string $element
      * @return SvgElement|null
@@ -616,6 +709,9 @@ class SvgElement implements Htmlable
     public function findFirstNonGroupElement(string $element): ?SvgElement
     {
         $content = $this->contents;
+        if (empty($content)) {
+            $this->findFirstElement($element);
+        }
         preg_match("/<" . $element . "[^>]+\/?>/i", $content, $match);
 
         $tag = $match === [] ? '' : $match[0];
@@ -625,23 +721,23 @@ class SvgElement implements Htmlable
             return null;
         }
 
-        $content = '';
         $attributes = $this->getElementAttributes($tag);
-        $classElement = 'BladeUI\\Icons\\Shapes\\' . ucfirst($element);
-        $classElement2 = 'BladeUI\\Icons\\Configurators\\' . ucfirst($element);
+        $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
+        $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
         if (class_exists($classElement)) {
-            $tmp = new $classElement($content, $attributes, $this);
+            $tmp = new $classElement($attributes, $this);
         } elseif (class_exists($classElement2)) {
             $tmp = new $classElement2($content, $attributes, $this);
         } else {
-            $tmp = new SvgElement($element, $content, $attributes, $this);
+            $tmp = new uSvgElement($element, $content, $attributes, $this);
         }
         $this->contents = str_replace($tag, '', $this->contents);
         return $tmp;
     }
 
     /**
-     * getElementAttributes
+     * get the attributes of a element froma string tag
+     * (<tag attribute="value"></tag>)
      *
      * @param  string $tag
      * @return array
@@ -656,36 +752,8 @@ class SvgElement implements Htmlable
         return  $attributes;
     }
 
-
     /**
-     * cleanGroup
-     *
-     * @return self
-     */
-    public function cleanGroup(): self
-    {
-        foreach ($this as $component => $svgElement) {
-            if ($component === 'g') {
-                foreach ($this->$component as $k => $g) {
-                    if (property_exists($g, 'g') && count($g->g) === 1) {
-                        $gOld = $g->g[0];
-                        $gAttribute = $g->attributes();
-                        $this->$component[$k] = $gOld;
-                        $gAttribute = array_merge($this->$component[$k]->attributes(), $gAttribute);
-                        foreach ($gAttribute as $attName => $val) {
-                            $this->$component[$k]->$attName($val);
-                        }
-                    }
-                    $g->clean();
-                }
-            }
-        }
-        return $this;
-    }
-
-
-    /**
-     * getTransformations
+     * get the Transformations of the element and make the corresponding Transformation Object
      *
      * @return void
      */
@@ -705,7 +773,8 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * getElementById
+     * find an element by its id and return it
+     * or null if not found
      *
      * @param  string $id
      * @return SvgElement|null
@@ -734,7 +803,8 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * getStartPointById
+     * get the start position point of an Shape element by its Id
+     * and return it or null if not found
      *
      * @param  string $id
      * @return NumArray|null
@@ -747,13 +817,17 @@ class SvgElement implements Htmlable
             return null;
         }
 
+        if (!($element instanceof Shape)) {
+            return null;
+        }
+
         $point = $element->getStartPosition();
         $transforms = [];
-        $transforms[] = $element->transforms();
+        $transforms[] = $element->transform();
 
         do {
             $element = $element->getContext();
-            $transforms[] = $element->transforms();
+            $transforms[] = $element->transform();
         } while ($element->hasContext());
 
         $n = count($transforms) - 1;
@@ -761,14 +835,13 @@ class SvgElement implements Htmlable
             if (!($transforms[$i] instanceof Transformation)) {
                 continue;
             }
-
             $point = $transforms[$i]->getTransformed($point);
         }
         return $point;
     }
 
     /**
-     * hasContext
+     * return true if the element has content or false otherwise
      *
      * @return void
      */
@@ -778,15 +851,32 @@ class SvgElement implements Htmlable
     }
 
     /**
-     * transform
+     * Get $elements = []
      *
-     * @param  string $transforms
-     * @return void
+     * @return  SvgElement[]
      */
-    public function transform(string $transforms)
+    public function getElements()
     {
-        $this->setAttribute('transform', $transforms);
-        $this->getTransformations();
+        return $this->elements;
+    }
+
+    /**
+     * Set $context
+     *
+     * @param  SvgElement  $context  $context
+     *
+     * @return  self
+     */
+    public function setContext(SvgElement $context): self
+    {
+        $this->context = $context;
+
         return $this;
+    }
+
+    public function removeElementById(string $id)
+    {
+        $element = $this->getElementById($id);
+        unset($element);
     }
 }

@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use NumPHP\Core\NumArray;
+use ASK\Svg\Conteiner;
 
 /**
- * Font
+ * A Font element into a svg document
  */
-class Font extends Configurator
+class Font extends Configurator implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
@@ -19,5 +18,12 @@ class Font extends Configurator
         }
 
         parent::__construct($contents,  $attributes, $context);
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

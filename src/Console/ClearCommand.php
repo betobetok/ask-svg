@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Console;
+namespace ASK\Svg\Console;
 
-use BladeUI\Icons\IconsManifest;
+use ASK\Svg\IconsManifest;
 use Illuminate\Console\Command;
 
+/**
+ * ClearCommand
+ * @ignore description
+ */
 final class ClearCommand extends Command
 {
     /**

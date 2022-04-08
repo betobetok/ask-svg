@@ -2,29 +2,23 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
-use NumPHP\Core\NumArray;
+use ASK\Svg\Conteiner;
+use ASK\Svg\SvgElement;
 
 /**
- * Text
+ * a Text element in a svg document
  */
-class Text extends Shape
+class Text extends Shape implements Conteiner
 {
+    /** @var string textContent */
+    private $textContent;
 
-    /**
-     * 
-     * @param string $name
-     * @param string $contents
-     * @param array $attributes
-     * @param SvgElement $context
-     *
-     * @return void
-     */
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null, string $contet = '')
     {
-        parent::__construct($contents,  $attributes, $context);
+        $this->textContent = $contet;
+        parent::__construct($attributes, $context);
         $att = $this->attributes();
         foreach ($att as $k => $val) {
             if (property_exists($this, $k)) {
@@ -32,5 +26,14 @@ class Text extends Shape
                 $this->removeAtt($k);
             }
         }
+    }
+
+    public function getContent()
+    {
+        return $this->textContent;
+    }
+
+    public function setContent($content)
+    {
     }
 }

@@ -1,2 +1,7 @@
 composer.lock
 vendor
+phpdoc.xmls
+templates/
+build/
+.phpunit.result.cache
+config/config.php

@@ -1,0 +1,17 @@
+
+{% for firstClass in project.indexes.classes|filter(v => v.FullyQualifiedStructuralElementName == '\\ASK\\Svg\\Svg') %}
+* [{{ firstClass.name }} - {{ firstClass.summary|raw }}](#{{ firstClass.name }}).
+{% endfor %}
+{% for firstClass in project.indexes.classes|filter(v => v.name == 'SvgElement') %}
+* [{{ firstClass.name }} - {{ firstClass.summary|raw }}](#{{ firstClass.name }}).
+{% endfor %}
+{% for abstractClass in project.indexes.classes %}
+{% if abstractClass.abstract %}
+* [{{ abstractClass.name }} - {{ abstractClass.summary|raw }}](#{{ abstractClass.name }}).
+{% for class in project.indexes.classes %}
+{% if not class.abstract and class.parent.name == abstractClass.name %}
+	- [{{ class.name }} - {{ class.summary|raw }}](#{{ class.name }}).
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}

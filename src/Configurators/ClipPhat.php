@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Configurators;
+namespace ASK\Svg\Configurators;
 
-use BladeUI\Icons\Concerns\RendersAttributes;
-use NumPHP\Core\NumArray;
+use ASK\Svg\Conteiner;
 
 /**
- * ClipPhat
+ * ClipPhat in a svg document
  */
-class ClipPhat extends Configurator
+class ClipPhat extends Configurator implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
@@ -19,5 +18,11 @@ class ClipPhat extends Configurator
         }
 
         parent::__construct($contents,  $attributes, $context);
+    }
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

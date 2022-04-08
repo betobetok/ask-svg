@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Generation;
+namespace ASK\Svg\Generation;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
@@ -26,6 +26,11 @@ final class IconGenerator
         return new self($config);
     }
 
+    /**
+     * generate
+     *
+     * @return void
+     */
     public function generate(): void
     {
         foreach ($this->sets as $set) {
@@ -35,7 +40,7 @@ final class IconGenerator
                 $filename = Str::of($file->getFilename());
                 $filename = $this->applyPrefixes($set, $filename);
                 $filename = $this->applySuffixes($set, $filename);
-                $pathname = $destination.$filename;
+                $pathname = $destination . $filename;
 
                 $this->filesystem->copy($file->getRealPath(), $pathname);
 
@@ -46,11 +51,17 @@ final class IconGenerator
         }
     }
 
+    /**
+     * getDestinationDirectory
+     *
+     * @param  array $set
+     * @return string
+     */
     private function getDestinationDirectory(array $set): string
     {
         $destination = Str::finish($set['destination'], DIRECTORY_SEPARATOR);
 
-        if (! Arr::get($set, 'safe', false)) {
+        if (!Arr::get($set, 'safe', false)) {
             $this->filesystem->deleteDirectory($destination);
         }
 
@@ -59,6 +70,13 @@ final class IconGenerator
         return $destination;
     }
 
+    /**
+     * applyPrefixes
+     *
+     * @param  mixed $set
+     * @param  mixed $filename
+     * @return Stringable
+     */
     private function applyPrefixes($set, Stringable $filename): Stringable
     {
         if ($set['input-prefix'] ?? false) {
@@ -72,14 +90,21 @@ final class IconGenerator
         return $filename;
     }
 
+    /**
+     * applySuffixes
+     *
+     * @param  mixed $set
+     * @param  mixed $filename
+     * @return Stringable
+     */
     private function applySuffixes($set, Stringable $filename): Stringable
     {
         if ($set['input-suffix'] ?? false) {
-            $filename = $filename->replace($set['input-suffix'].'.svg', '.svg');
+            $filename = $filename->replace($set['input-suffix'] . '.svg', '.svg');
         }
 
         if ($set['output-suffix'] ?? false) {
-            $filename = $filename->replace('.svg', $set['output-suffix'].'.svg');
+            $filename = $filename->replace('.svg', $set['output-suffix'] . '.svg');
         }
 
         return $filename;

@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons;
+namespace ASK\Svg;
 
-use BladeUI\Icons\Components\Svg as SvgComponent;
-use BladeUI\Icons\Exceptions\CannotRegisterIconSet;
-use BladeUI\Icons\Exceptions\SvgNotFound;
+use ASK\Svg\Components\SvgComponent;
+use ASK\Svg\Exceptions\CannotRegisterIconSet;
+use ASK\Svg\Exceptions\SvgNotFound;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\directoryExists;
+
+/**
+ * Factory
+ * @ignore
+ */
 final class Factory
 {
     private Filesystem $filesystem;
@@ -60,7 +67,7 @@ final class Factory
      */
     public function add(string $set, array $options): self
     {
-        if (! isset($options['prefix'])) {
+        if (!isset($options['prefix'])) {
             throw CannotRegisterIconSet::prefixNotDefined($set);
         }
 
@@ -151,6 +158,40 @@ final class Factory
         }
     }
 
+    public function svgCache(Svg $svg): Svg
+    {
+        [$set, $name] = $this->splitSetAndName('-', $svg->id());
+        if (isset($this->cache[$set])) {
+            $this->cache[$set][$name] = $svg->toHtml();
+            return $svg;
+        }
+
+        if ($set === 'default') {
+            $this->cache[$set][$name] = $svg->toHtml();
+            return $svg;
+        }
+        $path = App::basePath("resources/" . $set);
+        $config = [
+            "paths"         => $path,
+            "disk"          => "",
+            "prefix"        => $set,
+            "fallback"      => "",
+            "class"         => "",
+            "attributes"    => [],
+        ];
+
+        if (!file_exists($path)) {
+            mkdir($path);
+        }
+
+        $this->add($set, $config);
+        $this->cache[$set][$name] = $svg->toHtml();
+        $this->manifest->set($svg);
+        $this->registerComponents();
+
+        return $svg;
+    }
+
     /**
      * @throws SvgNotFound
      */
@@ -159,7 +200,6 @@ final class Factory
         if (isset($this->cache[$set][$name])) {
             return $this->cache[$set][$name];
         }
-
         if (isset($this->sets[$set])) {
             foreach ($this->sets[$set]['paths'] as $path) {
                 try {
@@ -218,12 +258,24 @@ final class Factory
         } elseif (is_array($class)) {
             $attributes = $class;
 
-            if (! isset($attributes['class']) && $class = $this->buildClass($set, '')) {
+            if (!isset($attributes['class']) && $class = $this->buildClass($set, '')) {
                 $attributes['class'] = $class;
             }
         }
 
-        return array_merge($attributes, $this->config['attributes'], (array) ($this->sets[$set]['attributes'] ?? []));
+        $attributes = array_merge(
+            $attributes,
+            $this->config['attributes'],
+            (array) ($this->sets[$set]['attributes'] ?? []),
+        );
+
+        foreach ($attributes as $key => $value) {
+            if (is_string($value)) {
+                $attributes[$key] = str_replace('"', '&quot;', $value);
+            }
+        }
+
+        return $attributes;
     }
 
     private function buildClass(string $set, string $class): string

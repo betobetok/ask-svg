@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BladeUI\Icons\Shapes;
+namespace ASK\Svg\Shapes;
 
-use BladeUI\Icons\SvgElement;
-use Exception;
+use ASK\Svg\SvgElement;
+use Illuminate\Support\Str;
 
 /**
- * Path
+ * A Path element in a svg document
  */
 class Path extends Shape
 {
@@ -18,21 +18,11 @@ class Path extends Shape
     /** @var array d*/
     protected array $d = [];
 
-    /**
-     * 
-     *
-     * @param  mixed $name
-     * @param  mixed $contents
-     * @param  mixed $attributes
-     * @param  SvgElement $context
-     * @return void
-     */
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
-
-        if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
-            $this->dString = $this->attributes()['d'];
+        parent::__construct($attributes, $context);
+        if (isset($attributes['d']) && !empty($attributes['d'])) {
+            $this->dString = $attributes['d'];
         }
         $this->d = $this->getExistingComands($this->dString);
         $this->removeAtt('d');
@@ -44,14 +34,13 @@ class Path extends Shape
     }
 
     /**
-     * toHtml
+     * (overloaded Method from SvgElement)
      *
      * @return string
      */
     public function toHtml(): string
     {
-        $dString = $this->content();
-        return sprintf('<%s d="%s" %s/>', $this->name(), $dString, $this->renderAttributes());
+        return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
     }
 
     /**
@@ -59,7 +48,7 @@ class Path extends Shape
      *
      * @return string
      */
-    public function content(): string
+    public function d(): string
     {
         $content = '';
         foreach ($this->d as $comand) {
@@ -71,7 +60,7 @@ class Path extends Shape
     }
 
     /**
-     * getExistingComands get the existing comands in a d attribute of a Paht element
+     * getExistingComands get the existing comands in a d attribute from a string
      *
      * @param  string $d
      * @return array
@@ -82,11 +71,10 @@ class Path extends Shape
         $prev = null;
         preg_match_all('/([a-zA-Z]{1})\s?([e0-9\s,.-]+)?[^A-Za-z]?/', $d, $match);
         foreach ($match[1] as $k => $name) {
-            preg_match_all('/(-?[0-9.]+(e-\d+)?)/', $match[2][$k], $arguments);
-            $commandClass = 'BladeUI\\Icons\\Commands\\' . ucfirst($name);
+            $commandClass = 'ASK\\Svg\\DCommands\\' . ucfirst($name);
             $type = $name === strtolower($name) ? 'relative' : 'absolute';
             if (class_exists($commandClass)) {
-                $command = new $commandClass($type, $arguments[0], $prev);
+                $command = new $commandClass($type, $match[2][$k], $prev);
                 $prev = $command;
             }
             $commands[$k][$name] = $command ?? $commandClass;
@@ -94,18 +82,10 @@ class Path extends Shape
         return $commands;
     }
 
-    protected function renderAttributes(): string
+    public function attributes(): array
     {
-        if (count($this->attributes()) == 0) {
-            return '';
-        }
-
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
-            if (is_int($attribute)) {
-                return $value;
-            }
-
-            return sprintf('%s="%s"', $attribute, $value);
-        })->implode(' ');
+        $attributes = parent::attributes();
+        $attributes['d'] = $this->d();
+        return $attributes;
     }
 }
