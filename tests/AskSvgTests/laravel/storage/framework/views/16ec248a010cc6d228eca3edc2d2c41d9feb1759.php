@@ -1,0 +1,1 @@
+<svg id="flag" xmlns="http://www.w3.org/2000/svg" view-box="0 0 20 20" viewBox="0 0 20 20" ><path d="M 7.667 12 H 2 v 8 H 0 V 0 h 12 l 0.333 2 H 20 l -3 6, 3 6 H 8 l -0.333 -2 z " /></svg><?php /**PATH /mnt/e/Proyectos/ask-svg/laravel/storage/framework/views/c5867c7e6e4429655a775d7866a7be2bdc02ef5f.blade.php ENDPATH**/ ?>

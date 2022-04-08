@@ -54,5 +54,10 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
+<<<<<<< Updated upstream
     "prefer-stable": true
+=======
+    "prefer-stable": true,
+    "test": "vendor/bin/phpunit"
+>>>>>>> Stashed changes
 }

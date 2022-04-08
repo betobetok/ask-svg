@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.667 12H2v8H0V0h12l.333 2H20l-3 6 3 6H8l-.333-2z"/></svg><?php /**PATH /mnt/e/Proyectos/ask-svg/vendor/orchestra/testbench-core/laravel/storage/framework/views/ab187f806a6d5217290624842d2b41d018b2f5f5.blade.php ENDPATH**/ ?>
