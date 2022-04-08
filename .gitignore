@@ -5,4 +5,3 @@ templates/
 build/
 .phpunit.result.cache
 config/config.php
-.phpunit.result.cache
