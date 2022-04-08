@@ -233,7 +233,7 @@ abstract class SvgElement implements Htmlable
      */
     protected function configAttributesAndContent(string $tag, string $contents, array $attributes): string
     {
-        $svg = preg_match("/<" . $tag . "[^>]*>/i", $contents, $svgTag);
+        $svg = preg_match("/<" . $tag . "[^>]*\/?>/i", $contents, $svgTag);
 
         if ($svg !== 0 && $svg !== false) {
             $attributes = $this->mergeAttributes($svgTag[0], $attributes);
@@ -256,7 +256,6 @@ abstract class SvgElement implements Htmlable
                 $this->setAttribute($key, $attribute);
             }
         }
-
         return $contents;
     }
 
@@ -352,8 +351,13 @@ abstract class SvgElement implements Htmlable
         }
 
         $ret = '';
+        if (isset($this->style) && !empty($this->style->rules())) {
+            $ret = $this->style->toHtml();
+        }
+
         foreach ($this->elements as $element) {
-            if ($element instanceof SvgElement) {
+            if (is_subclass_of($element, SvgElement::class)) {
+
                 $ret .= $element->toHtml();
             }
         }
@@ -460,8 +464,11 @@ abstract class SvgElement implements Htmlable
      * @param  mixed $element
      * @return void
      */
-    public function setElement(string $name, ?SvgElement $element)
+    public function setElement(string $name = '', ?SvgElement $element)
     {
+        if (empty($name) || in_array($name, self::GRAPH_ELEMENTS)) {
+            $name = $element->name();
+        }
         if (!empty($element) && $name !== 'style') {
             $this->elements[] = $element;
             if (isset($this->$name)) {
@@ -470,6 +477,12 @@ abstract class SvgElement implements Htmlable
                 $this->$name = [$element];
             }
         }
+    }
+
+    public function addAnElement(SvgElement $element)
+    {
+        $element->setContext($this);
+        $this->setElement('', $element);
     }
 
     /**
@@ -507,12 +520,18 @@ abstract class SvgElement implements Htmlable
      */
     public function toHtml(): string
     {
-        if (in_array($this->name(), self::GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
-        } elseif (in_array($this->name(), self::NON_GROUP_ELEMENTS)) {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '/>';
+        if (is_a($this, Conteiner::class)) {
+            return sprintf(
+                '<%s %s>' . NEW_LINE .
+                    TAB . '%s' . NEW_LINE .
+                    '</%s>' . NEW_LINE,
+                $this->name(),
+                $this->renderAttributes(),
+                $this->contents(),
+                $this->name()
+            );
         } else {
-            return sprintf('<' . $this->name() . '%s', $this->renderAttributes()) . '>' . $this->contents() . '</' . $this->name() . '>';
+            return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
         }
     }
 
@@ -643,7 +662,11 @@ abstract class SvgElement implements Htmlable
                 $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
                 $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
                 if (class_exists($classElement)) {
-                    $tmp = new $classElement($con, $attributes, $this);
+                    if (class_implements($classElement) === 'Conteiner') {
+                        $tmp = new $classElement($attributes, $this, $con);
+                    } else {
+                        $tmp = new $classElement($attributes, $this);
+                    }
                 } elseif (class_exists($classElement2)) {
                     $tmp = new $classElement2($con, $attributes, $this);
                 } else {
@@ -698,12 +721,11 @@ abstract class SvgElement implements Htmlable
             return null;
         }
 
-        $content = '';
         $attributes = $this->getElementAttributes($tag);
         $classElement = __NAMESPACE__ . '\\Shapes\\' . ucfirst($element);
         $classElement2 = __NAMESPACE__ . '\\Configurators\\' . ucfirst($element);
         if (class_exists($classElement)) {
-            $tmp = new $classElement($content, $attributes, $this);
+            $tmp = new $classElement($attributes, $this);
         } elseif (class_exists($classElement2)) {
             $tmp = new $classElement2($content, $attributes, $this);
         } else {
@@ -826,5 +848,35 @@ abstract class SvgElement implements Htmlable
     public function hasContext()
     {
         return $this->context !== null;
+    }
+
+    /**
+     * Get $elements = []
+     *
+     * @return  SvgElement[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * Set $context
+     *
+     * @param  SvgElement  $context  $context
+     *
+     * @return  self
+     */
+    public function setContext(SvgElement $context): self
+    {
+        $this->context = $context;
+
+        return $this;
+    }
+
+    public function removeElementById(string $id)
+    {
+        $element = $this->getElementById($id);
+        unset($element);
     }
 }

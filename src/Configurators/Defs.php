@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Configurators;
 
+use ASK\Svg\Conteiner;
 
 /**
  * The Definitions element in a svg document
  */
-class Defs extends Configurator
+class Defs extends Configurator implements Conteiner
 {
     public function __construct(string $contents, array $attributes = [], $context = null)
     {
@@ -54,5 +55,11 @@ class Defs extends Configurator
         } else {
             return '';
         }
+    }
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

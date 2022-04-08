@@ -3,6 +3,5 @@ vendor
 phpdoc.xmls
 templates/
 build/
-laravel
 .phpunit.result.cache
 config/config.php

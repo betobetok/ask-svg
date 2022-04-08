@@ -18,11 +18,11 @@ class Path extends Shape
     /** @var array d*/
     protected array $d = [];
 
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
-        if (isset($this->attributes()['d']) && !empty($this->attributes()['d'])) {
-            $this->dString = $this->attributes()['d'];
+        parent::__construct($attributes, $context);
+        if (isset($attributes['d']) && !empty($attributes['d'])) {
+            $this->dString = $attributes['d'];
         }
         $this->d = $this->getExistingComands($this->dString);
         $this->removeAtt('d');
@@ -40,8 +40,7 @@ class Path extends Shape
      */
     public function toHtml(): string
     {
-        $dString = $this->content();
-        return sprintf('<%s d="%s" %s/>', $this->name(), $dString, $this->renderAttributes());
+        return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
     }
 
     /**
@@ -49,7 +48,7 @@ class Path extends Shape
      *
      * @return string
      */
-    public function content(): string
+    public function d(): string
     {
         $content = '';
         foreach ($this->d as $comand) {
@@ -83,24 +82,10 @@ class Path extends Shape
         return $commands;
     }
 
-    /**
-     * renderAttributes return a string with attributes in a HTML format
-     * (overloaded Method from RenderAttributes)
-     *
-     * @return string
-     */
-    protected function renderAttributes(): string
+    public function attributes(): array
     {
-        if (count($this->attributes()) == 0) {
-            return '';
-        }
-
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
-            if (is_int($attribute)) {
-                return $value;
-            }
-
-            return sprintf('%s="%s"', Str::snake($attribute, '-'), $value);
-        })->implode(' ');
+        $attributes = parent::attributes();
+        $attributes['d'] = $this->d();
+        return $attributes;
     }
 }

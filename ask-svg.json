@@ -1,0 +1,8 @@
+{
+    "sets": {
+        "test2": {
+            "path": "test/BladeUiTests/resources/svg",
+            "prefix": "test"
+        }
+    }
+}

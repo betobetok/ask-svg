@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace ASK\Svg\Configurators;
 
 use ASK\Svg\Configurators\Configurator;
+use ASK\Svg\Conteiner;
 use ASK\Svg\SvgElement;
 
 /**
  * The Style element in a svg document
  */
-class Style extends Configurator
+class Style extends Configurator implements Conteiner
 {
     /** @var array $classes */
     private $classes;
@@ -125,6 +126,7 @@ class Style extends Configurator
                 }
             }
         }
+        return $this->rules;
     }
 
     /**
@@ -150,14 +152,14 @@ class Style extends Configurator
             return '';
         }
 
-        $ret = sprintf("<style %s>\n", $this->renderAttributes());
+        $ret = sprintf("<style %s>", $this->renderAttributes());
 
         foreach ($this->rules() as $ruleName => $declarations) {
-            $ret .=  sprintf("%s {\n", $ruleName);
+            $ret .=  sprintf("%s {", $ruleName);
             foreach ($declarations as $property => $value) {
-                $ret .=  sprintf("\t%s: %s;\n", $property, $value);
+                $ret .=  sprintf("%s: %s;", $property, $value);
             }
-            $ret .= "}\n";
+            $ret .= "}";
         }
         $ret .= '</style>';
         return $ret;
@@ -191,5 +193,12 @@ class Style extends Configurator
         $ret = parent::toArray();
         $ret['rules'] = $this->rules();
         return $ret;
+    }
+
+    public function getContent()
+    {
+    }
+    public function setContent($content)
+    {
     }
 }

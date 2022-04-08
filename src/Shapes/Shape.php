@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Shapes;
 
+use ASK\Svg\Configurators\uSvgElement;
 use ASK\Svg\SvgElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -19,14 +20,14 @@ abstract class Shape extends SvgElement
     /** @var NumArray $startPosition */
     protected NumArray $startPosition;
 
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
         $name = explode('\\', get_class($this));
         $name = strtolower($name[array_key_last($name)]);
 
         $this->isTransformable = true;
 
-        $contents = $this->configAttributesAndContent($name, $contents, $attributes);
+        $contents = $this->configAttributesAndContent($name, '', $attributes);
 
         parent::__construct($name,  $contents,  $attributes, $context);
     }
@@ -52,15 +53,11 @@ abstract class Shape extends SvgElement
             return '';
         }
 
-        $thisAttributes = Arr::except(get_object_vars($this), array_keys(get_object_vars(new SvgElement('', '', ['transform' => '']))));
-
-        return ' ' . collect($this->attributes())->map(function (string $value, $attribute) {
+        return collect($this->attributes())->map(function (string $value, $attribute) {
             if (is_int($attribute)) {
                 return $value;
             }
 
-            return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
-        })->implode(' ') . ' ' . collect($thisAttributes)->map(function ($value, $attribute) {
             return sprintf('%s="%s"', STR::snake($attribute, '-'), $value);
         })->implode(' ');
     }
@@ -73,5 +70,14 @@ abstract class Shape extends SvgElement
     public function toHtml(): string
     {
         return sprintf('<%s %s/>', $this->name(), $this->renderAttributes());
+    }
+
+    public function __get($name)
+    {
+        $attributes = $this->attributes();
+        if (in_array($name, array_keys($attributes))) {
+            return $attributes[$name];
+        }
+        return '';
     }
 }

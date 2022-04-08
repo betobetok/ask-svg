@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace ASK\Svg\Shapes;
 
+use ASK\Svg\Configurators\uSvgElement;
 use ASK\Svg\SvgElement;
-use Exception;
 use NumPHP\Core\NumArray;
+use Illuminate\Support\Str;
 
 /**
  * A Polyline element in a svg document
@@ -16,15 +17,16 @@ class Polyline extends Shape
     /** @var array $points */
     protected array $points = [];
 
-    public function __construct(string $contents, array $attributes = [], SvgElement $context = null)
+    public function __construct(array $attributes = [], SvgElement $context = null)
     {
-        parent::__construct($contents,  $attributes, $context);
-        if (isset($this->attributes()['points']) && !empty($this->attributes()['points'])) {
-            $this->points = $this->attributes()['points'];
+        parent::__construct($attributes, $context);
+        if (isset($attributes['points']) && !empty($attributes['points'])) {
+            $points = $attributes['points'];
         } else {
-            $this->points = '';
+            $points = '';
         }
-        $this->points = $this->getPoints($this->points);
+
+        $this->points = $this->getPoints($points);
         if (!empty($this->points)) {
             $this->removeAtt('points');
         }
@@ -38,7 +40,7 @@ class Polyline extends Shape
      */
     public function toHtml(): string
     {
-        return sprintf('<%s points="%s" %s/>', $this->name(), $this->pointsString(), $this->renderAttributes());
+        return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
     }
 
     /**
@@ -51,13 +53,38 @@ class Polyline extends Shape
     public function getPoints(string $points): array
     {
         $points2ret = [];
-        preg_match_all('/([e0-9\s.-]+),([e0-9\s.-]+)/', $points, $match);
+        preg_match_all('/(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?(-?\.?[\d]+(?:\.[0-9]+)?(?:e-[0-9]+|e[0-9]+)?)(?:\s|,)?/', $points, $match);
         foreach ($match[1] as $k => $name) {
             $points2ret[$k] = new NumArray([
-                'x' => $match[1],
-                'y' => $match[2]
+                'x' => $match[1][$k],
+                'y' => $match[2][$k]
             ]);
         }
         return $points2ret;
+    }
+
+    public function pointsString(): string
+    {
+        $pointsStr = '';
+        foreach ($this->points as $k => $point) {
+            $pointArray = $point->getData();
+            $pointsStr .= sprintf('%s,%s', $pointArray['x'], $pointArray['y']);
+            if (array_key_last($this->points) !== $k) {
+                $pointsStr .= ' ';
+            }
+        }
+        return $pointsStr;
+    }
+
+    /**
+     * attributes
+     *
+     * @return array
+     */
+    public function attributes(): array
+    {
+        $attributes = parent::attributes();
+        $attributes['points'] = $this->pointsString();
+        return $attributes;
     }
 }
