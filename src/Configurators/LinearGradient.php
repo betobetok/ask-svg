@@ -28,7 +28,7 @@ class LinearGradient extends Configurator implements Conteiner
         if (isset($this->stop)) {
             return sprintf('<%s %s>' . NEW_LINE . TAB . '%s' . NEW_LINE . '</%s>', $this->name(), $this->renderAttributes(), $this->contents(), $this->name());
         } else {
-            return sprintf('<%s %s />' . $this->name(), $this->renderAttributes());
+            return sprintf('<%s %s />', $this->name(), $this->renderAttributes());
         }
     }
 
