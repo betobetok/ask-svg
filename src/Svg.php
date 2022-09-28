@@ -7,6 +7,7 @@ namespace ASK\Svg;
 use ASK\Svg\Configurators\G;
 use ASK\Svg\Configurators\Style;
 use ASK\Svg\Exceptions\SvgNotFound;
+use Error;
 use Illuminate\Support\Str;
 
 /**
@@ -20,7 +21,6 @@ final class Svg extends SvgElement implements Conteiner
     public function __construct(string $fileName, string $contents = '', array $attributes = [])
     {
         $name = explode('/', $fileName);
-        $this->id(implode('-', $name));
         if (is_array($name) && isset($name[1])) {
             $this->name = $name[1];
         } elseif (is_array($name) && count($name) === 1) {
@@ -40,6 +40,7 @@ final class Svg extends SvgElement implements Conteiner
         parent::__construct($this->name, $this->contents);
 
         $this->cleanContent();
+        $this->id(implode('-', $name));
     }
 
     /**
@@ -333,7 +334,7 @@ final class Svg extends SvgElement implements Conteiner
     {
         $setFile = explode('-', $this->id());
         if (count($setFile) <= 1) {
-            $file = $setFile;
+            $file = $setFile[0];
             $set = 'default';
         } else {
             $file = $setFile[1];
@@ -353,8 +354,10 @@ final class Svg extends SvgElement implements Conteiner
         if (isset($sets[$set])) {
             $setPath = $sets[$set]['paths'][0];
         }
+
         $filePath = $setPath . '/' . $file . (Str::endsWith($file, '.svg') ? '' : '.svg');
-        if (!file_put_contents($filePath, $this->toHtml())) {
+
+        if (!file_put_contents($filePath, $this->toHtml(),)) {
             throw SvgNotFound::pathNotExist($filePath);
         }
     }

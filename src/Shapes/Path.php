@@ -69,7 +69,7 @@ class Path extends Shape
     {
         $commands = [];
         $prev = null;
-        preg_match_all('/([a-zA-Z]{1})\s?([e0-9\s,.-]+)?[^A-Za-z]?/', $d, $match);
+        preg_match_all('/([a-df-z]{1})\s?([e0-9\s,.-]+)?[^a-z]?/i', $d, $match);
         foreach ($match[1] as $k => $name) {
             $commandClass = 'ASK\\Svg\\DCommands\\' . ucfirst($name);
             $type = $name === strtolower($name) ? 'relative' : 'absolute';

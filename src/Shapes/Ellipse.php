@@ -22,6 +22,7 @@ class Ellipse extends Shape
                 $this->removeAtt($k);
             }
         }
+        $this->startPosition = $this->center();
     }
 
     /**
@@ -32,8 +33,8 @@ class Ellipse extends Shape
     public function center(): NumArray
     {
         return new NumArray([
-            'x' => $this->cx,
-            'y' => $this->cy,
+            $this->cx,
+            $this->cy,
         ]);
     }
 

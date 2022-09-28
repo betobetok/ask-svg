@@ -879,4 +879,10 @@ abstract class SvgElement implements Htmlable
         $element = $this->getElementById($id);
         unset($element);
     }
+
+    public function addTransformation($transform, $position = -1)
+    {
+        $this->transforms->addTransformation($transform, $position);
+        $this->setAttribute('transform', trim(implode(' ', $this->transforms->toStringEach())));
+    }
 }

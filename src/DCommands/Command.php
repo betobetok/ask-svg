@@ -147,9 +147,6 @@ abstract class Command implements Htmlable
     public function getEndPoint(bool $absolute = true): array
     {
         $a = $this->count - 1;
-        if ($a !== count($this->coordinates) - 1) {
-            dump([$this, $a]);
-        }
         return $this->getPoint($a, $absolute);
     }
 
@@ -174,7 +171,7 @@ abstract class Command implements Htmlable
         if (strtolower($command) === 'm') {
             return $this;
         } else {
-            return $this->prev === null ? null : $this->prev->getLastMComand();
+            return empty($this->prev) ? null : $this->prev->getLastMComand();
         }
     }
 

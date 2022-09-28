@@ -40,6 +40,7 @@ trait RendersAttributes
                 return $value;
             }
 
+
             return sprintf('%s="%s"', $attribute, $value);
         })->implode(' ');
     }
